@@ -647,14 +647,8 @@ section {
 
 .location__detail-icon {
   font-size: 1.5rem;
-  background: #000;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius);
   flex-shrink: 0;
+  margin-top: 0.1rem;
 }
 
 .location__map {
@@ -675,12 +669,12 @@ section {
 /* ─── CONTACTO ──────────────────────────────────────────────────────────────── */
 
 #contact {
-  background: #111;
-  color: #FFF;
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 #contact .section-title {
-  color: #FFF;
+  color: var(--color-text);
   text-align: center;
 }
 
@@ -696,7 +690,7 @@ section {
   flex-direction: column;
   gap: 0.75rem;
   padding: 1rem;
-  border-left: 2px solid rgba(255,255,255,0.1);
+  border-left: 2px solid var(--color-border);
 }
 
 .contact__item-icon {
@@ -715,6 +709,7 @@ section {
 .contact__item-value {
   font-size: 1.1rem;
   font-weight: 600;
+  color: var(--color-text);
 }
 
 /* ─── FOOTER ────────────────────────────────────────────────────────────────── */
@@ -768,7 +763,8 @@ section {
   transition: color var(--transition);
 }
 
-.footer__nav-link:hover {
+/* Solo los <a> del footer cambian de color con hover, no los <span> */
+a.footer__nav-link:hover {
   color: var(--color-primary);
 }
 
