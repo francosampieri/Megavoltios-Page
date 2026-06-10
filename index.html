@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ═══ SEO BÁSICO — MODIFICAR ═══════════════════════════════════════════ -->
+  <title>Megavoltios — Materiales Eléctricos y Ferretería Industrial</title>
+  <meta name="description" content="Materiales eléctricos, iluminación, herramientas y ferretería para hogares, comercios e industrias. Godoy Cruz, Mendoza." />
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+
+<body>
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+       HEADER
+       MODIFICAR: nombre, horarios, número de WhatsApp
+  ═══════════════════════════════════════════════════════════════════════════ -->
+  <header id="main-header" role="banner">
+    <div class="container">
+      <div class="header__inner">
+
+        <!-- Logo y nombre -->
+        <a href="#" class="header__logo" aria-label="Inicio — Megavoltios">
+          <!-- MODIFICAR: reemplazar src con la ruta real del logo -->
+          <!-- <img src="./assets/logos/logo.png" alt="Megavoltios" class="header__logo-img" /> -->
+          <span class="header__business-name">Megavoltios</span><!-- MODIFICAR: nombre real -->
+        </a>
+
+        <!-- Horarios (visible en desktop) -->
+        <p class="header__meta">
+          <!-- MODIFICAR: horarios reales -->
+          Lun–Vie: 08:30–18:30 &nbsp;·&nbsp; Sáb: 09:00–13:00
+        </p>
+
+        <!-- Navegación principal -->
+        <nav id="nav-menu" class="main-nav" aria-label="Navegación principal">
+          <a href="#hero"     class="main-nav__link">Inicio</a>
+          <a href="#products" class="main-nav__link">Productos</a>
+          <a href="#why-us"   class="main-nav__link">Nosotros</a>
+          <a href="#location" class="main-nav__link">Ubicación</a>
+          <a href="#contact"  class="main-nav__link">Contacto</a>
+          <a href="#"         class="main-nav__cta" data-whatsapp aria-label="Contactar por WhatsApp">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.12 1.522 5.855L.057 23.928a.5.5 0 0 0 .613.613l6.083-1.464A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.795 9.795 0 0 1-5.002-1.371l-.359-.214-3.717.895.911-3.618-.235-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+            WhatsApp
+          </a>
+        </nav>
+
+        <!-- Botón hamburguesa (mobile) -->
+        <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+
+  <main id="main-content">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         HERO
+         MODIFICAR: título, subtítulo y descripción del negocio
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <section id="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero__inner">
+          <p class="hero__eyebrow">Godoy Cruz, Mendoza</p><!-- MODIFICAR: ciudad/zona -->
+          <h1 id="hero-title" class="hero__title">
+            Materiales eléctricos<br>y ferretería industrial
+            <!-- MODIFICAR: título principal -->
+          </h1>
+          <p class="hero__subtitle">
+            Todo para instalaciones eléctricas, iluminación, herramientas y proyectos industriales.
+            <!-- MODIFICAR: descripción breve del negocio -->
+          </p>
+          <div class="hero__actions">
+            <a href="#products" class="btn btn--primary">Ver catálogo</a>
+            <a href="#" class="btn btn--whatsapp" data-whatsapp>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.12 1.522 5.855L.057 23.928a.5.5 0 0 0 .613.613l6.083-1.464A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.795 9.795 0 0 1-5.002-1.371l-.359-.214-3.717.895.911-3.618-.235-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+              Consultar por WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         MARCAS
+         MODIFICAR: agregar/quitar marcas en esta lista
+         Para cada marca: reemplazar el texto por una <img> cuando tengas el logo
+         Ejemplo: <img src="./assets/brands/schneider.png" alt="Schneider Electric" class="brands__logo" />
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <section id="brands" aria-label="Marcas con las que trabajamos">
+      <div class="container">
+        <p class="brands__title">Trabajamos con las mejores marcas</p>
+        <ul class="brands__grid" role="list">
+          <!-- MODIFICAR: reemplazar cada <span> por <img> cuando tengas los logos reales -->
+          <li class="brands__item"><span class="brands__name">Schneider</span></li>
+          <li class="brands__item"><span class="brands__name">Philips</span></li>
+          <li class="brands__item"><span class="brands__name">Osram</span></li>
+          <li class="brands__item"><span class="brands__name">Bticino</span></li>
+          <li class="brands__item"><span class="brands__name">Siemens</span></li>
+          <li class="brands__item"><span class="brands__name">Plavit</span></li>
+          <li class="brands__item"><span class="brands__name">Argos</span></li>
+          <!-- AGREGAR más marcas copiando una línea <li> -->
+        </ul>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         PRODUCTOS — Sección principal
+         El contenido es generado automáticamente desde data/products.json
+         No modificar el HTML de esta sección — editar el JSON.
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <section id="products" aria-labelledby="products-title">
+
+      <div class="products__header">
+        <div class="container">
+          <h2 id="products-title" class="section-title">Nuestro catálogo</h2>
+          <p class="section-subtitle">Seleccioná una categoría para navegar directamente</p>
+        </div>
+      </div>
+
+      <!-- Barra sticky de categorías — se genera desde JS -->
+      <div class="category-nav-wrapper" role="navigation" aria-label="Categorías del catálogo">
+        <div class="container">
+          <div id="category-nav"></div>
+        </div>
+      </div>
+
+      <!-- Cajas del catálogo — se generan desde JS -->
+      <div class="container">
+        <div id="catalog-grid" aria-live="polite"></div>
+      </div>
+
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         POR QUÉ ELEGIRNOS
+         MODIFICAR: títulos y descripciones de cada punto
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <section id="why-us" aria-labelledby="why-us-title">
+      <div class="container">
+        <h2 id="why-us-title" class="section-title">¿Por qué elegirnos?</h2>
+        <ul class="why-us__grid" role="list">
+          <li class="why-us__item">
+            <span class="why-us__icon" aria-hidden="true">📦</span>
+            <h3 class="why-us__title">Amplio stock</h3><!-- MODIFICAR -->
+            <p class="why-us__text">Contamos con una gran variedad de productos disponibles de inmediato.</p><!-- MODIFICAR -->
+          </li>
+          <li class="why-us__item">
+            <span class="why-us__icon" aria-hidden="true">🤝</span>
+            <h3 class="why-us__title">Atención personalizada</h3><!-- MODIFICAR -->
+            <p class="why-us__text">Te asesoramos para que encuentres exactamente lo que necesitás.</p><!-- MODIFICAR -->
+          </li>
+          <li class="why-us__item">
+            <span class="why-us__icon" aria-hidden="true">⭐</span>
+            <h3 class="why-us__title">Materiales de calidad</h3><!-- MODIFICAR -->
+            <p class="why-us__text">Trabajamos solo con las mejores marcas del mercado.</p><!-- MODIFICAR -->
+          </li>
+          <li class="why-us__item">
+            <span class="why-us__icon" aria-hidden="true">🏭</span>
+            <h3 class="why-us__title">Hogares e industrias</h3><!-- MODIFICAR -->
+            <p class="why-us__text">Soluciones para todo tipo de proyectos y necesidades.</p><!-- MODIFICAR -->
+          </li>
+        </ul>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         FAQ
+         MODIFICAR: preguntas y respuestas según lo que indique el dueño
+         Para agregar más: copiar un bloque <li class="faq__item">...</li>
+         Para eliminar: borrar el bloque completo
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <section id="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title" class="section-title" style="text-align:center">Preguntas frecuentes</h2>
+      <ul class="faq__list" role="list">
+
+        <li class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            ¿Realizan envíos?<!-- MODIFICAR -->
+            <span class="faq__icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__answer">
+            <!-- MODIFICAR: respuesta real del dueño -->
+            Sí, realizamos envíos dentro de Godoy Cruz y zonas aledañas. Consultanos por WhatsApp para coordinar.
+          </div>
+        </li>
+
+        <li class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            ¿Trabajan con empresas y contratistas?<!-- MODIFICAR -->
+            <span class="faq__icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__answer">
+            <!-- MODIFICAR -->
+            Sí, atendemos tanto a clientes particulares como a empresas, contratistas y profesionales del rubro.
+          </div>
+        </li>
+
+        <li class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            ¿Tienen lista de precios?<!-- MODIFICAR -->
+            <span class="faq__icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__answer">
+            <!-- MODIFICAR -->
+            Los precios varían según disponibilidad y volumen. Consultanos directamente por WhatsApp para obtener presupuesto.
+          </div>
+        </li>
+
+        <li class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            ¿Puedo encargar un producto que no veo en el catálogo?<!-- MODIFICAR -->
+            <span class="faq__icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__answer">
+            <!-- MODIFICAR -->
+            Por supuesto. Consultanos por WhatsApp y lo buscamos para vos.
+          </div>
+        </li>
+
+        <!-- AGREGAR MÁS PREGUNTAS: copiar el bloque <li> completo -->
+
+      </ul>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         UBICACIÓN
+         MODIFICAR: dirección y reemplazar el src del iframe con el embed real de Google Maps
+         Para obtener el iframe: Google Maps → tu dirección → Compartir → Incorporar mapa → copiar src
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <section id="location" aria-labelledby="location-title">
+      <div class="container">
+        <h2 id="location-title" class="section-title">Nuestra ubicación</h2>
+        <div class="location__inner">
+
+          <div class="location__info">
+            <div class="location__detail">
+              <span class="location__detail-icon" aria-hidden="true">📍</span>
+              <div>
+                <strong>Dirección</strong><br>
+                Independencia 888<!-- MODIFICAR --><br>
+                Godoy Cruz, Mendoza<!-- MODIFICAR -->
+              </div>
+            </div>
+            <div class="location__detail">
+              <span class="location__detail-icon" aria-hidden="true">🕐</span>
+              <div>
+                <strong>Horarios</strong><br>
+                Lunes a Viernes: 08:30 a 18:30<!-- MODIFICAR --><br>
+                Sábados: 09:00 a 13:00<!-- MODIFICAR -->
+              </div>
+            </div>
+            <div class="location__detail">
+              <span class="location__detail-icon" aria-hidden="true">📱</span>
+              <div>
+                <strong>WhatsApp</strong><br>
+                +54 9 261 681 3712<!-- MODIFICAR -->
+              </div>
+            </div>
+            <a href="https://maps.google.com/?q=Independencia+888+Godoy+Cruz+Mendoza" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
+              Ver en Google Maps<!-- MODIFICAR: actualizar la URL con la dirección real -->
+            </a>
+          </div>
+
+          <div class="location__map">
+            <!-- MODIFICAR: reemplazar este src con el iframe real de Google Maps -->
+            <!-- Cómo obtenerlo: Google Maps → buscar la dirección → Compartir → Incorporar un mapa → copiar solo el src -->
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.5!2d-68.8458!3d-32.9942!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzLCsDU5JzM5LjEiUyA2OMKwNTAnNDQuOSJX!5e0!3m2!1ses!2sar!4v1234567890"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Ubicación de Megavoltios en Google Maps">
+            </iframe>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         CONTACTO
+         MODIFICAR: número de WhatsApp, dirección, horarios, redes sociales
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <section id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <h2 id="contact-title" class="section-title">Contacto</h2>
+        <div class="contact__grid">
+
+          <div class="contact__item">
+            <span class="contact__item-icon" aria-hidden="true">💬</span>
+            <span class="contact__item-label">WhatsApp</span>
+            <a href="#" class="contact__item-value" data-whatsapp>+54 9 261 681 3712</a><!-- MODIFICAR -->
+          </div>
+
+          <div class="contact__item">
+            <span class="contact__item-icon" aria-hidden="true">📍</span>
+            <span class="contact__item-label">Dirección</span>
+            <span class="contact__item-value">Independencia 888, Godoy Cruz</span><!-- MODIFICAR -->
+          </div>
+
+          <div class="contact__item">
+            <span class="contact__item-icon" aria-hidden="true">🕐</span>
+            <span class="contact__item-label">Horarios</span>
+            <span class="contact__item-value">Lun–Vie 08:30–18:30<br>Sáb 09:00–13:00</span><!-- MODIFICAR -->
+          </div>
+
+          <div class="contact__item">
+            <span class="contact__item-icon" aria-hidden="true">📱</span>
+            <span class="contact__item-label">Redes sociales</span>
+            <!-- MODIFICAR: reemplazar # con URLs reales. Eliminar los que no usen. -->
+            <div>
+              <a href="#" class="contact__item-value">Instagram</a><br>
+              <a href="#" class="contact__item-value">Facebook</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       FOOTER
+       MODIFICAR: nombre, descripción, redes sociales, año
+  ═══════════════════════════════════════════════════════════════════════ -->
+  <footer id="main-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__inner">
+
+        <div>
+          <p class="footer__brand-name">Megavoltios</p><!-- MODIFICAR -->
+          <p class="footer__brand-desc">
+            Materiales eléctricos y ferretería para hogares, comercios e industrias.<!-- MODIFICAR -->
+          </p>
+        </div>
+
+        <nav aria-label="Navegación del footer">
+          <p class="footer__nav-title">Navegación</p>
+          <ul class="footer__nav-list" role="list">
+            <li><a href="#hero"     class="footer__nav-link">Inicio</a></li>
+            <li><a href="#products" class="footer__nav-link">Productos</a></li>
+            <li><a href="#why-us"   class="footer__nav-link">Nosotros</a></li>
+            <li><a href="#location" class="footer__nav-link">Ubicación</a></li>
+            <li><a href="#contact"  class="footer__nav-link">Contacto</a></li>
+          </ul>
+        </nav>
+
+        <div>
+          <p class="footer__nav-title">Contacto</p>
+          <ul class="footer__nav-list" role="list">
+            <li><a href="#" class="footer__nav-link" data-whatsapp>WhatsApp</a></li>
+            <li><span class="footer__nav-link">Independencia 888, Godoy Cruz</span></li><!-- MODIFICAR -->
+            <li><span class="footer__nav-link">Lun–Vie 08:30–18:30</span></li><!-- MODIFICAR -->
+          </ul>
+        </div>
+
+      </div>
+      <div class="footer__bottom">
+        <p>© <span id="footer-year"></span> Megavoltios. Todos los derechos reservados.</p><!-- MODIFICAR: nombre -->
+        <p>Diseñado por <strong>Tu Nombre</strong></p><!-- MODIFICAR: tu nombre/marca -->
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       BOTÓN WHATSAPP FLOTANTE
+       No modificar estructura — el href se asigna desde main.js
+  ═══════════════════════════════════════════════════════════════════════ -->
+  <a href="#" class="whatsapp-float" data-whatsapp aria-label="Contactar por WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.12 1.522 5.855L.057 23.928a.5.5 0 0 0 .613.613l6.083-1.464A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.795 9.795 0 0 1-5.002-1.371l-.359-.214-3.717.895.911-3.618-.235-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+    </svg>
+  </a>
+
+
+  <!-- Scripts al final del body para no bloquear el render -->
+  <script src="./js/main.js"></script>
+  <script src="./js/products.js"></script>
+
+  <!-- Año dinámico en el footer -->
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

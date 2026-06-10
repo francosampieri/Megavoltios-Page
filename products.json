@@ -1,0 +1,212 @@
+{
+  "categorias": [
+    {
+      "id": "materiales-electricos",
+      "nombre": "Materiales Eléctricos",
+      "subcategorias": [
+        {
+          "nombre": "Cables y Conductores",
+          "productos": [
+            "Unipolar",
+            "Bipolar",
+            "Tripolar",
+            "Subterráneo",
+            "Mellizo"
+          ]
+        },
+        {
+          "nombre": "Protecciones",
+          "productos": [
+            "Termomagnéticas",
+            "Disyuntores",
+            "Fusibles",
+            "Protectores de tensión",
+            "Interruptores diferenciales"
+          ]
+        },
+        {
+          "nombre": "Tableros y Cajas",
+          "productos": [
+            "Tableros de distribución",
+            "Cajas de pase",
+            "Cajas de derivación",
+            "Tapas ciegas"
+          ]
+        },
+        {
+          "nombre": "Cañerías y Accesorios",
+          "productos": [
+            "Caño corrugado",
+            "Caño rígido",
+            "Uniones y cuplas",
+            "Curvas",
+            "Boquillas"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "iluminacion",
+      "nombre": "Iluminación",
+      "subcategorias": [
+        {
+          "nombre": "Lámparas",
+          "productos": [
+            "Filamento",
+            "Bajo consumo",
+            "LED estándar",
+            "LED dicroica",
+            "Tubos LED"
+          ]
+        },
+        {
+          "nombre": "Iluminación Industrial",
+          "productos": [
+            "Proyectores outdoors",
+            "Campanas industriales",
+            "Tubulares estancas",
+            "Reflectores"
+          ]
+        },
+        {
+          "nombre": "Luminarias",
+          "productos": [
+            "Apliques de pared",
+            "Plafones",
+            "Downlights embutidos",
+            "Tiras LED"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "automatizacion",
+      "nombre": "Automatización",
+      "subcategorias": [
+        {
+          "nombre": "Control Industrial",
+          "productos": [
+            "Contactores",
+            "Relés térmicos",
+            "Temporizadores",
+            "Guardamotores"
+          ]
+        },
+        {
+          "nombre": "Domótica",
+          "productos": [
+            "Interruptores inteligentes",
+            "Controladores de riego",
+            "Sensores de presencia",
+            "Dimers"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "herramientas",
+      "nombre": "Herramientas",
+      "subcategorias": [
+        {
+          "nombre": "Herramientas Manuales",
+          "productos": [
+            "Destornilladores",
+            "Alicates",
+            "Pinzas pelacables",
+            "Llaves",
+            "Metros y cintas"
+          ]
+        },
+        {
+          "nombre": "Herramientas Eléctricas",
+          "productos": [
+            "Taladros",
+            "Atornilladores",
+            "Amoladoras",
+            "Sierras"
+          ]
+        },
+        {
+          "nombre": "Medición",
+          "productos": [
+            "Multímetros",
+            "Pinzas amperimétricas",
+            "Detectores de tensión",
+            "Testers"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ferreteria",
+      "nombre": "Ferretería",
+      "subcategorias": [
+        {
+          "nombre": "Fijaciones",
+          "productos": [
+            "Tornillos y bulones",
+            "Tarugos",
+            "Brocas",
+            "Espigas"
+          ]
+        },
+        {
+          "nombre": "Adhesivos y Selladores",
+          "productos": [
+            "Silicona",
+            "Cinta aisladora",
+            "Termocontraíble",
+            "Cinta autofundente"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seguridad-electrica",
+      "nombre": "Seguridad Eléctrica",
+      "subcategorias": [
+        {
+          "nombre": "Protección Personal",
+          "productos": [
+            "Guantes dieléctricos",
+            "Calzado de seguridad",
+            "Cascos",
+            "Anteojos de protección"
+          ]
+        },
+        {
+          "nombre": "Señalización",
+          "productos": [
+            "Carteles de advertencia",
+            "Balizas",
+            "Conos de seguridad",
+            "Cintas de peligro"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "industrial",
+      "nombre": "Industrial",
+      "subcategorias": [
+        {
+          "nombre": "Bandejas y Canalizaciones",
+          "productos": [
+            "Bandejas portacables",
+            "Canaletas",
+            "Soportes y abrazaderas",
+            "Escalerillas"
+          ]
+        },
+        {
+          "nombre": "Motores y Accionamientos",
+          "productos": [
+            "Motores eléctricos",
+            "Variadores de frecuencia",
+            "Arrancadores suaves"
+          ]
+        }
+      ]
+    }
+  ]
+}
