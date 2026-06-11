@@ -683,6 +683,42 @@ a.footer__nav-link:hover {
   fill: #fff;
 }
 
+/* ─── NAV TOGGLE (mobile hamburger) ─────────────────────────────────────────── */
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+}
+
+.nav-toggle__bar {
+  width: 24px;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 1px;
+  transition: var(--transition);
+}
+
+/* Ocultar el texto del nombre cuando hay logo imagen */
+.header__logo-img + .header__business-name {
+  display: none;
+}
+
+/* Products: eliminar padding-top duplicado */
+#products {
+  padding-top: 0;
+}
+
+/* FAQ: padding lateral para no pegarse a los bordes en mobile */
+#faq {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
 /* ─── RESPONSIVE ────────────────────────────────────────────────────────────── */
 
 @media (max-width: 992px) {
@@ -694,6 +730,8 @@ a.footer__nav-link:hover {
 
 @media (max-width: 768px) {
   .header__meta { display: none; }
+
+  .nav-toggle { display: flex; }
   
   .main-nav {
     display: none;
