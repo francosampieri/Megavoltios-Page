@@ -259,6 +259,8 @@ section {
   background: var(--brand-amber);
   color: #000;
   opacity: 0.88;
+  padding: 0.7rem 1.4rem;
+  font-size: 0.85rem;
 }
 
 .btn--whatsapp:hover {
@@ -574,15 +576,23 @@ section {
 }
 
 .location__detail-icon {
-  width: 44px;
-  height: 44px;
-  background: rgba(245, 166, 35, 0.1);
+  width: 28px;
   color: var(--brand-amber);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  border-radius: 8px;
-  font-size: 1.25rem;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.location__detail-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--brand-amber);
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   flex-shrink: 0;
 }
 
