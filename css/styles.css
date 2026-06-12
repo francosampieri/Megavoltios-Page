@@ -237,20 +237,32 @@ section {
   font-size: 0.95rem;
   cursor: pointer;
   border: none;
+  transition: all var(--transition);
 }
 
+/* Ver catálogo — CTA principal: más grande y más peso visual */
 .btn--primary {
   background: var(--brand-amber);
   color: #000;
+  padding: 1rem 2.25rem;
+  font-size: 1.05rem;
 }
 
+.btn--primary:hover {
+  background: var(--brand-amber-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 166, 35, 0.35);
+}
+
+/* WhatsApp — CTA secundario: mismo color, tamaño estándar */
 .btn--whatsapp {
   background: var(--brand-amber);
   color: #000;
+  opacity: 0.88;
 }
 
 .btn--whatsapp:hover {
-  filter: brightness(1.05);
+  opacity: 1;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(245, 166, 35, 0.3);
 }
@@ -564,9 +576,8 @@ section {
 .location__detail-icon {
   width: 44px;
   height: 44px;
-  background: rgba(245, 166, 35, 0.12);
+  background: rgba(245, 166, 35, 0.1);
   color: var(--brand-amber);
-  border: 1px solid rgba(245, 166, 35, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -654,39 +665,98 @@ a.contact__item-value:hover {
 
 #main-footer {
   background: var(--brand-navy-deep);
-  padding: 5rem 0 2rem;
+  padding: 5rem 0 2.5rem;
   color: rgba(255, 255, 255, 0.5);
+  border-top: 1px solid rgba(255,255,255,0.05);
 }
 
 .footer__inner {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 4rem;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 3rem;
   padding-bottom: 4rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  align-items: start;
+}
+
+/* Columna izquierda — logo + tagline + redes */
+.footer__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  padding-right: 2rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.footer__logo-img {
+  height: 80px;
+  width: auto;
+  opacity: 0.9;
 }
 
 .footer__brand-name {
   font-size: 1.5rem;
   font-weight: 800;
   color: var(--brand-amber);
-  margin-bottom: 1.5rem;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.footer__nav-title {
+.footer__brand-desc {
   font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1.6;
+  max-width: 220px;
+}
+
+.footer__social {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.footer__social-link {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1rem;
+  transition: all var(--transition);
+}
+
+.footer__social-link:hover {
+  border-color: var(--brand-amber);
+  color: var(--brand-amber);
+  background: rgba(245, 166, 35, 0.08);
+}
+
+/* Columnas de navegación */
+.footer__nav-title {
+  font-size: 0.78rem;
   font-weight: 700;
   color: #fff;
   text-transform: uppercase;
-  margin-bottom: 1.5rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
+  margin-bottom: 1.25rem;
+}
+
+.footer__nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
 .footer__nav-link {
-  font-size: 0.95rem;
-  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.4);
   display: block;
+  transition: color var(--transition);
 }
 
 a.footer__nav-link:hover {
@@ -696,10 +766,11 @@ a.footer__nav-link:hover {
 .footer__bottom {
   padding-top: 2rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.2);
+  text-align: center;
 }
 
 /* ─── WHATSAPP FLOAT ─────────────────────────────────────────────────────── */
@@ -799,5 +870,12 @@ a.footer__nav-link:hover {
   .footer__inner {
     grid-template-columns: 1fr;
     gap: 3rem;
+  }
+
+  .footer__brand {
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: 2rem;
   }
 }
