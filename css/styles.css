@@ -605,7 +605,7 @@ section {
 
 .location__map iframe {
   width: 100%;
-  height: 280px;
+  height: 330px;
   filter: grayscale(0.2) contrast(1.1);
 }
 
@@ -879,21 +879,19 @@ a.footer__nav-link:hover {
 
   .hero__title { font-size: 2.8rem; }
 
-  /* Navbar categorías: fade derecho para indicar que hay más contenido */
-  .category-nav-wrapper {
-    position: relative;
-  }
-
-  .category-nav-wrapper::after {
+  /* Fade derecho sobre el nav de categorías — sin tocar el wrapper sticky */
+  #category-nav::after {
     content: '';
-    position: absolute;
-    top: 0;
+    position: sticky;
     right: 0;
+    top: 0;
     bottom: 0;
-    width: 60px;
-    background: linear-gradient(to right, transparent, var(--brand-navy-dark));
+    min-width: 56px;
+    height: 100%;
+    background: linear-gradient(to right, transparent, var(--brand-navy-dark) 85%);
+    flex-shrink: 0;
     pointer-events: none;
-    z-index: 1;
+    align-self: stretch;
   }
 
   .footer__inner {
