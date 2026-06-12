@@ -94,8 +94,10 @@ section {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100%;
+  height: var(--header-height);
   gap: 1.5rem;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .header__logo {
@@ -155,18 +157,19 @@ section {
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 1.2rem;
-  background: var(--brand-whatsapp);
-  color: #fff;
+  background: var(--brand-amber);
+  color: #000;
   border-radius: var(--radius);
   font-weight: 700;
   font-size: 0.85rem;
   margin-left: 1rem;
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.25);
 }
 
 .main-nav__cta:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3);
+  box-shadow: 0 6px 16px rgba(245, 166, 35, 0.35);
+  filter: brightness(1.05);
 }
 
 /* ─── HERO ──────────────────────────────────────────────────────────────────── */
@@ -242,8 +245,14 @@ section {
 }
 
 .btn--whatsapp {
-  background: var(--brand-whatsapp);
-  color: #fff;
+  background: var(--brand-amber);
+  color: #000;
+}
+
+.btn--whatsapp:hover {
+  filter: brightness(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(245, 166, 35, 0.3);
 }
 
 .btn--outline {
@@ -511,14 +520,23 @@ section {
 }
 
 .faq__answer {
-  display: none;
-  padding: 0 1.5rem 1.5rem;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 1.5rem;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.7;
+  font-size: 0.95rem;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              padding 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+  opacity: 0;
 }
 
 .faq__item.is-open .faq__answer {
   display: block;
+  max-height: 400px;
+  padding: 0 1.5rem 1.5rem;
+  opacity: 1;
 }
 
 /* ─── LOCATION ─────────────────────────────────────────────────────────────── */
@@ -546,13 +564,15 @@ section {
 .location__detail-icon {
   width: 44px;
   height: 44px;
-  background: rgba(245, 166, 35, 0.15);
+  background: rgba(245, 166, 35, 0.12);
   color: var(--brand-amber);
+  border: 1px solid rgba(245, 166, 35, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
   font-size: 1.25rem;
+  flex-shrink: 0;
 }
 
 .location__map {
@@ -568,7 +588,7 @@ section {
   filter: grayscale(0.2) contrast(1.1);
 }
 
-/* ─── CONTACT ─────────────────────────────────────────────────────────────── */
+/* ─── CONTACTO ─────────────────────────────────────────────────────────────── */
 
 #contact {
   background: var(--brand-navy-dark);
@@ -577,29 +597,57 @@ section {
 .contact__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 3rem;
+  gap: 1.5rem;
   margin-top: 4rem;
 }
 
 .contact__item {
-  padding-left: 1.5rem;
-  border-left: 2px solid rgba(245, 166, 35, 0.3);
+  background: var(--brand-navy);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius);
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.contact__item:hover {
+  border-color: rgba(245, 166, 35, 0.4);
+  transform: translateY(-3px);
+}
+
+.contact__item-icon {
+  width: 52px;
+  height: 52px;
+  background: rgba(245, 166, 35, 0.12);
+  border: 1px solid rgba(245, 166, 35, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
 }
 
 .contact__item-label {
-  display: block;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.12em;
   color: var(--brand-amber);
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
 }
 
 .contact__item-value {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #fff;
+  line-height: 1.5;
+}
+
+a.contact__item-value:hover {
+  color: var(--brand-amber);
 }
 
 /* ─── FOOTER ────────────────────────────────────────────────────────────────── */
@@ -663,27 +711,27 @@ a.footer__nav-link:hover {
   z-index: 200;
   width: 60px;
   height: 60px;
-  background: var(--brand-whatsapp);
+  background: var(--brand-amber);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+  box-shadow: 0 8px 24px rgba(245, 166, 35, 0.4);
   transition: var(--transition);
 }
 
 .whatsapp-float:hover {
   transform: scale(1.1);
-  box-shadow: 0 12px 32px rgba(37, 211, 102, 0.5);
+  box-shadow: 0 12px 32px rgba(245, 166, 35, 0.55);
 }
 
 .whatsapp-float svg {
   width: 32px;
   height: 32px;
-  fill: #fff;
+  fill: #000;
 }
 
-/* ─── NAV TOGGLE (mobile hamburger) ─────────────────────────────────────────── */
+/* ─── NAV TOGGLE ────────────────────────────────────────────────────────────── */
 
 .nav-toggle {
   display: none;
@@ -698,22 +746,22 @@ a.footer__nav-link:hover {
 .nav-toggle__bar {
   width: 24px;
   height: 2px;
-  background: #ffffff;
+  background: #fff;
   border-radius: 1px;
   transition: var(--transition);
 }
 
-/* Ocultar el texto del nombre cuando hay logo imagen */
+/* Ocultar texto si hay imagen de logo */
 .header__logo-img + .header__business-name {
   display: none;
 }
 
-/* Products: eliminar padding-top duplicado */
+/* Products: sin padding-top duplicado */
 #products {
   padding-top: 0;
 }
 
-/* FAQ: padding lateral para no pegarse a los bordes en mobile */
+/* FAQ: padding lateral en mobile */
 #faq {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
@@ -730,8 +778,6 @@ a.footer__nav-link:hover {
 
 @media (max-width: 768px) {
   .header__meta { display: none; }
-
-  .nav-toggle { display: flex; }
   
   .main-nav {
     display: none;
