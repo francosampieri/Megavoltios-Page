@@ -36,17 +36,36 @@ function initMobileMenu() {
   const menu = document.getElementById('nav-menu');
   if (!toggle || !menu) return;
 
+  let isOpen = false;
+  let closeTimer = null;
+
+  function openMenu() {
+    clearTimeout(closeTimer);
+    isOpen = true;
+    menu.style.display = 'flex';
+    // Forzar reflow para que el navegador registre el display:flex antes de animar
+    menu.getBoundingClientRect();
+    menu.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', true);
+  }
+
+  function closeMenu() {
+    isOpen = false;
+    menu.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', false);
+    // Esperar a que termine la transición antes de ocultar
+    closeTimer = setTimeout(() => {
+      menu.style.display = 'none';
+    }, 300);
+  }
+
   toggle.addEventListener('click', () => {
-    const isOpen = menu.classList.toggle('is-open');
-    toggle.setAttribute('aria-expanded', isOpen);
+    isOpen ? closeMenu() : openMenu();
   });
 
-  // Cierra el menú al clickear un link
+  // Cierra al hacer click en un link
   menu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      menu.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded', false);
-    });
+    link.addEventListener('click', closeMenu);
   });
 }
 

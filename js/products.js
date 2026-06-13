@@ -112,37 +112,56 @@ function setActiveNavItem(id) {
 }
 
 /**
- * Scroll spy con debounce: solo actualiza el nav cuando el scroll
- * se detiene, evitando el parpadeo al saltar varias categorías.
+ * Scroll spy basado en posición real de elementos.
+ * Calcula qué categoría está más cerca del centro de la pantalla
+ * en cada evento de scroll. Sin IntersectionObserver = sin parpadeos.
  */
 function initScrollSpy() {
   const nav = document.getElementById('category-nav');
   if (!nav) return;
 
-  let scrollTimer = null;
-  let pendingId = null;
+  const stickyOffset = () => {
+    const header = document.getElementById('main-header');
+    const catNav = document.querySelector('.category-nav-wrapper');
+    return (header ? header.offsetHeight : 0) + (catNav ? catNav.offsetHeight : 0);
+  };
 
-  const observer = new IntersectionObserver((entries) => {
-    // Guardar el último id visible pero no aplicarlo todavía
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        pendingId = entry.target.id.replace('cat-', '');
+  let ticking = false;
+
+  function updateActive() {
+    const categories = document.querySelectorAll('.catalog-category');
+    if (!categories.length) return;
+
+    const offset = stickyOffset();
+    const viewportMid = window.innerHeight / 2;
+
+    let closestId = null;
+    let closestDist = Infinity;
+
+    categories.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      // Centro del elemento relativo al viewport, descontando los stickies
+      const elMid = rect.top + rect.height / 2 - offset;
+      const dist = Math.abs(elMid - viewportMid);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestId = el.id.replace('cat-', '');
       }
     });
 
-    // Cancelar el timer anterior y arrancar uno nuevo
-    // Solo actualiza el nav cuando el scroll se detiene (100ms de silencio)
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => {
-      if (pendingId) {
-        setActiveNavItem(pendingId);
-        pendingId = null;
-      }
-    }, 100);
+    if (closestId) setActiveNavItem(closestId);
+    ticking = false;
+  }
 
-  }, { rootMargin: '-35% 0px -55% 0px' });
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(updateActive);
+      ticking = true;
+    }
+  }, { passive: true });
 
-  document.querySelectorAll('.catalog-category').forEach(el => observer.observe(el));
+  // Activar al cargar
+  updateActive();
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

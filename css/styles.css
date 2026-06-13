@@ -893,34 +893,44 @@ a.footer__nav-link:hover {
     padding: 2rem;
     border-bottom: 1px solid var(--color-border);
     gap: 1rem;
+    transform: translateY(-12px);
+    opacity: 0;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .main-nav.is-open { display: flex; }
+  .main-nav.is-open {
+    display: flex;
+    transform: translateY(0);
+    opacity: 1;
+  }
 
   .hero__title { font-size: 2.8rem; }
 
-  /* Indicador de scroll — flecha animada pegada al borde derecho del nav */
+  /* Indicador de scroll — ícono de swipe, gris y discreto */
   .category-nav-hint {
     display: flex;
     position: absolute;
     right: 0;
     top: 0;
     bottom: 0;
-    width: 48px;
+    width: 52px;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(to right, transparent, var(--brand-navy-dark) 60%);
-    color: var(--brand-amber);
+    background: linear-gradient(to right, transparent, var(--brand-navy-dark) 55%);
+    color: rgba(255, 255, 255, 0.3);
     pointer-events: none;
-    animation: hint-pulse 1.5s ease-in-out infinite;
+    animation: hint-swipe 2s ease-in-out infinite;
   }
 
-  @keyframes hint-pulse {
-    0%, 100% { opacity: 0.5; transform: translateX(0); }
-    50%       { opacity: 1;   transform: translateX(3px); }
+  @keyframes hint-swipe {
+    0%   { opacity: 0;   transform: translateX(-8px); }
+    30%  { opacity: 1;   transform: translateX(0px);  }
+    70%  { opacity: 1;   transform: translateX(6px);  }
+    100% { opacity: 0;   transform: translateX(10px); }
   }
 
-  /* Ocultar el hint cuando el nav ya fue scrolleado */
+  /* Ocultar cuando ya deslizó */
   .category-nav-wrapper.scrolled .category-nav-hint {
     display: none;
   }
