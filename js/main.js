@@ -36,18 +36,51 @@ function initMobileMenu() {
   const menu = document.getElementById('nav-menu');
   if (!toggle || !menu) return;
 
+  let isOpen = false;
+  let closeTimer = null;
+
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
+  function openMenu() {
+    clearTimeout(closeTimer);
+    isOpen = true;
+    menu.style.display = 'flex';
+    // Forzar reflow para que el navegador registre el display antes de animar
+    menu.getBoundingClientRect();
+    menu.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', true);
+  }
+
+  function closeMenu() {
+    isOpen = false;
+    menu.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', false);
+    // Solo ocultar con display:none en mobile — en desktop el CSS lo maneja
+    if (isMobile()) {
+      closeTimer = setTimeout(() => {
+        menu.style.display = 'none';
+      }, 300);
+    }
+  }
+
   toggle.addEventListener('click', () => {
-    const isOpen = menu.classList.toggle('is-open');
-    toggle.setAttribute('aria-expanded', isOpen);
+    isOpen ? closeMenu() : openMenu();
   });
 
-  // Cierra el menú al clickear un link
   menu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      menu.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded', false);
-    });
+    link.addEventListener('click', closeMenu);
   });
+
+  // Al redimensionar a desktop, limpiar el inline style que pueda haber quedado
+  window.addEventListener('resize', () => {
+    if (!isMobile()) {
+      menu.style.display = '';
+      menu.classList.remove('is-open');
+      isOpen = false;
+    }
+  }, { passive: true });
 }
 
 // ─── NAVBAR: FONDO AL HACER SCROLL ───────────────────────────────────────────

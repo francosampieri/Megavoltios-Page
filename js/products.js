@@ -112,37 +112,63 @@ function setActiveNavItem(id) {
 }
 
 /**
- * Scroll spy con debounce: solo actualiza el nav cuando el scroll
- * se detiene, evitando el parpadeo al saltar varias categorías.
+ * Scroll spy: detecta qué categoría está en pantalla SOLO cuando
+ * el scroll se detiene. Durante el movimiento no actualiza nada,
+ * eliminando el efecto de "pasar por cada categoría".
  */
 function initScrollSpy() {
   const nav = document.getElementById('category-nav');
   if (!nav) return;
 
   let scrollTimer = null;
-  let pendingId = null;
+  let isUserScrolling = false;
 
-  const observer = new IntersectionObserver((entries) => {
-    // Guardar el último id visible pero no aplicarlo todavía
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        pendingId = entry.target.id.replace('cat-', '');
+  function getNearestCategory() {
+    const categories = document.querySelectorAll('.catalog-category');
+    if (!categories.length) return null;
+
+    const header = document.getElementById('main-header');
+    const catNavWrapper = document.querySelector('.category-nav-wrapper');
+    const offset = (header?.offsetHeight || 0) + (catNavWrapper?.offsetHeight || 0);
+    const viewportMid = window.innerHeight / 2;
+
+    let closestId = null;
+    let closestDist = Infinity;
+
+    categories.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      const elMid = rect.top + rect.height / 2 - offset;
+      const dist = Math.abs(elMid - viewportMid);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestId = el.id.replace('cat-', '');
       }
     });
 
-    // Cancelar el timer anterior y arrancar uno nuevo
-    // Solo actualiza el nav cuando el scroll se detiene (100ms de silencio)
+    return closestId;
+  }
+
+  window.addEventListener('scroll', () => {
+    // Marcar que estamos scrolleando — no hacer nada durante el movimiento
+    isUserScrolling = true;
+
+    // Resetear timer en cada evento de scroll
     clearTimeout(scrollTimer);
+
+    // Cuando el scroll lleva 150ms sin moverse, actualizar el nav
     scrollTimer = setTimeout(() => {
-      if (pendingId) {
-        setActiveNavItem(pendingId);
-        pendingId = null;
-      }
-    }, 100);
+      isUserScrolling = false;
+      const id = getNearestCategory();
+      if (id) setActiveNavItem(id);
+    }, 150);
 
-  }, { rootMargin: '-35% 0px -55% 0px' });
+  }, { passive: true });
 
-  document.querySelectorAll('.catalog-category').forEach(el => observer.observe(el));
+  // Estado inicial al cargar
+  setTimeout(() => {
+    const id = getNearestCategory();
+    if (id) setActiveNavItem(id);
+  }, 200);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
