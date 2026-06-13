@@ -112,27 +112,24 @@ function setActiveNavItem(id) {
 }
 
 /**
- * Scroll spy basado en posición real de elementos.
- * Calcula qué categoría está más cerca del centro de la pantalla
- * en cada evento de scroll. Sin IntersectionObserver = sin parpadeos.
+ * Scroll spy: detecta qué categoría está en pantalla SOLO cuando
+ * el scroll se detiene. Durante el movimiento no actualiza nada,
+ * eliminando el efecto de "pasar por cada categoría".
  */
 function initScrollSpy() {
   const nav = document.getElementById('category-nav');
   if (!nav) return;
 
-  const stickyOffset = () => {
-    const header = document.getElementById('main-header');
-    const catNav = document.querySelector('.category-nav-wrapper');
-    return (header ? header.offsetHeight : 0) + (catNav ? catNav.offsetHeight : 0);
-  };
+  let scrollTimer = null;
+  let isUserScrolling = false;
 
-  let ticking = false;
-
-  function updateActive() {
+  function getNearestCategory() {
     const categories = document.querySelectorAll('.catalog-category');
-    if (!categories.length) return;
+    if (!categories.length) return null;
 
-    const offset = stickyOffset();
+    const header = document.getElementById('main-header');
+    const catNavWrapper = document.querySelector('.category-nav-wrapper');
+    const offset = (header?.offsetHeight || 0) + (catNavWrapper?.offsetHeight || 0);
     const viewportMid = window.innerHeight / 2;
 
     let closestId = null;
@@ -140,7 +137,6 @@ function initScrollSpy() {
 
     categories.forEach(el => {
       const rect = el.getBoundingClientRect();
-      // Centro del elemento relativo al viewport, descontando los stickies
       const elMid = rect.top + rect.height / 2 - offset;
       const dist = Math.abs(elMid - viewportMid);
       if (dist < closestDist) {
@@ -149,19 +145,30 @@ function initScrollSpy() {
       }
     });
 
-    if (closestId) setActiveNavItem(closestId);
-    ticking = false;
+    return closestId;
   }
 
   window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(updateActive);
-      ticking = true;
-    }
+    // Marcar que estamos scrolleando — no hacer nada durante el movimiento
+    isUserScrolling = true;
+
+    // Resetear timer en cada evento de scroll
+    clearTimeout(scrollTimer);
+
+    // Cuando el scroll lleva 150ms sin moverse, actualizar el nav
+    scrollTimer = setTimeout(() => {
+      isUserScrolling = false;
+      const id = getNearestCategory();
+      if (id) setActiveNavItem(id);
+    }, 150);
+
   }, { passive: true });
 
-  // Activar al cargar
-  updateActive();
+  // Estado inicial al cargar
+  setTimeout(() => {
+    const id = getNearestCategory();
+    if (id) setActiveNavItem(id);
+  }, 200);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

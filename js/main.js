@@ -39,11 +39,15 @@ function initMobileMenu() {
   let isOpen = false;
   let closeTimer = null;
 
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
   function openMenu() {
     clearTimeout(closeTimer);
     isOpen = true;
     menu.style.display = 'flex';
-    // Forzar reflow para que el navegador registre el display:flex antes de animar
+    // Forzar reflow para que el navegador registre el display antes de animar
     menu.getBoundingClientRect();
     menu.classList.add('is-open');
     toggle.setAttribute('aria-expanded', true);
@@ -53,20 +57,30 @@ function initMobileMenu() {
     isOpen = false;
     menu.classList.remove('is-open');
     toggle.setAttribute('aria-expanded', false);
-    // Esperar a que termine la transición antes de ocultar
-    closeTimer = setTimeout(() => {
-      menu.style.display = 'none';
-    }, 300);
+    // Solo ocultar con display:none en mobile — en desktop el CSS lo maneja
+    if (isMobile()) {
+      closeTimer = setTimeout(() => {
+        menu.style.display = 'none';
+      }, 300);
+    }
   }
 
   toggle.addEventListener('click', () => {
     isOpen ? closeMenu() : openMenu();
   });
 
-  // Cierra al hacer click en un link
   menu.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', closeMenu);
   });
+
+  // Al redimensionar a desktop, limpiar el inline style que pueda haber quedado
+  window.addEventListener('resize', () => {
+    if (!isMobile()) {
+      menu.style.display = '';
+      menu.classList.remove('is-open');
+      isOpen = false;
+    }
+  }, { passive: true });
 }
 
 // ─── NAVBAR: FONDO AL HACER SCROLL ───────────────────────────────────────────
