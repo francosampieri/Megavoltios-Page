@@ -20,10 +20,6 @@ async function loadProducts() {
   }
 }
 
-/**
- * Construye la barra de navegación sticky con las categorías.
- * Cada botón hace scroll suave hasta la caja correspondiente.
- */
 function buildCategoryNav(categorias) {
   const nav = document.getElementById('category-nav');
   if (!nav) return;
@@ -34,25 +30,20 @@ function buildCategoryNav(categorias) {
     btn.className = 'category-nav__item';
     btn.textContent = cat.nombre;
 
-    // Scroll suave sin romper la URL
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const target = document.getElementById(`cat-${cat.id}`);
       if (target) {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-      // Marcar activo
-      nav.querySelectorAll('.category-nav__item').forEach(b => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
+      // Al hacer click manual, marcar inmediatamente sin esperar al scroll spy
+      setActiveNavItem(btn.getAttribute('href').replace('#cat-', ''));
     });
 
     nav.appendChild(btn);
   });
 }
 
-/**
- * Construye las cajas de cada categoría con sus subcategorías en columnas.
- */
 function buildCatalog(categorias) {
   const grid = document.getElementById('catalog-grid');
   if (!grid) return;
@@ -62,13 +53,11 @@ function buildCatalog(categorias) {
     section.className = 'catalog-category';
     section.id = `cat-${cat.id}`;
 
-    // Nombre de la categoría
     const heading = document.createElement('h3');
     heading.className = 'catalog-category__title';
     heading.textContent = cat.nombre;
     section.appendChild(heading);
 
-    // Contenedor de subcategorías en columnas
     const subGrid = document.createElement('div');
     subGrid.className = 'catalog-subcategory-grid';
 
@@ -100,21 +89,58 @@ function buildCatalog(categorias) {
   });
 }
 
-// Highlight del nav según scroll
+/**
+ * Marca como activo el item del nav que corresponde al id dado.
+ * Centra el item activo dentro del scroll horizontal del nav.
+ */
+function setActiveNavItem(id) {
+  const nav = document.getElementById('category-nav');
+  if (!nav) return;
+
+  nav.querySelectorAll('.category-nav__item').forEach(btn => {
+    const isActive = btn.getAttribute('href') === `#cat-${id}`;
+    btn.classList.toggle('is-active', isActive);
+
+    // Scroll horizontal del nav para centrar el item activo en mobile
+    if (isActive) {
+      const navRect = nav.getBoundingClientRect();
+      const btnRect = btn.getBoundingClientRect();
+      const offset = btnRect.left - navRect.left - (navRect.width / 2) + (btnRect.width / 2);
+      nav.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  });
+}
+
+/**
+ * Scroll spy con debounce: solo actualiza el nav cuando el scroll
+ * se detiene, evitando el parpadeo al saltar varias categorías.
+ */
 function initScrollSpy() {
   const nav = document.getElementById('category-nav');
   if (!nav) return;
 
+  let scrollTimer = null;
+  let pendingId = null;
+
   const observer = new IntersectionObserver((entries) => {
+    // Guardar el último id visible pero no aplicarlo todavía
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const id = entry.target.id.replace('cat-', '');
-        nav.querySelectorAll('.category-nav__item').forEach(btn => {
-          btn.classList.toggle('is-active', btn.getAttribute('href') === `#cat-${id}`);
-        });
+        pendingId = entry.target.id.replace('cat-', '');
       }
     });
-  }, { rootMargin: '-40% 0px -55% 0px' });
+
+    // Cancelar el timer anterior y arrancar uno nuevo
+    // Solo actualiza el nav cuando el scroll se detiene (100ms de silencio)
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      if (pendingId) {
+        setActiveNavItem(pendingId);
+        pendingId = null;
+      }
+    }, 100);
+
+  }, { rootMargin: '-35% 0px -55% 0px' });
 
   document.querySelectorAll('.catalog-category').forEach(el => observer.observe(el));
 }

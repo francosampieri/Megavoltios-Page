@@ -829,7 +829,22 @@ a.footer__nav-link:hover {
   height: 2px;
   background: #fff;
   border-radius: 1px;
-  transition: var(--transition);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+
+/* Animación X cuando el menú está abierto */
+#nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+#nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+#nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 /* Ocultar texto si hay imagen de logo */
@@ -846,6 +861,11 @@ a.footer__nav-link:hover {
 #faq {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+
+/* Indicador de scroll horizontal de categorías — oculto en desktop */
+.category-nav-hint {
+  display: none;
 }
 
 /* ─── RESPONSIVE ────────────────────────────────────────────────────────────── */
@@ -879,19 +899,30 @@ a.footer__nav-link:hover {
 
   .hero__title { font-size: 2.8rem; }
 
-  /* Fade derecho sobre el nav de categorías — sin tocar el wrapper sticky */
-  #category-nav::after {
-    content: '';
-    position: sticky;
+  /* Indicador de scroll — flecha animada pegada al borde derecho del nav */
+  .category-nav-hint {
+    display: flex;
+    position: absolute;
     right: 0;
     top: 0;
     bottom: 0;
-    min-width: 56px;
-    height: 100%;
-    background: linear-gradient(to right, transparent, var(--brand-navy-dark) 85%);
-    flex-shrink: 0;
+    width: 48px;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, transparent, var(--brand-navy-dark) 60%);
+    color: var(--brand-amber);
     pointer-events: none;
-    align-self: stretch;
+    animation: hint-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes hint-pulse {
+    0%, 100% { opacity: 0.5; transform: translateX(0); }
+    50%       { opacity: 1;   transform: translateX(3px); }
+  }
+
+  /* Ocultar el hint cuando el nav ya fue scrolleado */
+  .category-nav-wrapper.scrolled .category-nav-hint {
+    display: none;
   }
 
   .footer__inner {

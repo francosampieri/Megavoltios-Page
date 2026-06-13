@@ -91,6 +91,29 @@ function initSmoothScroll() {
   });
 }
 
+// ─── CATEGORY NAV HINT (mobile) ──────────────────────────────────────────────
+
+function initCategoryNavHint() {
+  const nav = document.getElementById('category-nav');
+  const wrapper = nav ? nav.closest('.category-nav-wrapper') : null;
+  if (!nav || !wrapper) return;
+
+  // Solo en mobile
+  if (window.innerWidth > 768) return;
+
+  // position:relative necesario para el hint absolute, sin romper sticky del wrapper
+  wrapper.style.position = 'sticky'; // ya lo tiene, pero forzamos el relative en el inner
+  nav.parentElement.style.position = 'relative';
+
+  nav.addEventListener('scroll', () => {
+    if (nav.scrollLeft > 20) {
+      wrapper.classList.add('scrolled');
+    } else {
+      wrapper.classList.remove('scrolled');
+    }
+  }, { passive: true });
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -99,4 +122,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavbarScroll();
   initFAQ();
   initSmoothScroll();
+  initCategoryNavHint();
 });
