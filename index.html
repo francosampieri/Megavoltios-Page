@@ -40,9 +40,9 @@
           <a href="#hero"     class="main-nav__link">Inicio</a>
           <a href="#products" class="main-nav__link">Catálogo</a>
           <a href="#why-us"   class="main-nav__link">Nosotros</a>
-          <a href="#faq"      class="main-nav__link">FAQ</a>
           <a href="#location" class="main-nav__link">Ubicación</a>
           <a href="#contact"  class="main-nav__link">Contacto</a>
+          <a href="#faq"      class="main-nav__link">Ayuda</a>
           <a href="#"         class="main-nav__cta" data-whatsapp aria-label="Contactar por WhatsApp">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.12 1.522 5.855L.057 23.928a.5.5 0 0 0 .613.613l6.083-1.464A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.795 9.795 0 0 1-5.002-1.371l-.359-.214-3.717.895.911-3.618-.235-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
             WhatsApp
@@ -188,66 +188,6 @@
 
 
     <!-- ══════════════════════════════════════════════════════════════════════
-         FAQ
-         MODIFICAR: preguntas y respuestas según lo que indique el dueño
-         Para agregar más: copiar un bloque <li class="faq__item">...</li>
-         Para eliminar: borrar el bloque completo
-    ═══════════════════════════════════════════════════════════════════════ -->
-    <section id="faq" aria-labelledby="faq-title">
-      <h2 id="faq-title" class="section-title" style="text-align:center">Preguntas frecuentes</h2>
-      <ul class="faq__list" role="list">
-
-        <li class="faq__item">
-          <button class="faq__question" aria-expanded="false">
-            ¿Realizan envíos?<!-- MODIFICAR -->
-            <span class="faq__icon" aria-hidden="true">+</span>
-          </button>
-          <div class="faq__answer">
-            <!-- MODIFICAR: respuesta real del dueño -->
-            Sí, realizamos envíos dentro de Godoy Cruz y zonas aledañas. Consultanos por WhatsApp para coordinar.
-          </div>
-        </li>
-
-        <li class="faq__item">
-          <button class="faq__question" aria-expanded="false">
-            ¿Trabajan con empresas y contratistas?<!-- MODIFICAR -->
-            <span class="faq__icon" aria-hidden="true">+</span>
-          </button>
-          <div class="faq__answer">
-            <!-- MODIFICAR -->
-            Sí, atendemos tanto a clientes particulares como a empresas, contratistas y profesionales del rubro.
-          </div>
-        </li>
-
-        <li class="faq__item">
-          <button class="faq__question" aria-expanded="false">
-            ¿Tienen lista de precios?<!-- MODIFICAR -->
-            <span class="faq__icon" aria-hidden="true">+</span>
-          </button>
-          <div class="faq__answer">
-            <!-- MODIFICAR -->
-            Los precios varían según disponibilidad y volumen. Consultanos directamente por WhatsApp para obtener presupuesto.
-          </div>
-        </li>
-
-        <li class="faq__item">
-          <button class="faq__question" aria-expanded="false">
-            ¿Puedo encargar un producto que no veo en el catálogo?<!-- MODIFICAR -->
-            <span class="faq__icon" aria-hidden="true">+</span>
-          </button>
-          <div class="faq__answer">
-            <!-- MODIFICAR -->
-            Por supuesto. Consultanos por WhatsApp y lo buscamos para vos.
-          </div>
-        </li>
-
-        <!-- AGREGAR MÁS PREGUNTAS: copiar el bloque <li> completo -->
-
-      </ul>
-    </section>
-
-
-    <!-- ══════════════════════════════════════════════════════════════════════
          UBICACIÓN
          MODIFICAR: dirección y reemplazar el src del iframe con el embed real de Google Maps
          Para obtener el iframe: Google Maps → tu dirección → Compartir → Incorporar mapa → copiar src
@@ -350,6 +290,61 @@
       </div>
     </section>
 
+    <!-- ══════════════════════════════════════════════════════════════════════
+         AYUDA (FAQ)
+         MODIFICAR: preguntas y respuestas según lo que indique el dueño
+         Para agregar más: copiar un bloque <li class="faq__item">...</li>
+         Para eliminar: borrar el bloque completo
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <section id="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title" class="section-title" style="text-align:center">¿Tenés alguna duda?</h2>
+      <ul class="faq__list" role="list">
+
+        <li class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            ¿Realizan envíos?
+            <span class="faq__icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__answer">
+            Sí, realizamos envíos dentro de Godoy Cruz y zonas aledañas. Consultanos por WhatsApp para coordinar.
+          </div>
+        </li>
+
+        <li class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            ¿Trabajan con empresas y contratistas?
+            <span class="faq__icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__answer">
+            Sí, atendemos tanto a clientes particulares como a empresas, contratistas y profesionales del rubro.
+          </div>
+        </li>
+
+        <li class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            ¿Tienen lista de precios?
+            <span class="faq__icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__answer">
+            Los precios varían según disponibilidad y volumen. Consultanos directamente por WhatsApp para obtener presupuesto.
+          </div>
+        </li>
+
+        <li class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            ¿Puedo encargar un producto que no veo en el catálogo?
+            <span class="faq__icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__answer">
+            Por supuesto. Consultanos por WhatsApp y lo buscamos para vos.
+          </div>
+        </li>
+
+        <!-- AGREGAR MÁS PREGUNTAS: copiar el bloque <li> completo -->
+
+      </ul>
+    </section>
+
   </main>
 
 
@@ -386,9 +381,9 @@
             <li><a href="#hero"     class="footer__nav-link">Inicio</a></li>
             <li><a href="#products" class="footer__nav-link">Catálogo</a></li>
             <li><a href="#why-us"   class="footer__nav-link">Nosotros</a></li>
-            <li><a href="#faq"      class="footer__nav-link">FAQ</a></li>
             <li><a href="#location" class="footer__nav-link">Ubicación</a></li>
             <li><a href="#contact"  class="footer__nav-link">Contacto</a></li>
+            <li><a href="#faq"      class="footer__nav-link">Ayuda</a></li>
           </ul>
         </nav>
 

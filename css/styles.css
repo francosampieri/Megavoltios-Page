@@ -231,7 +231,7 @@ section {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, #0B0F22 15%, rgba(11,15,34,0.6) 50%, rgba(11,15,34,0.1) 100%);
+  background: linear-gradient(to right, #0B0F22 0%, rgba(11,15,34,0.85) 30%, rgba(11,15,34,0.2) 60%, rgba(11,15,34,0.05) 100%);
 }
 
 .hero__inner {
