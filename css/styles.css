@@ -100,6 +100,16 @@ section {
   padding-bottom: 0;
 }
 
+/* La nav ocupa todo el espacio disponible y distribuye los links uniformemente */
+.main-nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 0;
+  margin: 0 1.5rem;
+}
+
 .header__logo {
   display: flex;
   align-items: center;
@@ -126,12 +136,6 @@ section {
 }
 
 /* ─── MAIN NAV ────────────────────────────────────────────────────────────── */
-
-.main-nav {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
 
 .main-nav__link {
   padding: 0.5rem 1rem;
@@ -737,11 +741,42 @@ section {
   flex-direction: column;
   justify-content: space-between;
   min-height: 180px;
-  transition: filter var(--transition);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Destello que barre la card en hover */
+.contact__item--primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255,255,255,0.18) 50%,
+    transparent 100%
+  );
+  transition: left 0.55s ease;
+  pointer-events: none;
 }
 
 .contact__item--primary:hover {
-  filter: brightness(1.05);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(245, 166, 35, 0.4);
+}
+
+.contact__item--primary:hover::after {
+  left: 140%;
+}
+
+.contact__item--primary:hover .contact__item-hint {
+  color: rgba(0,0,0,0.65);
+  letter-spacing: 0.02em;
 }
 
 .contact__item--primary .contact__item-label {
@@ -771,6 +806,7 @@ section {
   font-size: 0.75rem;
   color: rgba(0,0,0,0.45);
   margin-top: 2px;
+  transition: color 0.28s ease, letter-spacing 0.28s ease;
 }
 
 /* Columna derecha: tres filas apiladas */
