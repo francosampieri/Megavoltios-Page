@@ -272,32 +272,49 @@
         <h2 id="contact-title" class="section-title">Contacto</h2>
         <div class="contact__grid">
 
-          <div class="contact__item">
-            <span class="contact__item-icon" aria-hidden="true">💬</span>
-            <span class="contact__item-label">WhatsApp</span>
-            <a href="#" class="contact__item-value" data-whatsapp>+54 9 261 681 3712</a><!-- MODIFICAR -->
-          </div>
-
-          <div class="contact__item">
-            <span class="contact__item-icon" aria-hidden="true">📍</span>
-            <span class="contact__item-label">Dirección</span>
-            <span class="contact__item-value">Independencia 888, Godoy Cruz</span><!-- MODIFICAR -->
-          </div>
-
-          <div class="contact__item">
-            <span class="contact__item-icon" aria-hidden="true">🕐</span>
-            <span class="contact__item-label">Horarios</span>
-            <span class="contact__item-value">Lun–Vie 08:30–18:30<br>Sáb 09:00–13:00</span><!-- MODIFICAR -->
-          </div>
-
-          <div class="contact__item">
-            <span class="contact__item-icon" aria-hidden="true">📱</span>
-            <span class="contact__item-label">Redes sociales</span>
-            <!-- MODIFICAR: reemplazar # con URLs reales. Eliminar los que no usen. -->
+          <!-- Card principal — WhatsApp en ámbar sólido -->
+          <a href="#" class="contact__item--primary" data-whatsapp>
             <div>
-              <a href="https://www.instagram.com/megavoltios1/" class="contact__item-value">Instagram</a><br>
-              <a href="https://www.facebook.com/people/Megavoltios-Megavoltios/pfbid02VK6pFSBSDmp6FAZhH46vEYhB27UEnsK79srgKXpkrSKd3h2BVDwyhwS2JmhfB68Cl/?mibextid=ZbWKwL&utm_source=ig&utm_medium=social&utm_content=link_in_bio" class="contact__item-value">Facebook</a>
+              <span class="contact__item-label">Canal principal</span>
+              <div class="contact__item-title">WhatsApp</div>
             </div>
+            <div>
+              <div class="contact__item-value">+54 9 261 681 3712</div>
+              <div class="contact__item-hint">Consultanos directo →</div>
+            </div>
+          </a>
+
+          <!-- Columna derecha: dirección, horarios, redes -->
+          <div class="contact__secondary">
+
+            <div class="contact__item--secondary">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z"/></svg>
+              <div>
+                <div class="contact__item-label">Dirección</div>
+                <span class="contact__item-value">Independencia 888, Godoy Cruz</span>
+              </div>
+            </div>
+
+            <div class="contact__item--secondary">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+              <div>
+                <div class="contact__item-label">Horarios</div>
+                <span class="contact__item-value">Lun–Vie 08:30–18:30 · Sáb 09:00–13:00</span>
+              </div>
+            </div>
+
+            <div class="contact__item--secondary">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <div>
+                <div class="contact__item-label">Redes sociales</div>
+                <div>
+                  <a href="https://www.instagram.com/megavoltios1/" class="contact__item-value" target="_blank" rel="noopener noreferrer">Instagram</a>
+                  &nbsp;·&nbsp;
+                  <a href="https://www.facebook.com/people/Megavoltios-Megavoltios/pfbid02VK6pFSBSDmp6FAZhH46vEYhB27UEnsK79srgKXpkrSKd3h2BVDwyhwS2JmhfB68Cl/" class="contact__item-value" target="_blank" rel="noopener noreferrer">Facebook</a>
+                </div>
+              </div>
+            </div>
+
           </div>
 
         </div>
