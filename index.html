@@ -24,16 +24,9 @@
 
         <!-- Logo y nombre -->
         <a href="#" class="header__logo" aria-label="Inicio — Megavoltios">
-          <!-- MODIFICAR: reemplazar src con la ruta real del logo -->
           <img src="./assets/logos/logo.png" alt="Megavoltios" class="header__logo-img" />
-          <span class="header__business-name">Megavoltios</span><!-- MODIFICAR: nombre real -->
+          <span class="header__business-name">Megavoltios</span>
         </a>
-
-        <!-- Horarios (visible en desktop) -->
-        <p class="header__meta">
-          <!-- MODIFICAR: horarios reales -->
-          Lun–Vie: 08:30–18:30 &nbsp;·&nbsp; Sáb: 09:00–13:00
-        </p>
 
         <!-- Navegación principal -->
         <nav id="nav-menu" class="main-nav" aria-label="Navegación principal">
@@ -42,7 +35,7 @@
           <a href="#why-us"   class="main-nav__link">Nosotros</a>
           <a href="#location" class="main-nav__link">Ubicación</a>
           <a href="#contact"  class="main-nav__link">Contacto</a>
-          <a href="#faq"      class="main-nav__link">Ayuda</a>
+          <a href="#faq"      class="main-nav__link">Preguntas</a>
           <a href="#"         class="main-nav__cta" data-whatsapp aria-label="Contactar por WhatsApp">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.12 1.522 5.855L.057 23.928a.5.5 0 0 0 .613.613l6.083-1.464A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.795 9.795 0 0 1-5.002-1.371l-.359-.214-3.717.895.911-3.618-.235-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
             WhatsApp
@@ -105,15 +98,30 @@
       <div class="container">
         <p class="brands__title">Trabajamos con las mejores marcas</p>
         <ul class="brands__grid" role="list">
-          <!-- MODIFICAR: reemplazar cada <span> por <img> cuando tengas los logos reales -->
-          <li class="brands__item"><span class="brands__name">Schneider</span></li>
-          <li class="brands__item"><span class="brands__name">Philips</span></li>
-          <li class="brands__item"><span class="brands__name">Osram</span></li>
-          <li class="brands__item"><span class="brands__name">Bticino</span></li>
-          <li class="brands__item"><span class="brands__name">Siemens</span></li>
-          <li class="brands__item"><span class="brands__name">Plavit</span></li>
-          <li class="brands__item"><span class="brands__name">Argos</span></li>
-          <!-- AGREGAR más marcas copiando una línea <li> -->
+          <li class="brands__item">
+            <img src="./assets/brands/mh.png" alt="MH Conductores Eléctricos" class="brands__logo" />
+          </li>
+          <li class="brands__item">
+            <img src="./assets/brands/kalop.png" alt="Kalop" class="brands__logo" />
+          </li>
+          <li class="brands__item">
+            <img src="./assets/brands/genrod.png" alt="Genrod" class="brands__logo" />
+          </li>
+          <li class="brands__item">
+            <img src="./assets/brands/baw.svg" alt="BAW Electric" class="brands__logo" />
+          </li>
+          <li class="brands__item">
+            <img src="./assets/brands/ge.png" alt="General Electric" class="brands__logo" />
+          </li>
+          <li class="brands__item">
+            <img src="./assets/brands/weg.svg" alt="WEG" class="brands__logo" />
+          </li>
+          <li class="brands__item">
+            <img src="./assets/brands/bael.png" alt="BAEL Iluminación" class="brands__logo" />
+          </li>
+          <li class="brands__item">
+            <img src="./assets/brands/einhell.png" alt="Einhell" class="brands__logo" />
+          </li>
         </ul>
       </div>
     </section>
@@ -162,26 +170,47 @@
       <div class="container">
         <h2 id="why-us-title" class="section-title">¿Por qué elegirnos?</h2>
         <ul class="why-us__grid" role="list">
+
           <li class="why-us__item">
-            <span class="why-us__icon" aria-hidden="true">📦</span>
-            <h3 class="why-us__title">Amplio stock</h3><!-- MODIFICAR -->
-            <p class="why-us__text">Contamos con una gran variedad de productos disponibles de inmediato.</p><!-- MODIFICAR -->
+            <div class="why-us__bg" style="background-image:url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=75')" aria-hidden="true"></div>
+            <div class="why-us__overlay" aria-hidden="true"></div>
+            <div class="why-us__content">
+              <svg class="why-us__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+              <h3 class="why-us__title">Amplio stock</h3>
+              <p class="why-us__text">Gran variedad de productos disponibles de inmediato para tu proyecto.</p>
+            </div>
           </li>
+
           <li class="why-us__item">
-            <span class="why-us__icon" aria-hidden="true">🤝</span>
-            <h3 class="why-us__title">Atención personalizada</h3><!-- MODIFICAR -->
-            <p class="why-us__text">Te asesoramos para que encuentres exactamente lo que necesitás.</p><!-- MODIFICAR -->
+            <div class="why-us__bg" style="background-image:url('https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=600&q=75')" aria-hidden="true"></div>
+            <div class="why-us__overlay" aria-hidden="true"></div>
+            <div class="why-us__content">
+              <svg class="why-us__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+              <h3 class="why-us__title">Atención personalizada</h3>
+              <p class="why-us__text">Te asesoramos para que encuentres exactamente lo que necesitás.</p>
+            </div>
           </li>
+
           <li class="why-us__item">
-            <span class="why-us__icon" aria-hidden="true">⭐</span>
-            <h3 class="why-us__title">Materiales de calidad</h3><!-- MODIFICAR -->
-            <p class="why-us__text">Trabajamos solo con las mejores marcas del mercado.</p><!-- MODIFICAR -->
+            <div class="why-us__bg" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=75')" aria-hidden="true"></div>
+            <div class="why-us__overlay" aria-hidden="true"></div>
+            <div class="why-us__content">
+              <svg class="why-us__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
+              <h3 class="why-us__title">Materiales de calidad</h3>
+              <p class="why-us__text">Trabajamos solo con las mejores marcas del mercado eléctrico.</p>
+            </div>
           </li>
+
           <li class="why-us__item">
-            <span class="why-us__icon" aria-hidden="true">🏭</span>
-            <h3 class="why-us__title">Hogares e industrias</h3><!-- MODIFICAR -->
-            <p class="why-us__text">Soluciones para todo tipo de proyectos y necesidades.</p><!-- MODIFICAR -->
+            <div class="why-us__bg" style="background-image:url('https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&q=75')" aria-hidden="true"></div>
+            <div class="why-us__overlay" aria-hidden="true"></div>
+            <div class="why-us__content">
+              <svg class="why-us__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"/></svg>
+              <h3 class="why-us__title">Hogares e industrias</h3>
+              <p class="why-us__text">Soluciones para todo tipo de proyectos y necesidades eléctricas.</p>
+            </div>
           </li>
+
         </ul>
       </div>
     </section>
@@ -258,32 +287,49 @@
         <h2 id="contact-title" class="section-title">Contacto</h2>
         <div class="contact__grid">
 
-          <div class="contact__item">
-            <span class="contact__item-icon" aria-hidden="true">💬</span>
-            <span class="contact__item-label">WhatsApp</span>
-            <a href="#" class="contact__item-value" data-whatsapp>+54 9 261 681 3712</a><!-- MODIFICAR -->
-          </div>
-
-          <div class="contact__item">
-            <span class="contact__item-icon" aria-hidden="true">📍</span>
-            <span class="contact__item-label">Dirección</span>
-            <span class="contact__item-value">Independencia 888, Godoy Cruz</span><!-- MODIFICAR -->
-          </div>
-
-          <div class="contact__item">
-            <span class="contact__item-icon" aria-hidden="true">🕐</span>
-            <span class="contact__item-label">Horarios</span>
-            <span class="contact__item-value">Lun–Vie 08:30–18:30<br>Sáb 09:00–13:00</span><!-- MODIFICAR -->
-          </div>
-
-          <div class="contact__item">
-            <span class="contact__item-icon" aria-hidden="true">📱</span>
-            <span class="contact__item-label">Redes sociales</span>
-            <!-- MODIFICAR: reemplazar # con URLs reales. Eliminar los que no usen. -->
+          <!-- Card principal — WhatsApp en ámbar sólido -->
+          <a href="#" class="contact__item--primary" data-whatsapp>
             <div>
-              <a href="https://www.instagram.com/megavoltios1/" class="contact__item-value">Instagram</a><br>
-              <a href="https://www.facebook.com/people/Megavoltios-Megavoltios/pfbid02VK6pFSBSDmp6FAZhH46vEYhB27UEnsK79srgKXpkrSKd3h2BVDwyhwS2JmhfB68Cl/?mibextid=ZbWKwL&utm_source=ig&utm_medium=social&utm_content=link_in_bio" class="contact__item-value">Facebook</a>
+              <span class="contact__item-label">Canal principal</span>
+              <div class="contact__item-title">WhatsApp</div>
             </div>
+            <div>
+              <div class="contact__item-value">+54 9 261 681 3712</div>
+              <div class="contact__item-hint">Consultanos directo →</div>
+            </div>
+          </a>
+
+          <!-- Columna derecha: dirección, horarios, redes -->
+          <div class="contact__secondary">
+
+            <div class="contact__item--secondary">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z"/></svg>
+              <div>
+                <div class="contact__item-label">Dirección</div>
+                <span class="contact__item-value">Independencia 888, Godoy Cruz</span>
+              </div>
+            </div>
+
+            <div class="contact__item--secondary">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+              <div>
+                <div class="contact__item-label">Horarios</div>
+                <span class="contact__item-value">Lun–Vie 08:30–18:30 · Sáb 09:00–13:00</span>
+              </div>
+            </div>
+
+            <div class="contact__item--secondary">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <div>
+                <div class="contact__item-label">Redes sociales</div>
+                <div>
+                  <a href="https://www.instagram.com/megavoltios1/" class="contact__item-value" target="_blank" rel="noopener noreferrer">Instagram</a>
+                  &nbsp;·&nbsp;
+                  <a href="https://www.facebook.com/people/Megavoltios-Megavoltios/pfbid02VK6pFSBSDmp6FAZhH46vEYhB27UEnsK79srgKXpkrSKd3h2BVDwyhwS2JmhfB68Cl/" class="contact__item-value" target="_blank" rel="noopener noreferrer">Facebook</a>
+                </div>
+              </div>
+            </div>
+
           </div>
 
         </div>
@@ -383,7 +429,7 @@
             <li><a href="#why-us"   class="footer__nav-link">Nosotros</a></li>
             <li><a href="#location" class="footer__nav-link">Ubicación</a></li>
             <li><a href="#contact"  class="footer__nav-link">Contacto</a></li>
-            <li><a href="#faq"      class="footer__nav-link">Ayuda</a></li>
+            <li><a href="#faq"      class="footer__nav-link">Preguntas</a></li>
           </ul>
         </nav>
 
