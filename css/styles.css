@@ -359,14 +359,15 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 2.5rem 4rem;
+  flex-wrap: nowrap;
+  gap: 0 3rem;
 }
 
 .brands__item {
   opacity: 0.35;
   transition: opacity 0.35s ease, transform 0.35s ease;
   list-style: none;
+  flex-shrink: 1;
 }
 
 .brands__item:hover {
@@ -375,17 +376,13 @@ section {
 }
 
 .brands__logo {
-  height: 36px;
+  height: 28px;
   width: auto;
-  max-width: 140px;
+  max-width: 110px;
   object-fit: contain;
   display: block;
-  /* Los logos son blancos — se ven sobre fondo oscuro */
   filter: brightness(0) invert(1);
 }
-
-/* Al hover, los logos con color propio pueden mostrarse si existen versiones color */
-/* Por ahora todos son blancos así que mantenemos el filtro */
 
 .brands__name {
   font-size: 1.25rem;
@@ -396,7 +393,6 @@ section {
 .brands__item:hover .brands__name {
   color: var(--brand-amber);
 }
-
 
 /* ─── PRODUCTS & CATALOG ───────────────────────────────────────────────────── */
 
