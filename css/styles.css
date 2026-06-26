@@ -359,8 +359,8 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: nowrap;
-  gap: 0 3rem;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.5rem;
 }
 
 .brands__item {
@@ -1084,6 +1084,19 @@ a.footer__nav-link:hover {
 
 @media (max-width: 768px) {
   .header__meta { display: none; }
+
+  /* Marcas: grid de 4 columnas fijas en mobile — 2 filas de 4 */
+  .brands__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem 1rem;
+    justify-items: center;
+  }
+
+  .brands__logo {
+    height: 22px;
+    max-width: 80px;
+  }
 
   .hero__bg-image {
     width: 100%;
