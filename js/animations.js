@@ -1,201 +1,202 @@
 /**
  * animations.js
- * Gestiona todas las animaciones de entrada por scroll del sitio.
- * No modificar para cambios de contenido — usar main.js y products.js.
+ * Animaciones de entrada por scroll.
  */
 
-// ─── UTILIDAD: INTERSECTION OBSERVER ─────────────────────────────────────────
+const EASE = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
-function createObserver(callback, options = {}) {
-  return new IntersectionObserver(callback, {
-    threshold: options.threshold ?? 0.15,
-    rootMargin: options.rootMargin ?? '0px 0px -60px 0px',
+function observe(el, onVisible, options = {}) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        onVisible(entry.target);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: options.threshold ?? 0.12, rootMargin: options.rootMargin ?? '0px 0px -50px 0px' });
+  io.observe(el);
+}
+
+function fadeUp(el, delay = 0) {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.transition = `opacity 0.55s ${EASE} ${delay}ms, transform 0.55s ${EASE} ${delay}ms`;
+  observe(el, (t) => {
+    t.style.opacity = '1';
+    t.style.transform = 'translateY(0)';
   });
 }
 
-// ─── 1. ELEMENTOS CON CLASE ANIM-* ───────────────────────────────────────────
-// Cualquier elemento con .anim-fade-up, .anim-fade-in, etc.
-// entra al viewport → recibe .is-visible
-
-function initScrollAnimations() {
-  const targets = document.querySelectorAll(
-    '.anim-fade-up, .anim-fade-in, .anim-slide-left, .anim-slide-right'
-  );
-
-  if (!targets.length) return;
-
-  const observer = createObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target); // animar solo una vez
-      }
-    });
+function slideIn(el, direction = 'left', delay = 0) {
+  const x = direction === 'left' ? '-32px' : '32px';
+  el.style.opacity = '0';
+  el.style.transform = `translateX(${x})`;
+  el.style.transition = `opacity 0.6s ${EASE} ${delay}ms, transform 0.6s ${EASE} ${delay}ms`;
+  observe(el, (t) => {
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(0)';
   });
-
-  targets.forEach(el => observer.observe(el));
 }
 
-// ─── 2. STAGGER — grupos de elementos ────────────────────────────────────────
-// El contenedor tiene .anim-stagger
-// Cuando el contenedor entra al viewport, sus hijos reciben
-// .is-visible con un pequeño delay escalonado
-
-function initStaggerAnimations() {
-  const groups = document.querySelectorAll('.anim-stagger');
-  if (!groups.length) return;
-
-  const observer = createObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const children = entry.target.children;
-        Array.from(children).forEach((child, i) => {
-          setTimeout(() => {
-            child.classList.add('is-visible');
-          }, i * 90);
-        });
-        observer.unobserve(entry.target);
-      }
+function stagger(parent, delayStep = 80) {
+  const children = Array.from(parent.children);
+  children.forEach((child, i) => {
+    child.style.opacity = '0';
+    child.style.transform = 'translateY(20px)';
+    child.style.transition = `opacity 0.5s ${EASE} ${i * delayStep}ms, transform 0.5s ${EASE} ${i * delayStep}ms`;
+  });
+  observe(parent, () => {
+    children.forEach(child => {
+      child.style.opacity = '';
+      child.style.transform = 'translateY(0)';
     });
-  }, { threshold: 0.1 });
-
-  groups.forEach(el => observer.observe(el));
+  }, { threshold: 0.08 });
 }
 
-// ─── 3. TÍTULOS DE SECCIÓN ────────────────────────────────────────────────────
-// .section-title y .section-subtitle arrancan ocultos (CSS)
-// y aparecen con fadeUp cuando entran al viewport
+// ─── HERO ─────────────────────────────────────────────────────────────────────
+// Subtítulo y botones más rápidos (ya animados por CSS, solo ajustamos velocidad)
+
+function initHero() {
+  // Velocidad de subtítulo y acciones — reescribir las reglas inline
+  const subtitle = document.querySelector('.hero__subtitle');
+  const actions  = document.querySelector('.hero__actions');
+  if (subtitle) subtitle.style.animationDuration = '0.45s';
+  if (actions)  actions.style.animationDuration  = '0.45s';
+}
+
+// ─── TÍTULOS DE SECCIÓN ───────────────────────────────────────────────────────
+// NO se ocultan hasta que el observer esté listo — evita sección vacía
 
 function initSectionTitles() {
-  const titles = document.querySelectorAll(
-    '.section-title, .section-subtitle'
-  );
-
-  if (!titles.length) return;
-
-  const observer = createObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.animation = 'fadeUp 0.65s cubic-bezier(0.4,0,0.2,1) forwards';
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
-
-  titles.forEach(el => observer.observe(el));
+  document.querySelectorAll('.section-title, .section-subtitle').forEach(el => {
+    fadeUp(el, 0);
+  });
 }
 
-// ─── 4. CATALOG CATEGORIES — aparecen al hacer scroll ────────────────────────
-// Las cajas del catálogo se generan dinámicamente desde JS.
-// Las observamos después de que products.js las cree.
+// ─── MARCAS ───────────────────────────────────────────────────────────────────
+// Stagger rápido: 40ms entre logos, todos visibles antes de seguir scrolleando
+
+function initBrands() {
+  const grid = document.querySelector('.brands__grid');
+  if (!grid) return;
+  stagger(grid, 40);
+}
+
+// ─── POR QUÉ ELEGIRNOS ────────────────────────────────────────────────────────
+
+function initWhyUs() {
+  const grid = document.querySelector('.why-us__grid');
+  if (!grid) return;
+  stagger(grid, 90);
+}
+
+// ─── UBICACIÓN ────────────────────────────────────────────────────────────────
+
+function initLocation() {
+  const info = document.querySelector('.location__info');
+  const map  = document.querySelector('.location__map');
+  if (info) slideIn(info, 'left');
+  if (map)  slideIn(map, 'right', 80);
+}
+
+// ─── FAQ ──────────────────────────────────────────────────────────────────────
+
+function initFAQAnimation() {
+  const list = document.querySelector('.faq__list');
+  if (!list) return;
+  stagger(list, 70);
+}
+
+// ─── CONTACTO ─────────────────────────────────────────────────────────────────
+
+function initContactAnimation() {
+  const primary   = document.querySelector('.contact__item--primary');
+  const secondary = document.querySelector('.contact__secondary');
+  if (primary)   slideIn(primary, 'left');
+  if (secondary) slideIn(secondary, 'right', 80);
+
+  // Sacudida de atención al entrar — más pronunciada
+  if (primary) {
+    observe(primary, (el) => {
+      setTimeout(() => {
+        el.style.transition = 'transform 0.15s ease';
+        el.style.transform  = 'scale(1.04) translateY(-3px)';
+        setTimeout(() => {
+          el.style.transform = 'scale(0.98)';
+          setTimeout(() => {
+            el.style.transform  = 'scale(1)';
+            el.style.transition = '';
+          }, 150);
+        }, 150);
+      }, 400);
+    }, { threshold: 0.5 });
+  }
+}
+
+// ─── CATÁLOGO ─────────────────────────────────────────────────────────────────
+// Las categorías se generan dinámicamente. Usamos MutationObserver
+// para detectar cuando están listas, y luego las animamos individualmente.
 
 function initCatalogAnimations() {
-  // Esperar a que products.js termine de generar el catálogo
   const grid = document.getElementById('catalog-grid');
   if (!grid) return;
 
-  const mutationObserver = new MutationObserver(() => {
-    const categories = grid.querySelectorAll('.catalog-category');
-    if (!categories.length) return;
+  function animateCategories() {
+    const cats = grid.querySelectorAll('.catalog-category');
+    if (!cats.length) return;
 
-    mutationObserver.disconnect();
-
-    const scrollObserver = createObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          scrollObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.08 });
-
-    categories.forEach((cat, i) => {
-      cat.style.opacity = '0';
-      cat.style.transform = 'translateY(24px)';
-      cat.style.transition = `opacity 0.55s ease ${i * 60}ms, transform 0.55s ease ${i * 60}ms`;
-      scrollObserver.observe(cat);
+    cats.forEach((cat, i) => {
+      fadeUp(cat, i * 50);
     });
+  }
+
+  // Si el catálogo ya tiene contenido (carga rápida)
+  if (grid.children.length > 0) {
+    animateCategories();
+    return;
+  }
+
+  // Esperar a que products.js inserte las categorías
+  const mo = new MutationObserver(() => {
+    if (grid.children.length > 0) {
+      mo.disconnect();
+      // Pequeño delay para que el DOM esté estable
+      setTimeout(animateCategories, 50);
+    }
   });
-
-  mutationObserver.observe(grid, { childList: true });
+  mo.observe(grid, { childList: true });
 }
 
-// Cuando una catalog-category recibe .is-visible, aplicar el estado visible
-document.addEventListener('animationFrame', () => {});
+// ─── WHATSAPP FLOAT: pulso más visible ───────────────────────────────────────
 
-// Polyfill simple para catalog-category: usar clase en lugar de inline style
-function applyCatalogVisible() {
-  document.addEventListener('scroll', () => {}, { passive: true });
-}
+function initWhatsAppPulse() {
+  const btn = document.querySelector('.whatsapp-float');
+  if (!btn) return;
 
-// ─── 5. HERO: barra lateral ya animada por CSS ───────────────────────────────
-// No necesita JS, está en el keyframe amberBarGrow
-
-// ─── 6. BRAND ITEMS: fade in escalonado ──────────────────────────────────────
-
-function initBrandsAnimation() {
-  const grid = document.querySelector('.brands__grid');
-  if (!grid) return;
-
-  const observer = createObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const items = entry.target.querySelectorAll('.brands__item');
-        items.forEach((item, i) => {
-          item.style.opacity = '0';
-          item.style.transform = 'translateY(12px)';
-          item.style.transition = `opacity 0.5s ease ${i * 70}ms, transform 0.5s ease ${i * 70}ms`;
-          setTimeout(() => {
-            item.style.opacity = '0.35';
-            item.style.transform = 'translateY(0)';
-          }, i * 70 + 50);
-        });
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
-
-  // Reset inicial
-  const items = grid.querySelectorAll('.brands__item');
-  items.forEach(item => {
-    item.style.opacity = '0';
-  });
-
-  observer.observe(grid);
-}
-
-// ─── 7. CONTACT CARD WHATSAPP: pulso inicial ─────────────────────────────────
-
-function initContactAnimation() {
-  const primary = document.querySelector('.contact__item--primary');
-  if (!primary) return;
-
-  const observer = createObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        // Pequeña sacudida de atención al entrar
-        primary.style.transition = 'transform 0.3s cubic-bezier(0.4,0,0.2,1)';
-        setTimeout(() => { primary.style.transform = 'scale(1.02)'; }, 200);
-        setTimeout(() => { primary.style.transform = 'scale(1)'; }, 500);
-        observer.unobserve(primary);
-      }
-    });
-  }, { threshold: 0.4 });
-
-  observer.observe(primary);
+  // Pulso que escala el botón visiblemente cada 4 segundos
+  setInterval(() => {
+    btn.style.transition = 'transform 0.25s ease, box-shadow 0.25s ease';
+    btn.style.transform  = 'scale(1.22)';
+    btn.style.boxShadow  = '0 0 0 8px rgba(245,166,35,0.25)';
+    setTimeout(() => {
+      btn.style.transform = 'scale(1)';
+      btn.style.boxShadow = '';
+    }, 300);
+  }, 4000);
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Respetar preferencia de usuario
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reducedMotion) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  initScrollAnimations();
-  initStaggerAnimations();
+  initHero();
   initSectionTitles();
-  initCatalogAnimations();
-  initBrandsAnimation();
+  initBrands();
+  initWhyUs();
+  initLocation();
+  initFAQAnimation();
   initContactAnimation();
+  initCatalogAnimations();
+  initWhatsAppPulse();
 });
