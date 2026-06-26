@@ -97,7 +97,7 @@
     <section id="brands" aria-label="Marcas con las que trabajamos">
       <div class="container">
         <p class="brands__title">Trabajamos con las mejores marcas</p>
-        <ul class="brands__grid" role="list">
+        <ul class="brands__grid anim-stagger" role="list">
           <li class="brands__item">
             <img src="./assets/brands/mh.png" alt="MH Conductores Eléctricos" class="brands__logo" />
           </li>
@@ -169,7 +169,7 @@
     <section id="why-us" aria-labelledby="why-us-title">
       <div class="container">
         <h2 id="why-us-title" class="section-title">¿Por qué elegirnos?</h2>
-        <ul class="why-us__grid" role="list">
+        <ul class="why-us__grid anim-stagger" role="list">
 
           <li class="why-us__item">
             <div class="why-us__bg" style="background-image:url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&q=75')" aria-hidden="true"></div>
@@ -226,7 +226,7 @@
         <h2 id="location-title" class="section-title">Nuestra ubicación</h2>
         <div class="location__inner">
 
-          <div class="location__info">
+          <div class="location__info anim-slide-left">
             <div class="location__detail">
               <span class="location__detail-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>
@@ -261,7 +261,7 @@
             </a>
           </div>
 
-          <div class="location__map">
+          <div class="location__map anim-slide-right">
             <!-- MODIFICAR: reemplazar este src con el iframe real de Google Maps -->
             <!-- Cómo obtenerlo: Google Maps → buscar la dirección → Compartir → Incorporar un mapa → copiar solo el src -->
             <iframe
@@ -288,7 +288,7 @@
         <div class="contact__grid">
 
           <!-- Card principal — WhatsApp en ámbar sólido -->
-          <a href="#" class="contact__item--primary" data-whatsapp>
+          <a href="#" class="contact__item--primary anim-slide-left" data-whatsapp>
             <div>
               <span class="contact__item-label">Canal principal</span>
               <div class="contact__item-title">WhatsApp</div>
@@ -300,7 +300,7 @@
           </a>
 
           <!-- Columna derecha: dirección, horarios, redes -->
-          <div class="contact__secondary">
+          <div class="contact__secondary anim-slide-right">
 
             <div class="contact__item--secondary">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z"/></svg>
@@ -344,7 +344,7 @@
     ═══════════════════════════════════════════════════════════════════════ -->
     <section id="faq" aria-labelledby="faq-title">
       <h2 id="faq-title" class="section-title" style="text-align:center">¿Tenés alguna duda?</h2>
-      <ul class="faq__list" role="list">
+      <ul class="faq__list anim-stagger" role="list">
 
         <li class="faq__item">
           <button class="faq__question" aria-expanded="false">
@@ -466,6 +466,7 @@
   <!-- Scripts al final del body para no bloquear el render -->
   <script src="./js/main.js"></script>
   <script src="./js/products.js"></script>
+  <script src="./js/animations.js"></script>
 
   <!-- Año dinámico en el footer -->
   <script>

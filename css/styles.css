@@ -1191,3 +1191,151 @@ a.footer__nav-link:hover {
     min-height: 140px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMACIONES
+   Todas las animaciones del sitio en un solo bloque.
+   Respetar prefers-reduced-motion para accesibilidad.
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── KEYFRAMES ─────────────────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes amberBarGrow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+@keyframes heroTitleReveal {
+  from { opacity: 0; transform: translateY(20px) skewY(1deg); }
+  to   { opacity: 1; transform: translateY(0) skewY(0deg); }
+}
+
+@keyframes heroPulse {
+  0%, 100% { opacity: 0.035; }
+  50%       { opacity: 0.055; }
+}
+
+@keyframes amberGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245,166,35,0); }
+  50%       { box-shadow: 0 0 20px 4px rgba(245,166,35,0.15); }
+}
+
+/* ─── CLASES BASE — elementos ocultos antes de animar ───────────────────── */
+
+.anim-fade-up,
+.anim-fade-in,
+.anim-slide-left,
+.anim-slide-right {
+  opacity: 0;
+}
+
+.anim-fade-up.is-visible {
+  animation: fadeUp 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.anim-fade-in.is-visible {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.anim-slide-left.is-visible {
+  animation: slideInLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.anim-slide-right.is-visible {
+  animation: slideInRight 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Stagger: delay escalonado para grupos de elementos */
+.anim-stagger > *     { opacity: 0; }
+.anim-stagger > *.is-visible { animation: fadeUp 0.6s cubic-bezier(0.4,0,0.2,1) forwards; }
+.anim-stagger > *:nth-child(1).is-visible { animation-delay: 0ms; }
+.anim-stagger > *:nth-child(2).is-visible { animation-delay: 90ms; }
+.anim-stagger > *:nth-child(3).is-visible { animation-delay: 180ms; }
+.anim-stagger > *:nth-child(4).is-visible { animation-delay: 270ms; }
+.anim-stagger > *:nth-child(5).is-visible { animation-delay: 360ms; }
+.anim-stagger > *:nth-child(6).is-visible { animation-delay: 450ms; }
+.anim-stagger > *:nth-child(7).is-visible { animation-delay: 540ms; }
+.anim-stagger > *:nth-child(8).is-visible { animation-delay: 630ms; }
+
+/* ─── HERO: animaciones de carga ────────────────────────────────────────── */
+
+/* Grilla de fondo pulsa suavemente */
+#hero::before {
+  animation: heroPulse 4s ease-in-out infinite;
+}
+
+/* Barra ámbar izquierda crece de arriba a abajo */
+#hero::after {
+  transform-origin: top;
+  animation: amberBarGrow 1s cubic-bezier(0.4,0,0.2,1) 0.3s both;
+}
+
+/* Título del hero: cada línea aparece con delay */
+.hero__title {
+  animation: heroTitleReveal 0.8s cubic-bezier(0.4,0,0.2,1) 0.2s both;
+}
+
+.hero__subtitle {
+  animation: fadeUp 0.7s cubic-bezier(0.4,0,0.2,1) 0.5s both;
+}
+
+.hero__actions {
+  animation: fadeUp 0.7s cubic-bezier(0.4,0,0.2,1) 0.7s both;
+}
+
+/* ─── WHATSAPP FLOTANTE: pulso de atención ───────────────────────────────── */
+
+.whatsapp-float {
+  animation: amberGlow 3s ease-in-out 3s infinite;
+}
+
+/* ─── SECCIÓN TITLES: aparecen al entrar al viewport ───────────────────── */
+
+.section-title,
+.section-subtitle,
+.products__header .section-title,
+.products__header .section-subtitle {
+  opacity: 0;
+}
+
+/* ─── RESPETA PREFERENCIA DE MOVIMIENTO REDUCIDO ────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .anim-fade-up,
+  .anim-fade-in,
+  .anim-slide-left,
+  .anim-slide-right,
+  .anim-stagger > *,
+  .section-title,
+  .section-subtitle {
+    opacity: 1 !important;
+  }
+}
