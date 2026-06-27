@@ -496,7 +496,8 @@ section {
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 4px 6px 4px 1rem;
+  padding: 4px 6px 4px 1.25rem;
+  margin-left: -0.5rem;
   border-radius: 4px;
   transition: background var(--transition);
   position: relative;
