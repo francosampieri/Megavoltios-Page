@@ -497,16 +497,16 @@ section {
   justify-content: space-between;
   gap: 0.5rem;
   padding: 4px 6px 4px 1.25rem;
-  margin-left: -0.5rem;
   border-radius: 4px;
   transition: background var(--transition);
   position: relative;
 }
 
+/* Rombo — posicionado a la izquierda del padding */
 .catalog-product-list__item::before {
   content: '';
   position: absolute;
-  left: 0;
+  left: 0.3rem;
   top: 50%;
   transform: translateY(-50%) rotate(45deg);
   width: 5px;
@@ -514,10 +514,23 @@ section {
   background: var(--brand-amber);
   border-radius: 1px;
   flex-shrink: 0;
+  z-index: 1;
 }
 
-.catalog-product-list__item:hover {
+/* Fondo hover: se extiende más allá del borde izquierdo del item */
+.catalog-product-list__item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  left: -0.6rem;
+  border-radius: 4px;
   background: rgba(255, 255, 255, 0.04);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.catalog-product-list__item:hover::after {
+  opacity: 1;
 }
 
 .catalog-product-list__name {
@@ -525,6 +538,8 @@ section {
   color: rgba(255, 255, 255, 0.75);
   flex: 1;
   transition: color var(--transition);
+  position: relative;
+  z-index: 1;
 }
 
 .catalog-product-list__item:hover .catalog-product-list__name {
@@ -544,6 +559,8 @@ section {
   transform: translateX(4px);
   transition: opacity var(--transition), transform var(--transition);
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .catalog-product-list__item:hover .catalog-product-list__consult {
