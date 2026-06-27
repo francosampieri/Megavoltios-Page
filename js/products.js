@@ -76,7 +76,26 @@ function buildCatalog(categorias) {
       sub.productos.forEach(producto => {
         const item = document.createElement('li');
         item.className = 'catalog-product-list__item';
-        item.textContent = producto;
+
+        // Nombre del producto
+        const nombre = document.createElement('span');
+        nombre.className = 'catalog-product-list__name';
+        nombre.textContent = producto;
+
+        // Botón consultar — aparece al hover via CSS
+        const btn = document.createElement('a');
+        btn.className = 'catalog-product-list__consult';
+        btn.textContent = 'Consultar';
+        btn.target = '_blank';
+        btn.rel = 'noopener noreferrer';
+        btn.setAttribute('aria-label', `Consultar por WhatsApp: ${producto}`);
+
+        // Mensaje específico del producto
+        const mensaje = `Hola, estoy interesado en el producto: *${producto}*. ¿Podrían darme más información?`;
+        btn.href = `https://wa.me/5492616813712?text=${encodeURIComponent(mensaje)}`;
+
+        item.appendChild(nombre);
+        item.appendChild(btn);
         list.appendChild(item);
       });
 
