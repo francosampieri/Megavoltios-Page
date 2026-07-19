@@ -476,6 +476,18 @@ section {
   gap: 2rem;
 }
 
+/* Variante para categorías sin subcategorías: el wrapper es simple,
+   la grilla real está en la lista de productos que ocupa todo el ancho */
+.catalog-subcategory-grid--direct {
+  display: block;
+}
+
+.catalog-subcategory-grid--direct .catalog-product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.25rem 2rem;
+}
+
 .catalog-subcategory__title {
   font-size: 0.85rem;
   font-weight: 700;

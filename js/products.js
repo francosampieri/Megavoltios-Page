@@ -58,54 +58,73 @@ function buildCatalog(categorias) {
     heading.textContent = cat.nombre;
     section.appendChild(heading);
 
-    const subGrid = document.createElement('div');
-    subGrid.className = 'catalog-subcategory-grid';
+    // Caso 1: la categoría tiene subcategorías → grid de columnas
+    if (cat.subcategorias && cat.subcategorias.length > 0) {
+      const subGrid = document.createElement('div');
+      subGrid.className = 'catalog-subcategory-grid';
 
-    cat.subcategorias.forEach(sub => {
-      const subCol = document.createElement('div');
-      subCol.className = 'catalog-subcategory';
+      cat.subcategorias.forEach(sub => {
+        const subCol = document.createElement('div');
+        subCol.className = 'catalog-subcategory';
 
-      const subTitle = document.createElement('h4');
-      subTitle.className = 'catalog-subcategory__title';
-      subTitle.textContent = sub.nombre;
-      subCol.appendChild(subTitle);
+        const subTitle = document.createElement('h4');
+        subTitle.className = 'catalog-subcategory__title';
+        subTitle.textContent = sub.nombre;
+        subCol.appendChild(subTitle);
 
-      const list = document.createElement('ul');
-      list.className = 'catalog-product-list';
-
-      sub.productos.forEach(producto => {
-        const item = document.createElement('li');
-        item.className = 'catalog-product-list__item';
-
-        // Nombre del producto
-        const nombre = document.createElement('span');
-        nombre.className = 'catalog-product-list__name';
-        nombre.textContent = producto;
-
-        // Botón consultar — aparece al hover via CSS
-        const btn = document.createElement('a');
-        btn.className = 'catalog-product-list__consult';
-        btn.textContent = 'Consultar';
-        btn.target = '_blank';
-        btn.rel = 'noopener noreferrer';
-        btn.setAttribute('aria-label', `Consultar por WhatsApp: ${producto}`);
-
-        // Mensaje específico del producto
-        const mensaje = `Hola, estoy interesado en el producto: *${producto}*. ¿Podrían darme más información?`;
-        btn.href = `https://wa.me/5492616813712?text=${encodeURIComponent(mensaje)}`;
-
-        item.appendChild(nombre);
-        item.appendChild(btn);
-        list.appendChild(item);
+        const list = buildProductList(sub.productos);
+        subCol.appendChild(list);
+        subGrid.appendChild(subCol);
       });
 
-      subCol.appendChild(list);
-      subGrid.appendChild(subCol);
-    });
+      section.appendChild(subGrid);
 
-    section.appendChild(subGrid);
+    // Caso 2: la categoría NO tiene subcategorías → lista directa de productos
+    } else if (cat.productos && cat.productos.length > 0) {
+      const directWrap = document.createElement('div');
+      directWrap.className = 'catalog-subcategory-grid catalog-subcategory-grid--direct';
+
+      const list = buildProductList(cat.productos);
+      directWrap.appendChild(list);
+      section.appendChild(directWrap);
+    }
+
     grid.appendChild(section);
   });
+}
+
+/**
+ * Construye una lista <ul> de productos con su botón "Consultar" por WhatsApp.
+ * Reutilizado tanto por categorías con subcategorías como sin ellas.
+ */
+function buildProductList(productos) {
+  const list = document.createElement('ul');
+  list.className = 'catalog-product-list';
+
+  productos.forEach(producto => {
+    const item = document.createElement('li');
+    item.className = 'catalog-product-list__item';
+
+    const nombre = document.createElement('span');
+    nombre.className = 'catalog-product-list__name';
+    nombre.textContent = producto;
+
+    const btn = document.createElement('a');
+    btn.className = 'catalog-product-list__consult';
+    btn.textContent = 'Consultar';
+    btn.target = '_blank';
+    btn.rel = 'noopener noreferrer';
+    btn.setAttribute('aria-label', `Consultar por WhatsApp: ${producto}`);
+
+    const mensaje = `Hola, estoy interesado en el producto: *${producto}*. ¿Podrían darme más información?`;
+    btn.href = `https://wa.me/5492616813712?text=${encodeURIComponent(mensaje)}`;
+
+    item.appendChild(nombre);
+    item.appendChild(btn);
+    list.appendChild(item);
+  });
+
+  return list;
 }
 
 /**
