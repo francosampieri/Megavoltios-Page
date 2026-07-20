@@ -336,6 +336,117 @@ section {
   color: var(--brand-amber);
 }
 
+/* ─── CATEGORY SHOWCASE ─────────────────────────────────────────────────────── */
+
+#category-showcase {
+  padding: 5rem 0 4rem;
+}
+
+/* 3 cards destacadas */
+.showcase__featured {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+}
+
+/* 7 cards compactas */
+.showcase__rest {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.75rem;
+}
+
+.showcase__card {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: block;
+  transition: border-color var(--transition);
+}
+
+.showcase__card:hover {
+  border-color: rgba(245, 166, 35, 0.35);
+}
+
+.showcase__card--featured {
+  height: 190px;
+}
+
+.showcase__card--compact {
+  height: 110px;
+}
+
+.showcase__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(0.3) brightness(0.35);
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+.showcase__card:hover .showcase__bg {
+  filter: saturate(0.55) brightness(0.5);
+  transform: scale(1.04);
+}
+
+.showcase__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(11,15,34,0.9) 0%, rgba(11,15,34,0.4) 100%);
+}
+
+.showcase__card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--brand-amber);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.showcase__card:hover::after {
+  transform: scaleX(1);
+}
+
+.showcase__content {
+  position: relative;
+  z-index: 1;
+  padding: 1.25rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.showcase__card--compact .showcase__content {
+  padding: 0.85rem;
+}
+
+.showcase__title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.showcase__card--compact .showcase__title {
+  font-size: 0.78rem;
+}
+
+.showcase__desc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 0.35rem;
+  line-height: 1.4;
+}
+
 /* ─── BRANDS ────────────────────────────────────────────────────────────────── */
 
 #brands {
@@ -1152,10 +1263,39 @@ a.footer__nav-link:hover {
     grid-template-columns: 1fr;
     gap: 3rem;
   }
+
+  /* Tablet: 7 columnas comprimidas se ven mal, pasar a 4 */
+  .showcase__rest {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+
+  .showcase__card--compact {
+    height: 100px;
+  }
 }
 
 @media (max-width: 768px) {
   .header__meta { display: none; }
+
+  /* Category showcase: destacadas apiladas, resto en grid 2 columnas */
+  .showcase__featured {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .showcase__card--featured {
+    height: 150px;
+  }
+
+  .showcase__rest {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .showcase__card--compact {
+    height: 90px;
+  }
 
   /* Marcas: grid de 4 columnas fijas en mobile — 2 filas de 4 */
   .brands__grid {
