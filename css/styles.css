@@ -428,18 +428,6 @@ section {
   justify-content: flex-end;
 }
 
-/* Cards destacadas: título/desc a la izquierda, botón a la derecha, en fila */
-.showcase__card--featured .showcase__content {
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.showcase__card--featured .showcase__text {
-  min-width: 0;
-}
-
 .showcase__card--compact .showcase__content {
   padding: 0.85rem;
 }
@@ -479,12 +467,6 @@ section {
   white-space: nowrap;
   flex-shrink: 0;
   transition: all var(--transition);
-}
-
-/* En cards destacadas el botón está a la derecha, sin margin-top */
-.showcase__card--featured .showcase__btn {
-  margin-top: 0;
-  align-self: center;
 }
 
 .showcase__card:hover .showcase__btn {
