@@ -339,7 +339,12 @@ section {
 /* ─── CATEGORY SHOWCASE ─────────────────────────────────────────────────────── */
 
 #category-showcase {
-  padding: 5rem 0 4rem;
+  padding: 4rem 0 2.5rem;
+}
+
+#category-showcase-title {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  margin-bottom: 2rem;
 }
 
 /* 3 cards destacadas */
@@ -347,7 +352,6 @@ section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
-  margin-top: 3rem;
   margin-bottom: 1.25rem;
 }
 
@@ -424,6 +428,18 @@ section {
   justify-content: flex-end;
 }
 
+/* Cards destacadas: título/desc a la izquierda, botón a la derecha, en fila */
+.showcase__card--featured .showcase__content {
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.showcase__card--featured .showcase__text {
+  min-width: 0;
+}
+
 .showcase__card--compact .showcase__content {
   padding: 0.85rem;
 }
@@ -452,15 +468,23 @@ section {
   display: inline-flex;
   align-self: flex-start;
   margin-top: 0.85rem;
-  border: 1px solid rgba(245, 166, 35, 0.5);
-  color: var(--brand-amber);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0.4rem 0.9rem;
   border-radius: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: all var(--transition);
+}
+
+/* En cards destacadas el botón está a la derecha, sin margin-top */
+.showcase__card--featured .showcase__btn {
+  margin-top: 0;
+  align-self: center;
 }
 
 .showcase__card:hover .showcase__btn {
@@ -559,6 +583,46 @@ section {
   background: var(--brand-navy-dark);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.category-nav-wrapper > .container {
+  flex: 1;
+  min-width: 0;
+}
+
+.category-nav__arrow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 100%;
+  min-height: 48px;
+  background: var(--brand-navy-dark);
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: color var(--transition), background var(--transition);
+}
+
+.category-nav__arrow:hover {
+  color: var(--brand-amber);
+  background: rgba(245, 166, 35, 0.06);
+}
+
+.category-nav__arrow:disabled {
+  opacity: 0.2;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Ocultar flechas en mobile — ahí se usa el swipe + hint */
+@media (max-width: 768px) {
+  .category-nav__arrow {
+    display: none;
+  }
 }
 
 #category-nav {

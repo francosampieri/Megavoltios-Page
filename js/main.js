@@ -147,6 +147,45 @@ function initCategoryNavHint() {
   }, { passive: true });
 }
 
+// ─── CATEGORY NAV ARROWS (desktop) ───────────────────────────────────────────
+
+function initCategoryNavArrows() {
+  const nav = document.getElementById('category-nav');
+  const wrapper = nav ? nav.closest('.category-nav-wrapper') : null;
+  if (!nav || !wrapper) return;
+
+  const btnLeft  = wrapper.querySelector('.category-nav__arrow--left');
+  const btnRight = wrapper.querySelector('.category-nav__arrow--right');
+  if (!btnLeft || !btnRight) return;
+
+  const SCROLL_STEP = 240;
+
+  function updateArrowState() {
+    const maxScroll = nav.scrollWidth - nav.clientWidth;
+    btnLeft.disabled  = nav.scrollLeft <= 4;
+    btnRight.disabled = nav.scrollLeft >= maxScroll - 4;
+
+    // Si no hay overflow, ocultar ambas flechas
+    const hasOverflow = maxScroll > 4;
+    btnLeft.style.display  = hasOverflow ? '' : 'none';
+    btnRight.style.display = hasOverflow ? '' : 'none';
+  }
+
+  btnLeft.addEventListener('click', () => {
+    nav.scrollBy({ left: -SCROLL_STEP, behavior: 'smooth' });
+  });
+
+  btnRight.addEventListener('click', () => {
+    nav.scrollBy({ left: SCROLL_STEP, behavior: 'smooth' });
+  });
+
+  nav.addEventListener('scroll', updateArrowState, { passive: true });
+  window.addEventListener('resize', updateArrowState, { passive: true });
+
+  // Esperar a que products.js haya poblado el nav antes de calcular
+  setTimeout(updateArrowState, 300);
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -156,4 +195,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initFAQ();
   initSmoothScroll();
   initCategoryNavHint();
+  initCategoryNavArrows();
 });
