@@ -437,7 +437,8 @@ section {
 }
 
 .showcase__card--compact .showcase__title {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
+  line-height: 1.25;
 }
 
 .showcase__desc {
@@ -445,6 +446,33 @@ section {
   color: rgba(255, 255, 255, 0.55);
   margin-top: 0.35rem;
   line-height: 1.4;
+}
+
+.showcase__btn {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: 0.85rem;
+  border: 1px solid rgba(245, 166, 35, 0.5);
+  color: var(--brand-amber);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.4rem 0.9rem;
+  border-radius: 3px;
+  transition: all var(--transition);
+}
+
+.showcase__card:hover .showcase__btn {
+  background: var(--brand-amber);
+  color: #000;
+  border-color: var(--brand-amber);
+}
+
+.showcase__btn--compact {
+  margin-top: 0.4rem;
+  font-size: 0.62rem;
+  padding: 0.25rem 0.6rem;
 }
 
 /* ─── BRANDS ────────────────────────────────────────────────────────────────── */

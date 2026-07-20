@@ -89,113 +89,9 @@
 
 
     <!-- ══════════════════════════════════════════════════════════════════════
-         CATEGORÍAS DESTACADAS
-         3 cards grandes (categorías principales) + 7 compactas (resto)
-         Cada card salta directo a su categoría en el catálogo
-         MODIFICAR: si cambian las categorías destacadas, actualizar
-         las imágenes y el href de cada card
-    ═══════════════════════════════════════════════════════════════════════ -->
-    <section id="category-showcase" aria-labelledby="category-showcase-title">
-      <div class="container">
-        <h2 id="category-showcase-title" class="section-title">Explorá nuestro catálogo</h2>
-        <p class="section-subtitle">Encontrá todo lo que necesitás organizado por categoría</p>
-
-        <!-- 3 categorías destacadas -->
-        <div class="showcase__featured anim-stagger">
-          <a href="#cat-iluminacion" class="showcase__card showcase__card--featured">
-            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=700&q=70')"></div>
-            <div class="showcase__overlay"></div>
-            <div class="showcase__content">
-              <h3 class="showcase__title">Iluminación</h3>
-              <p class="showcase__desc">Lámparas LED, tubos y paneles</p>
-            </div>
-          </a>
-
-          <a href="#cat-cables-y-aislaciones" class="showcase__card showcase__card--featured">
-            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=700&q=70')"></div>
-            <div class="showcase__overlay"></div>
-            <div class="showcase__content">
-              <h3 class="showcase__title">Cables y Aislaciones</h3>
-              <p class="showcase__desc">Unipolares, subterráneos y más</p>
-            </div>
-          </a>
-
-          <a href="#cat-industrial" class="showcase__card showcase__card--featured">
-            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=700&q=70')"></div>
-            <div class="showcase__overlay"></div>
-            <div class="showcase__content">
-              <h3 class="showcase__title">Industrial</h3>
-              <p class="showcase__desc">Fichas, contactores y control</p>
-            </div>
-          </a>
-        </div>
-
-        <!-- 7 categorías restantes, compactas -->
-        <div class="showcase__rest anim-stagger">
-          <a href="#cat-gabinetes-y-tableros" class="showcase__card showcase__card--compact">
-            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=60')"></div>
-            <div class="showcase__overlay"></div>
-            <div class="showcase__content">
-              <h3 class="showcase__title">Gabinetes</h3>
-            </div>
-          </a>
-
-          <a href="#cat-herramientas" class="showcase__card showcase__card--compact">
-            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&q=60')"></div>
-            <div class="showcase__overlay"></div>
-            <div class="showcase__content">
-              <h3 class="showcase__title">Herramientas</h3>
-            </div>
-          </a>
-
-          <a href="#cat-residencial" class="showcase__card showcase__card--compact">
-            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=400&q=60')"></div>
-            <div class="showcase__overlay"></div>
-            <div class="showcase__content">
-              <h3 class="showcase__title">Residencial</h3>
-            </div>
-          </a>
-
-          <a href="#cat-puesta-a-tierra" class="showcase__card showcase__card--compact">
-            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1620230874645-b6786f7f3892?w=400&q=60')"></div>
-            <div class="showcase__overlay"></div>
-            <div class="showcase__content">
-              <h3 class="showcase__title">Tierra</h3>
-            </div>
-          </a>
-
-          <a href="#cat-medicion" class="showcase__card showcase__card--compact">
-            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&q=60')"></div>
-            <div class="showcase__overlay"></div>
-            <div class="showcase__content">
-              <h3 class="showcase__title">Medición</h3>
-            </div>
-          </a>
-
-          <a href="#cat-caneria-pvc-y-metalica" class="showcase__card showcase__card--compact">
-            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?w=400&q=60')"></div>
-            <div class="showcase__overlay"></div>
-            <div class="showcase__content">
-              <h3 class="showcase__title">Cañería</h3>
-            </div>
-          </a>
-
-          <a href="#cat-senalizacion-y-automatizacion" class="showcase__card showcase__card--compact">
-            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?w=400&q=60')"></div>
-            <div class="showcase__overlay"></div>
-            <div class="showcase__content">
-              <h3 class="showcase__title">Señalización</h3>
-            </div>
-          </a>
-        </div>
-
-      </div>
-    </section>
-
-
+         MARCAS
          MODIFICAR: agregar/quitar marcas en esta lista
-         Para cada marca: reemplazar el texto por una <img> cuando tengas el logo
-         Ejemplo: <img src="./assets/brands/schneider.png" alt="Schneider Electric" class="brands__logo" />
+         Para cada marca: reemplazar el <img> cuando tengas el logo real
     ═══════════════════════════════════════════════════════════════════════ -->
     <section id="brands" aria-label="Marcas con las que trabajamos">
       <div class="container">
@@ -226,6 +122,120 @@
             <img src="./assets/brands/einhell.png" alt="Einhell" class="brands__logo" />
           </li>
         </ul>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         CATEGORÍAS DESTACADAS
+         3 cards grandes (categorías principales) + 7 compactas (resto)
+         Cada card salta directo a su categoría en el catálogo
+         MODIFICAR: si cambian las categorías destacadas, actualizar
+         las imágenes y el href de cada card
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <section id="category-showcase" aria-labelledby="category-showcase-title">
+      <div class="container">
+        <h2 id="category-showcase-title" class="section-title">Lo que podés encontrar en Megavoltios</h2>
+
+        <!-- 3 categorías destacadas -->
+        <div class="showcase__featured anim-stagger">
+          <a href="#cat-iluminacion" class="showcase__card showcase__card--featured">
+            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=700&q=70')"></div>
+            <div class="showcase__overlay"></div>
+            <div class="showcase__content">
+              <h3 class="showcase__title">Iluminación</h3>
+              <p class="showcase__desc">Lámparas LED, tubos y paneles</p>
+              <span class="showcase__btn">Ver productos</span>
+            </div>
+          </a>
+
+          <a href="#cat-cables-y-aislaciones" class="showcase__card showcase__card--featured">
+            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=700&q=70')"></div>
+            <div class="showcase__overlay"></div>
+            <div class="showcase__content">
+              <h3 class="showcase__title">Cables y Aislaciones</h3>
+              <p class="showcase__desc">Unipolares, subterráneos y más</p>
+              <span class="showcase__btn">Ver productos</span>
+            </div>
+          </a>
+
+          <a href="#cat-industrial" class="showcase__card showcase__card--featured">
+            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=700&q=70')"></div>
+            <div class="showcase__overlay"></div>
+            <div class="showcase__content">
+              <h3 class="showcase__title">Industrial</h3>
+              <p class="showcase__desc">Fichas, contactores y control</p>
+              <span class="showcase__btn">Ver productos</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- 7 categorías restantes, compactas -->
+        <div class="showcase__rest anim-stagger">
+          <a href="#cat-gabinetes-y-tableros" class="showcase__card showcase__card--compact">
+            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=60')"></div>
+            <div class="showcase__overlay"></div>
+            <div class="showcase__content">
+              <h3 class="showcase__title">Gabinetes</h3>
+              <span class="showcase__btn showcase__btn--compact">Ver</span>
+            </div>
+          </a>
+
+          <a href="#cat-herramientas" class="showcase__card showcase__card--compact">
+            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&q=60')"></div>
+            <div class="showcase__overlay"></div>
+            <div class="showcase__content">
+              <h3 class="showcase__title">Herramientas</h3>
+              <span class="showcase__btn showcase__btn--compact">Ver</span>
+            </div>
+          </a>
+
+          <a href="#cat-residencial" class="showcase__card showcase__card--compact">
+            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=400&q=60')"></div>
+            <div class="showcase__overlay"></div>
+            <div class="showcase__content">
+              <h3 class="showcase__title">Residencial</h3>
+              <span class="showcase__btn showcase__btn--compact">Ver</span>
+            </div>
+          </a>
+
+          <a href="#cat-puesta-a-tierra" class="showcase__card showcase__card--compact">
+            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1620230874645-b6786f7f3892?w=400&q=60')"></div>
+            <div class="showcase__overlay"></div>
+            <div class="showcase__content">
+              <h3 class="showcase__title">Puesta a Tierra</h3>
+              <span class="showcase__btn showcase__btn--compact">Ver</span>
+            </div>
+          </a>
+
+          <a href="#cat-medicion" class="showcase__card showcase__card--compact">
+            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&q=60')"></div>
+            <div class="showcase__overlay"></div>
+            <div class="showcase__content">
+              <h3 class="showcase__title">Medición</h3>
+              <span class="showcase__btn showcase__btn--compact">Ver</span>
+            </div>
+          </a>
+
+          <a href="#cat-caneria-pvc-y-metalica" class="showcase__card showcase__card--compact">
+            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?w=400&q=60')"></div>
+            <div class="showcase__overlay"></div>
+            <div class="showcase__content">
+              <h3 class="showcase__title">Cañería</h3>
+              <span class="showcase__btn showcase__btn--compact">Ver</span>
+            </div>
+          </a>
+
+          <a href="#cat-senalizacion-y-automatizacion" class="showcase__card showcase__card--compact">
+            <div class="showcase__bg" style="background-image:url('https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?w=400&q=60')"></div>
+            <div class="showcase__overlay"></div>
+            <div class="showcase__content">
+              <h3 class="showcase__title">Señalización y Automatización</h3>
+              <span class="showcase__btn showcase__btn--compact">Ver</span>
+            </div>
+          </a>
+        </div>
+
       </div>
     </section>
 
