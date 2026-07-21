@@ -15,7 +15,7 @@
 // ═══ CONFIGURACIÓN ═══════════════════════════════════════════════════════════
 // MODIFICAR: Pegar acá la URL del CSV público de Google Sheets
 // Cómo obtenerla: Google Sheets → Archivo → Compartir → Publicar en la web → CSV → Copiar link
-const SHEET_CSV_URL = ''; // ← Pegar URL aquí. Ejemplo: 'https://docs.google.com/spreadsheets/d/XXXXX/export?format=csv&gid=0'
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThiL5HG6YFCnpudCNlqd8NRYNRGUtO2fptZ1yV_3JAi0NnC_XZaMfjPLotNjfRiuBwJpmJeO12eEy3/pub?gid=0&single=true&output=csv';
 
 // URL base para imágenes locales (si en la columna Imagen ponen solo el nombre del archivo)
 const LOCAL_IMAGES_BASE = './assets/products/';
