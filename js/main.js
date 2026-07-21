@@ -36,18 +36,51 @@ function initMobileMenu() {
   const menu = document.getElementById('nav-menu');
   if (!toggle || !menu) return;
 
+  let isOpen = false;
+  let closeTimer = null;
+
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
+  function openMenu() {
+    clearTimeout(closeTimer);
+    isOpen = true;
+    menu.style.display = 'flex';
+    // Forzar reflow para que el navegador registre el display antes de animar
+    menu.getBoundingClientRect();
+    menu.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', true);
+  }
+
+  function closeMenu() {
+    isOpen = false;
+    menu.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', false);
+    // Solo ocultar con display:none en mobile — en desktop el CSS lo maneja
+    if (isMobile()) {
+      closeTimer = setTimeout(() => {
+        menu.style.display = 'none';
+      }, 300);
+    }
+  }
+
   toggle.addEventListener('click', () => {
-    const isOpen = menu.classList.toggle('is-open');
-    toggle.setAttribute('aria-expanded', isOpen);
+    isOpen ? closeMenu() : openMenu();
   });
 
-  // Cierra el menú al clickear un link
   menu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      menu.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded', false);
-    });
+    link.addEventListener('click', closeMenu);
   });
+
+  // Al redimensionar a desktop, limpiar el inline style que pueda haber quedado
+  window.addEventListener('resize', () => {
+    if (!isMobile()) {
+      menu.style.display = '';
+      menu.classList.remove('is-open');
+      isOpen = false;
+    }
+  }, { passive: true });
 }
 
 // ─── NAVBAR: FONDO AL HACER SCROLL ───────────────────────────────────────────
@@ -91,6 +124,68 @@ function initSmoothScroll() {
   });
 }
 
+// ─── CATEGORY NAV HINT (mobile) ──────────────────────────────────────────────
+
+function initCategoryNavHint() {
+  const nav = document.getElementById('category-nav');
+  const wrapper = nav ? nav.closest('.category-nav-wrapper') : null;
+  if (!nav || !wrapper) return;
+
+  // Solo en mobile
+  if (window.innerWidth > 768) return;
+
+  // position:relative necesario para el hint absolute, sin romper sticky del wrapper
+  wrapper.style.position = 'sticky'; // ya lo tiene, pero forzamos el relative en el inner
+  nav.parentElement.style.position = 'relative';
+
+  nav.addEventListener('scroll', () => {
+    if (nav.scrollLeft > 20) {
+      wrapper.classList.add('scrolled');
+    } else {
+      wrapper.classList.remove('scrolled');
+    }
+  }, { passive: true });
+}
+
+// ─── CATEGORY NAV ARROWS (desktop) ───────────────────────────────────────────
+
+function initCategoryNavArrows() {
+  const nav = document.getElementById('category-nav');
+  const wrapper = nav ? nav.closest('.category-nav-wrapper') : null;
+  if (!nav || !wrapper) return;
+
+  const btnLeft  = wrapper.querySelector('.category-nav__arrow--left');
+  const btnRight = wrapper.querySelector('.category-nav__arrow--right');
+  if (!btnLeft || !btnRight) return;
+
+  const SCROLL_STEP = 240;
+
+  function updateArrowState() {
+    const maxScroll = nav.scrollWidth - nav.clientWidth;
+    btnLeft.disabled  = nav.scrollLeft <= 4;
+    btnRight.disabled = nav.scrollLeft >= maxScroll - 4;
+
+    // Si no hay overflow, ocultar ambas flechas
+    const hasOverflow = maxScroll > 4;
+    btnLeft.style.display  = hasOverflow ? '' : 'none';
+    btnRight.style.display = hasOverflow ? '' : 'none';
+  }
+
+  btnLeft.addEventListener('click', () => {
+    nav.scrollBy({ left: -SCROLL_STEP, behavior: 'smooth' });
+  });
+
+  btnRight.addEventListener('click', () => {
+    nav.scrollBy({ left: SCROLL_STEP, behavior: 'smooth' });
+  });
+
+  nav.addEventListener('scroll', updateArrowState, { passive: true });
+  window.addEventListener('resize', updateArrowState, { passive: true });
+
+  // Esperar a que products.js haya poblado el nav antes de calcular
+  setTimeout(updateArrowState, 300);
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -99,4 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavbarScroll();
   initFAQ();
   initSmoothScroll();
+  initCategoryNavHint();
+  initCategoryNavArrows();
 });

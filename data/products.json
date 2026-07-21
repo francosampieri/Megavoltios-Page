@@ -1,46 +1,47 @@
 {
   "categorias": [
     {
-      "id": "materiales-electricos",
-      "nombre": "Materiales Eléctricos",
+      "id": "industrial",
+      "nombre": "Industrial",
+      "productos": [
+        "Térmicas",
+        "Disyuntores",
+        "Contactores",
+        "Guardamotores",
+        "Relé falta de fase",
+        "Relé térmico",
+        "Temporizadores",
+        "Minicontactores",
+        "Medidor de consumo",
+        "Fichas industriales IP44/IP65",
+        "Ficha industrial naranja monofásica y trifásica"
+      ]
+    },
+    {
+      "id": "cables-y-aislaciones",
+      "nombre": "Cables y Aislaciones",
       "subcategorias": [
         {
-          "nombre": "Cables y Conductores",
+          "nombre": "Cables",
           "productos": [
-            "Unipolar",
-            "Bipolar",
-            "Tripolar",
+            "Unipolares",
+            "Paralelos",
+            "Tipo taller",
             "Subterráneo",
-            "Mellizo"
+            "Cable plano para bomba sumergible",
+            "Extraflexible de soldadura",
+            "Alta temperatura",
+            "Libre halógeno",
+            "Preensablado"
           ]
         },
         {
-          "nombre": "Protecciones",
+          "nombre": "Aislaciones",
           "productos": [
-            "Termomagnéticas",
-            "Disyuntores",
-            "Fusibles",
-            "Protectores de tensión",
-            "Interruptores diferenciales"
-          ]
-        },
-        {
-          "nombre": "Tableros y Cajas",
-          "productos": [
-            "Tableros de distribución",
-            "Cajas de pase",
-            "Cajas de derivación",
-            "Tapas ciegas"
-          ]
-        },
-        {
-          "nombre": "Cañerías y Accesorios",
-          "productos": [
-            "Caño corrugado",
-            "Caño rígido",
-            "Uniones y cuplas",
-            "Curvas",
-            "Boquillas"
+            "Terminal de cobre y preaislado",
+            "Puntera TIF",
+            "Cinta aisladora",
+            "Bornera divisible"
           ]
         }
       ]
@@ -48,59 +49,62 @@
     {
       "id": "iluminacion",
       "nombre": "Iluminación",
-      "subcategorias": [
-        {
-          "nombre": "Lámparas",
-          "productos": [
-            "Filamento",
-            "Bajo consumo",
-            "LED estándar",
-            "LED dicroica",
-            "Tubos LED"
-          ]
-        },
-        {
-          "nombre": "Iluminación Industrial",
-          "productos": [
-            "Proyectores outdoors",
-            "Campanas industriales",
-            "Tubulares estancas",
-            "Reflectores"
-          ]
-        },
-        {
-          "nombre": "Luminarias",
-          "productos": [
-            "Apliques de pared",
-            "Plafones",
-            "Downlights embutidos",
-            "Tiras LED"
-          ]
-        }
+      "productos": [
+        "Lámparas LED y dicroica",
+        "High power LED",
+        "Reflectores LED",
+        "Tubos LED",
+        "Luces de emergencia LED",
+        "Paneles LED cuadrados y redondos",
+        "Listón bajo alacena LED",
+        "Tiras LED más accesorios"
       ]
     },
     {
-      "id": "automatizacion",
-      "nombre": "Automatización",
-      "subcategorias": [
-        {
-          "nombre": "Control Industrial",
-          "productos": [
-            "Contactores",
-            "Relés térmicos",
-            "Temporizadores",
-            "Guardamotores"
-          ]
-        },
-        {
-          "nombre": "Domótica",
-          "productos": [
-            "Interruptores inteligentes",
-            "Controladores de riego",
-            "Sensores de presencia",
-            "Dimers"
-          ]
-        }
+      "id": "gabinetes-y-tableros",
+      "nombre": "Gabinetes y Tableros",
+      "productos": [
+        "Tablero PVC exterior/embutir para térmica",
+        "Tablero metálico exterior/embutir para térmica",
+        "Gabinete metálico estanco",
+        "Caja de paso estanca PVC"
+      ]
+    },
+    {
+      "id": "caneria-pvc-y-metalica",
+      "nombre": "Cañería PVC y Metálica",
+      "productos": [
+        "Caño PVC x 3 metros",
+        "Accesorios para caño PVC",
+        "Caño metálico x 3 metros y accesorios",
+        "Cablecanal con adhesivo y accesorios",
+        "Unicanal y accesorios",
+        "Bandeja portacable perforada y accesorios",
+        "Caño corrugado abierto y cerrado PVC",
+        "Caño para pilastra y accesorios"
+      ]
+    },
+    {
+      "id": "senalizacion-y-automatizacion",
+      "nombre": "Señalización y Automatización",
+      "productos": [
+        "Piloto luminoso",
+        "Mini voltímetro digital",
+        "Mini amperímetro digital",
+        "Selectoras con aro metálico",
+        "Pulsador con aro metálico rasante",
+        "Pulsador doble metálico",
+        "Pulsador de emergencia con retención",
+        "Final de carrera",
+        "Micro switch"
+      ]
+    },
+    {
+      "id": "puesta-a-tierra",
+      "nombre": "Puesta a Tierra",
+      "productos": [
+        "Jabalina acero-cobre",
+        "Kit puesta a tierra"
       ]
     },
     {
@@ -113,99 +117,43 @@
             "Destornilladores",
             "Alicates",
             "Pinzas pelacables",
-            "Llaves",
-            "Metros y cintas"
+            "Llaves fijas y cricket",
+            "Cinta métrica"
           ]
         },
         {
-          "nombre": "Herramientas Eléctricas",
+          "nombre": "Herramientas Eléctricas e Inalámbricas",
           "productos": [
-            "Taladros",
+            "Taladro percutor",
             "Atornilladores",
             "Amoladoras",
             "Sierras"
           ]
-        },
-        {
-          "nombre": "Medición",
-          "productos": [
-            "Multímetros",
-            "Pinzas amperimétricas",
-            "Detectores de tensión",
-            "Testers"
-          ]
         }
       ]
     },
     {
-      "id": "ferreteria",
-      "nombre": "Ferretería",
-      "subcategorias": [
-        {
-          "nombre": "Fijaciones",
-          "productos": [
-            "Tornillos y bulones",
-            "Tarugos",
-            "Brocas",
-            "Espigas"
-          ]
-        },
-        {
-          "nombre": "Adhesivos y Selladores",
-          "productos": [
-            "Silicona",
-            "Cinta aisladora",
-            "Termocontraíble",
-            "Cinta autofundente"
-          ]
-        }
+      "id": "medicion",
+      "nombre": "Medición",
+      "productos": [
+        "Multímetros",
+        "Pinzas amperimétricas",
+        "Detectores de tensión",
+        "Testers"
       ]
     },
     {
-      "id": "seguridad-electrica",
-      "nombre": "Seguridad Eléctrica",
-      "subcategorias": [
-        {
-          "nombre": "Protección Personal",
-          "productos": [
-            "Guantes dieléctricos",
-            "Calzado de seguridad",
-            "Cascos",
-            "Anteojos de protección"
-          ]
-        },
-        {
-          "nombre": "Señalización",
-          "productos": [
-            "Carteles de advertencia",
-            "Balizas",
-            "Conos de seguridad",
-            "Cintas de peligro"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "industrial",
-      "nombre": "Industrial",
-      "subcategorias": [
-        {
-          "nombre": "Bandejas y Canalizaciones",
-          "productos": [
-            "Bandejas portacables",
-            "Canaletas",
-            "Soportes y abrazaderas",
-            "Escalerillas"
-          ]
-        },
-        {
-          "nombre": "Motores y Accionamientos",
-          "productos": [
-            "Motores eléctricos",
-            "Variadores de frecuencia",
-            "Arrancadores suaves"
-          ]
-        }
+      "id": "residencial",
+      "nombre": "Residencial",
+      "productos": [
+        "Llaves de luz",
+        "Detectores de movimiento y gas",
+        "Fotocélulas",
+        "Ventiladores de techo",
+        "Caloventores",
+        "Extractores de baño 4'' y 6''",
+        "Cerraduras puerta y portón",
+        "Zapatillas eléctricas"
       ]
     }
   ]
