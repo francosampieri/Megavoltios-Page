@@ -162,6 +162,7 @@
     .product-row__actions { display: flex; gap: 0.25rem; justify-content: flex-end; }
     .product-row__action-btn { width: 30px; height: 30px; border-radius: var(--radius-sm); background: none; color: var(--text-dim); display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
     .product-row__action-btn:hover { background: rgba(255,255,255,0.06); color: var(--amber); }
+    .product-row__action-btn--edit:hover { color: #60a5fa; background: rgba(96,165,250,0.1); }
     .product-row__action-btn--delete:hover { color: var(--red); background: var(--red-bg); }
     .product-row__action-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
@@ -449,11 +450,11 @@
   const CONFIG = {
     // URL del CSV público de Google Sheets
     // Sheets → Archivo → Compartir → Publicar en la web → CSV → Copiar link
-    sheetCsvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThiL5HG6YFCnpudCNlqd8NRYNRGUtO2fptZ1yV_3JAi0NnC_XZaMfjPLotNjfRiuBwJpmJeO12eEy3/pub?gid=0&single=true&output=csv',
+    sheetCsvUrl: '', // ← PEGAR URL AQUÍ
 
     // Cloudinary (para subir imágenes)
-    cloudinaryCloudName: 'dgkh64tcm',
-    cloudinaryUploadPreset: 'Megavoltios-catalogo',
+    cloudinaryCloudName: '', // ← Tu cloud name de Cloudinary
+    cloudinaryUploadPreset: '', // ← Upload preset "unsigned" creado en Cloudinary
 
     // Categorías disponibles (para el dropdown del formulario)
     categorias: [
@@ -479,6 +480,7 @@
     currentFilter: 'Todos',
     searchQuery: '',
     uploadedImageUrl: '',
+    editingRowIndex: null,  // null = modo agregar, número = modo editar
   };
 
   // ═══ DOM REFS ═════════════════════════════════════════════════════
@@ -723,6 +725,9 @@
           ${hasImage ? 'Card visual' : 'Solo texto'}
         </div>
         <div class="product-row__actions">
+          <button class="product-row__action-btn product-row__action-btn--edit" title="Editar" data-row="${prod.rowIndex}">
+            <svg viewBox="0 0 24 24"><path d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+          </button>
           <button class="product-row__action-btn product-row__action-btn--delete" title="Eliminar" data-cat="${escAttr(prod.categoria)}" data-name="${escAttr(prod.nombre)}" data-row="${prod.rowIndex}">
             <svg viewBox="0 0 24 24"><path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
           </button>
@@ -736,6 +741,15 @@
     productTable.querySelectorAll('.product-row__action-btn--delete').forEach(btn => {
       btn.addEventListener('click', () => {
         showDeleteDialog(btn.dataset.cat, btn.dataset.name, parseInt(btn.dataset.row));
+      });
+    });
+
+    // Attach edit handlers
+    productTable.querySelectorAll('.product-row__action-btn--edit').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const rowIndex = parseInt(btn.dataset.row);
+        const product = state.products.find(p => p.rowIndex === rowIndex);
+        if (product) openEditForm(product);
       });
     });
   }
@@ -789,10 +803,55 @@
     $('#formMarca').value = '';
     $('#formDescripcion').value = '';
     state.uploadedImageUrl = '';
+    state.editingRowIndex = null;
     uploadZone.style.display = '';
     uploadPreview.classList.remove('active');
     uploadProgress.classList.remove('active');
     $('#btnSave').disabled = false;
+    $('#btnSave').textContent = 'Guardar producto';
+    $('#formTitle').textContent = 'Nuevo producto';
+    $('.form-card__subtitle').textContent = 'Completá los datos. Si subís una imagen, el producto aparecerá como card visual en la web.';
+  }
+
+  // ═══ EDIT PRODUCT — Abrir formulario pre-rellenado ═══════════════
+  function openEditForm(product) {
+    state.editingRowIndex = product.rowIndex;
+
+    // Llenar campos con datos del producto
+    $('#formCategoria').value = product.categoria;
+    $('#formSubcategoria').value = product.subcategoria || '';
+    $('#formNombre').value = product.nombre;
+    $('#formMarca').value = product.marca || '';
+    $('#formDescripcion').value = product.descripcion || '';
+
+    // Si tiene imagen, mostrarla en el preview
+    if (product.imagen) {
+      state.uploadedImageUrl = product.imagen;
+      uploadZone.style.display = 'none';
+      uploadPreview.classList.add('active');
+      $('#previewImg').src = product.imagen.startsWith('http') ? product.imagen : `./assets/products/${product.imagen}`;
+      $('#previewName').textContent = 'Imagen actual';
+      $('#previewSize').textContent = 'Click ✕ para quitar y subir otra';
+    } else {
+      state.uploadedImageUrl = '';
+      uploadZone.style.display = '';
+      uploadPreview.classList.remove('active');
+    }
+
+    uploadProgress.classList.remove('active');
+    $('#btnSave').disabled = false;
+    $('#btnSave').textContent = 'Actualizar producto';
+    $('#formTitle').textContent = 'Editar producto';
+    $('.form-card__subtitle').textContent = `Editando: ${product.nombre}`;
+
+    // Mostrar formulario
+    pageList.classList.remove('active');
+    pageForm.classList.add('active');
+    $('#pageTitle').textContent = 'Editar producto';
+    $('#topbarActions').innerHTML = `
+      <button class="topbar__btn topbar__btn--outline" id="btnBackToList">← Volver al listado</button>
+    `;
+    $('#btnBackToList').addEventListener('click', goBackToList);
   }
 
   // ═══ IMAGE UPLOAD (Cloudinary) ════════════════════════════════════
@@ -880,7 +939,7 @@
     }
   }
 
-  // ═══ SAVE PRODUCT ═════════════════════════════════════════════════
+  // ═══ SAVE PRODUCT (add or edit) ═══════════════════════════════════
   $('#btnSave').addEventListener('click', async () => {
     const categoria = $('#formCategoria').value;
     const nombre = $('#formNombre').value.trim();
@@ -891,22 +950,28 @@
     }
 
     const btn = $('#btnSave');
+    const isEditing = state.editingRowIndex !== null;
     btn.disabled = true;
-    btn.textContent = 'Guardando...';
+    btn.textContent = isEditing ? 'Actualizando...' : 'Guardando...';
+
+    const payload = {
+      password: state.password,
+      categoria,
+      subcategoria: $('#formSubcategoria').value.trim(),
+      nombre,
+      marca: $('#formMarca').value.trim(),
+      descripcion: $('#formDescripcion').value.trim(),
+      imagen: state.uploadedImageUrl,
+    };
 
     try {
-      const res = await fetch('/api/add-product', {
+      const endpoint = isEditing ? '/api/edit-product' : '/api/add-product';
+      if (isEditing) payload.rowIndex = state.editingRowIndex;
+
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          password: state.password,
-          categoria,
-          subcategoria: $('#formSubcategoria').value.trim(),
-          nombre,
-          marca: $('#formMarca').value.trim(),
-          descripcion: $('#formDescripcion').value.trim(),
-          imagen: state.uploadedImageUrl,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (res.status === 401) {
@@ -920,9 +985,11 @@
         throw new Error(data.error || 'Error desconocido');
       }
 
-      showToast('Producto guardado', 'Aparecerá en el catálogo en unos segundos');
+      showToast(
+        isEditing ? 'Producto actualizado' : 'Producto guardado',
+        'Los cambios se reflejarán en unos segundos'
+      );
 
-      // Reload products after a short delay (Sheets takes a moment to update)
       setTimeout(async () => {
         await loadProducts();
       }, 2000);
@@ -933,7 +1000,7 @@
       showToast('Error guardando producto', err.message, true);
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Guardar producto';
+      btn.textContent = isEditing ? 'Actualizar producto' : 'Guardar producto';
     }
   });
 
@@ -1013,6 +1080,5 @@
   }
   </script>
 
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1eda48ffc7ee9ae',t:'MTc4NDY3Mjk0OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1ee0d87392aaf4c',t:'MTc4NDY3NzI0OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
