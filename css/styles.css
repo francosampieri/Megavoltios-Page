@@ -347,10 +347,10 @@ section {
   margin-bottom: 2rem;
 }
 
-/* 3 cards destacadas */
+/* 4 cards destacadas */
 .showcase__featured {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.25rem;
   margin-bottom: 1.25rem;
 }
@@ -376,7 +376,7 @@ section {
 }
 
 .showcase__card--featured {
-  height: 190px;
+  height: 170px;
 }
 
 .showcase__card--compact {
@@ -433,7 +433,7 @@ section {
 }
 
 .showcase__title {
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: -0.01em;
@@ -446,7 +446,7 @@ section {
 }
 
 .showcase__desc {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.55);
   margin-top: 0.35rem;
   line-height: 1.4;
@@ -1346,6 +1346,11 @@ a.footer__nav-link:hover {
 
   .showcase__card--compact {
     height: 100px;
+  }
+
+  /* Featured: 4 columnas pasan a 2 en tablet */
+  .showcase__featured {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
