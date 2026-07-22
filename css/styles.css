@@ -1376,6 +1376,11 @@ a.footer__nav-link:hover {
     height: 90px;
   }
 
+  /* Última compact ocupa las 2 columnas para evitar espacio vacío */
+  .showcase__rest > :last-child {
+    grid-column: span 2;
+  }
+
   /* Marcas: grid de 4 columnas fijas en mobile — 2 filas de 4 */
   .brands__grid {
     display: grid;
