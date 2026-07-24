@@ -1718,7 +1718,7 @@ a.footer__nav-link:hover {
 .product-card__cta svg {
   width: 13px;
   height: 13px;
-  fill: currentColor;
+  stroke: currentColor;
 }
 
 /* Hint de scroll — oculto en desktop */

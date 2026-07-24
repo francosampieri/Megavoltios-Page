@@ -428,7 +428,7 @@ function buildProductCards(products) {
     cta.className = 'product-card__cta';
     cta.type = 'button';
     cta.innerHTML = `
-      <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.12 1.522 5.855L.057 23.928a.5.5 0 0 0 .613.613l6.083-1.464A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.795 9.795 0 0 1-5.002-1.371l-.359-.214-3.717.895.911-3.618-.235-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
       Ver más
     `;
     body.appendChild(cta);
