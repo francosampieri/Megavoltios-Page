@@ -35,17 +35,18 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ products: [] });
     }
 
-    // Skip header row, parse data
+    // Skip header row, parse data — mantener índice original para rowIndex correcto
     const products = rows.slice(1)
-      .filter(row => row.length > 0 && (row[0] || '').trim())
-      .map((row, idx) => ({
-        rowIndex: idx + 1,
-        categoria: (row[0] || '').trim(),
-        subcategoria: (row[1] || '').trim(),
-        nombre: (row[2] || '').trim(),
-        marca: (row[3] || '').trim(),
-        descripcion: (row[4] || '').trim(),
-        imagen: (row[5] || '').trim(),
+      .map((row, originalIdx) => ({ _originalIdx: originalIdx, row }))
+      .filter(item => item.row.length > 0 && (item.row[0] || '').trim())
+      .map(item => ({
+        rowIndex: item._originalIdx + 1, // 1-based, coincide con fila real en Sheet
+        categoria: (item.row[0] || '').trim(),
+        subcategoria: (item.row[1] || '').trim(),
+        nombre: (item.row[2] || '').trim(),
+        marca: (item.row[3] || '').trim(),
+        descripcion: (item.row[4] || '').trim(),
+        imagen: (item.row[5] || '').trim(),
       }))
       .filter(p => p.nombre);
 

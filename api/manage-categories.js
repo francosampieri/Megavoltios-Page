@@ -85,6 +85,65 @@ async function addCategory(sheets, spreadsheetId, categoria, subcategoria) {
   });
 }
 
+// ═══ ELIMINAR PRODUCTOS ASOCIADOS A UNA CATEGORÍA/SUBCATEGORÍA ══════
+async function deleteAssociatedProducts(sheets, spreadsheetId, categoria, subcategoria) {
+  // Obtener sheetId de la pestaña Productos
+  const sheetMeta = await sheets.spreadsheets.get({ spreadsheetId });
+  const prodSheet = sheetMeta.data.sheets.find(s => s.properties.title === 'Productos');
+  if (!prodSheet) return; // No hay pestaña Productos
+
+  const prodSheetId = prodSheet.properties.sheetId;
+
+  // Leer todas las filas de Productos
+  const data = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: 'Productos!A:C',
+  });
+
+  const rows = data.data.values || [];
+  const rowsToDelete = [];
+
+  for (let i = 1; i < rows.length; i++) {
+    const cat = (rows[i][0] || '').trim();
+    const sub = (rows[i][1] || '').trim();
+
+    if (subcategoria !== undefined) {
+      // Eliminar productos de esta categoría + subcategoría
+      if (cat === categoria && sub === subcategoria) {
+        rowsToDelete.push(i);
+      }
+    } else {
+      // Eliminar todos los productos de esta categoría
+      if (cat === categoria) {
+        rowsToDelete.push(i);
+      }
+    }
+  }
+
+  if (rowsToDelete.length === 0) return 0;
+
+  // Eliminar de abajo hacia arriba para no desfasar los índices
+  rowsToDelete.sort((a, b) => b - a);
+
+  const requests = rowsToDelete.map(rowIndex => ({
+    deleteDimension: {
+      range: {
+        sheetId: prodSheetId,
+        dimension: 'ROWS',
+        startIndex: rowIndex,
+        endIndex: rowIndex + 1,
+      },
+    },
+  }));
+
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: { requests },
+  });
+
+  return rowsToDelete.length;
+}
+
 // ═══ ELIMINAR CATEGORÍA O SUBCATEGORÍA ══════════════════════════════
 async function deleteCategory(sheets, spreadsheetId, categoria, subcategoria) {
   // Obtener sheetId de la pestaña Config
@@ -179,9 +238,12 @@ module.exports = async function handler(req, res) {
 
       case 'delete': {
         if (!categoria) return res.status(400).json({ error: 'Categoría requerida' });
+        // Primero eliminar productos asociados
+        const deletedCount = await deleteAssociatedProducts(sheets, spreadsheetId, categoria, subcategoria);
+        // Luego eliminar de Config
         await deleteCategory(sheets, spreadsheetId, categoria, subcategoria);
-        console.log(`✓ Categoría eliminada: ${categoria}${subcategoria ? ' > ' + subcategoria : ''}`);
-        return res.status(200).json({ success: true });
+        console.log(`✓ Eliminado: ${categoria}${subcategoria ? ' > ' + subcategoria : ''} (+ ${deletedCount} productos)`);
+        return res.status(200).json({ success: true, deletedProducts: deletedCount });
       }
 
       case 'count': {
