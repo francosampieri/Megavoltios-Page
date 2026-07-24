@@ -60,7 +60,9 @@ async function loadProducts() {
 // ═══ LECTURA DESDE GOOGLE SHEETS (CSV) ══════════════════════════════════════
 
 async function loadFromSheet(url) {
-  const response = await fetch(url);
+  // Cache-busting: agregar timestamp para evitar caché del navegador
+  const cacheBuster = `&_t=${Date.now()}`;
+  const response = await fetch(url + cacheBuster);
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   
   const csvText = await response.text();
@@ -323,7 +325,10 @@ function buildProductCards(products) {
 
     const img = document.createElement('img');
     img.className = 'product-card__image';
-    img.src = prod.imagen;
+    // Cache-busting para imágenes de Cloudinary
+    img.src = prod.imagen.includes('cloudinary.com') 
+      ? prod.imagen + '?v=' + Date.now() 
+      : prod.imagen;
     img.alt = prod.nombre;
     img.loading = 'lazy';
     imgWrap.appendChild(img);
