@@ -172,7 +172,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ═══ FORM ═══ */
-    .form-card { background: var(--navy); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; max-width: 720px; margin: 0 auto; }
+    .form-card { background: var(--navy); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; max-width: 800px; margin: 0 auto; }
     .form-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem; }
     .form-card__subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
@@ -284,6 +284,14 @@
     .cat-action-btn--del:hover { border-color: var(--red); color: var(--red); background: var(--red-bg); }
     .cat-action-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
+    /* Form grid overflow fix */
+    .form-grid > .form-group > div[style*="display:flex"] {
+      min-width: 0;
+    }
+    .form-grid > .form-group > div[style*="display:flex"] > .form-select {
+      min-width: 0;
+    }
+
     /* ═══ RESPONSIVE ═══ */
     @media (max-width: 768px) {
       .topbar { padding: 0.75rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
@@ -375,8 +383,8 @@
         <div class="form-grid">
           <div class="form-group">
             <label class="form-label">Categoría <span class="required">*</span></label>
-            <div style="display:flex;gap:0.5rem;align-items:center;">
-              <select class="form-select" id="formCategoria" style="flex:1;">
+            <div style="display:flex;gap:0.5rem;align-items:center;min-width:0;">
+              <select class="form-select" id="formCategoria" style="flex:1;min-width:0;">
                 <option value="">Seleccionar...</option>
               </select>
               <button type="button" class="cat-action-btn cat-action-btn--add" id="btnAddCat" title="Agregar categoría">+</button>
@@ -386,8 +394,8 @@
           </div>
           <div class="form-group">
             <label class="form-label">Subcategoría</label>
-            <div style="display:flex;gap:0.5rem;align-items:center;">
-              <select class="form-select" id="formSubcategoria" style="flex:1;">
+            <div style="display:flex;gap:0.5rem;align-items:center;min-width:0;">
+              <select class="form-select" id="formSubcategoria" style="flex:1;min-width:0;">
                 <option value="">Sin subcategoría</option>
               </select>
               <button type="button" class="cat-action-btn cat-action-btn--add" id="btnAddSub" title="Agregar subcategoría" style="display:none;">+</button>
@@ -402,7 +410,6 @@
           <div class="form-group">
             <label class="form-label">Marca</label>
             <input type="text" class="form-input" id="formMarca" placeholder="Ej: Einhell" />
-            <span class="form-hint">Aparece como badge sobre la imagen</span>
           </div>
           <div class="form-group form-group--full">
             <label class="form-label">Descripción</label>
@@ -728,6 +735,14 @@
       }
     });
 
+    // Agregar categoría (botón +)
+    $('#btnAddCat').addEventListener('click', async () => {
+      const name = prompt('Nombre de la nueva categoría:');
+      if (name && name.trim()) {
+        await addCategoryToConfig(name.trim());
+      }
+    });
+
     // Eliminar categoría
     $('#btnDelCat').addEventListener('click', async () => {
       const cat = $('#formCategoria').value;
@@ -826,6 +841,15 @@
   }
 
   async function deleteSubcategoryFromConfig(cat, sub) {
+    // Contar productos con esta subcategoría
+    const count = state.products.filter(p => p.categoria === cat && p.subcategoria === sub).length;
+    
+    const msg = count > 0
+      ? `⚠ Esta subcategoría tiene ${count} producto(s) vinculado(s).\n\nSi la eliminás, esos productos quedarán sin subcategoría.\n\n¿Seguro que querés eliminar "${sub}" de "${cat}"?`
+      : `¿Eliminar la subcategoría "${sub}" de "${cat}"?`;
+
+    if (!confirm(msg)) return;
+
     try {
       const res = await fetch('/api/manage-categories', {
         method: 'POST',
