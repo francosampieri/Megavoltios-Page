@@ -1581,8 +1581,8 @@ a.footer__nav-link:hover {
 
 .product-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1rem;
   margin-top: 1.5rem;
 }
 
