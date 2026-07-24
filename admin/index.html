@@ -263,6 +263,27 @@
     .dialog p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; }
     .dialog__actions { display: flex; gap: 0.75rem; justify-content: center; }
 
+    /* Category management buttons */
+    .cat-action-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--navy-dark);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .cat-action-btn:hover { border-color: var(--amber); color: var(--amber); }
+    .cat-action-btn--del:hover { border-color: var(--red); color: var(--red); background: var(--red-bg); }
+    .cat-action-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
     /* ═══ RESPONSIVE ═══ */
     @media (max-width: 768px) {
       .topbar { padding: 0.75rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
@@ -354,13 +375,24 @@
         <div class="form-grid">
           <div class="form-group">
             <label class="form-label">Categoría <span class="required">*</span></label>
-            <select class="form-select" id="formCategoria">
-              <option value="">Seleccionar...</option>
-            </select>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <select class="form-select" id="formCategoria" style="flex:1;">
+                <option value="">Seleccionar...</option>
+              </select>
+              <button type="button" class="cat-action-btn cat-action-btn--add" id="btnAddCat" title="Agregar categoría">+</button>
+              <button type="button" class="cat-action-btn cat-action-btn--del" id="btnDelCat" title="Eliminar categoría" style="display:none;">×</button>
+            </div>
+            <span class="form-hint" id="catHint"></span>
           </div>
           <div class="form-group">
             <label class="form-label">Subcategoría</label>
-            <input type="text" class="form-input" id="formSubcategoria" placeholder="Ej: Herramientas Eléctricas" />
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <select class="form-select" id="formSubcategoria" style="flex:1;">
+                <option value="">Sin subcategoría</option>
+              </select>
+              <button type="button" class="cat-action-btn cat-action-btn--add" id="btnAddSub" title="Agregar subcategoría" style="display:none;">+</button>
+              <button type="button" class="cat-action-btn cat-action-btn--del" id="btnDelSub" title="Eliminar subcategoría" style="display:none;">×</button>
+            </div>
             <span class="form-hint">Opcional — para organizar dentro de la categoría</span>
           </div>
           <div class="form-group">
@@ -450,11 +482,11 @@
   const CONFIG = {
     // URL del CSV público de Google Sheets
     // Sheets → Archivo → Compartir → Publicar en la web → CSV → Copiar link
-    sheetCsvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThiL5HG6YFCnpudCNlqd8NRYNRGUtO2fptZ1yV_3JAi0NnC_XZaMfjPLotNjfRiuBwJpmJeO12eEy3/pub?gid=0&single=true&output=csv', // ← PEGAR URL AQUÍ
+    sheetCsvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThiL5HG6YFCnpudCNlqd8NRYNRGUtO2fptZ1yV_3JAi0NnC_XZaMfjPLotNjfRiuBwJpmJeO12eEy3/pub?gid=0&single=true&output=csv',
 
     // Cloudinary (para subir imágenes)
-    cloudinaryCloudName: 'dgkh64tcm', // ← Tu cloud name de Cloudinary
-    cloudinaryUploadPreset: 'Megavoltios-catalogo', // ← Upload preset "unsigned" creado en Cloudinary
+    cloudinaryCloudName: 'dgkh64tcm',
+    cloudinaryUploadPreset: 'Megavoltios-catalogo',
 
     // Categorías disponibles (para el dropdown del formulario)
     categorias: [
@@ -480,7 +512,8 @@
     currentFilter: 'Todos',
     searchQuery: '',
     uploadedImageUrl: '',
-    editingRowIndex: null,  // null = modo agregar, número = modo editar
+    editingRowIndex: null,
+    configCategories: {},  // { "Categoría": ["Sub1", "Sub2"], ... } cargado desde Config
   };
 
   // ═══ DOM REFS ═════════════════════════════════════════════════════
@@ -552,16 +585,261 @@
 
   // ═══ INIT ADMIN ═══════════════════════════════════════════════════
   async function initAdmin() {
-    // Poblar dropdown de categorías
+    await loadCategories();
+    await loadProducts();
+    initCategoryManagement();
+  }
+
+  // ═══ CATEGORÍAS DINÁMICAS (desde pestaña Config) ══════════════════
+  async function loadCategories() {
+    try {
+      const res = await fetch('/api/manage-categories');
+      if (res.ok) {
+        const data = await res.json();
+        state.configCategories = data.categorias || {};
+      }
+    } catch (err) {
+      console.warn('No se pudieron cargar categorías de Config, usando CONFIG local:', err.message);
+      // Fallback: construir desde el array estático
+      state.configCategories = {};
+      CONFIG.categorias.forEach(cat => { state.configCategories[cat] = []; });
+    }
+    updateCategoryDropdown();
+  }
+
+  function updateCategoryDropdown() {
     const select = $('#formCategoria');
-    CONFIG.categorias.forEach(cat => {
+    const currentVal = select.value;
+    select.innerHTML = '<option value="">Seleccionar...</option>';
+
+    Object.keys(state.configCategories).sort().forEach(cat => {
       const opt = document.createElement('option');
       opt.value = cat;
       opt.textContent = cat;
       select.appendChild(opt);
     });
 
-    await loadProducts();
+    // Opción para agregar nueva
+    const addOpt = document.createElement('option');
+    addOpt.value = '__add__';
+    addOpt.textContent = '➕ Agregar nueva categoría...';
+    select.appendChild(addOpt);
+
+    // Restaurar selección si existe
+    if (currentVal && currentVal !== '__add__') {
+      select.value = currentVal;
+    }
+
+    updateSubcategoryDropdown();
+    updateCatActions();
+  }
+
+  function updateSubcategoryDropdown() {
+    const select = $('#formSubcategoria');
+    const cat = $('#formCategoria').value;
+    const currentVal = select.value;
+    select.innerHTML = '<option value="">Sin subcategoría</option>';
+
+    if (cat && state.configCategories[cat]) {
+      state.configCategories[cat].sort().forEach(sub => {
+        const opt = document.createElement('option');
+        opt.value = sub;
+        opt.textContent = sub;
+        select.appendChild(opt);
+      });
+    }
+
+    // Opción para agregar nueva subcategoría (solo si hay categoría seleccionada)
+    if (cat && cat !== '__add__') {
+      const addOpt = document.createElement('option');
+      addOpt.value = '__add__';
+      addOpt.textContent = '➕ Agregar nueva subcategoría...';
+      select.appendChild(addOpt);
+    }
+
+    // Restaurar selección
+    if (currentVal && currentVal !== '__add__') {
+      select.value = currentVal;
+    }
+
+    updateSubActions();
+  }
+
+  function updateCatActions() {
+    const cat = $('#formCategoria').value;
+    const btnDel = $('#btnDelCat');
+    const hint = $('#catHint');
+
+    if (cat && cat !== '__add__') {
+      btnDel.style.display = '';
+      // Contar productos de esta categoría
+      const count = state.products.filter(p => p.categoria === cat).length;
+      hint.textContent = count > 0 ? `${count} producto(s) en esta categoría` : '';
+    } else {
+      btnDel.style.display = 'none';
+      hint.textContent = '';
+    }
+  }
+
+  function updateSubActions() {
+    const cat = $('#formCategoria').value;
+    const sub = $('#formSubcategoria').value;
+    const btnAdd = $('#btnAddSub');
+    const btnDel = $('#btnDelSub');
+
+    if (cat && cat !== '__add__') {
+      btnAdd.style.display = '';
+      btnDel.style.display = (sub && sub !== '__add__') ? '' : 'none';
+    } else {
+      btnAdd.style.display = 'none';
+      btnDel.style.display = 'none';
+    }
+  }
+
+  function initCategoryManagement() {
+    // Cambio de categoría
+    $('#formCategoria').addEventListener('change', async (e) => {
+      if (e.target.value === '__add__') {
+        e.target.value = '';
+        const name = prompt('Nombre de la nueva categoría:');
+        if (name && name.trim()) {
+          await addCategoryToConfig(name.trim());
+        } else {
+          updateCategoryDropdown();
+        }
+      } else {
+        updateSubcategoryDropdown();
+        updateCatActions();
+      }
+    });
+
+    // Cambio de subcategoría
+    $('#formSubcategoria').addEventListener('change', async (e) => {
+      if (e.target.value === '__add__') {
+        e.target.value = '';
+        const name = prompt('Nombre de la nueva subcategoría:');
+        if (name && name.trim()) {
+          await addSubcategoryToConfig($('#formCategoria').value, name.trim());
+        } else {
+          updateSubcategoryDropdown();
+        }
+      } else {
+        updateSubActions();
+      }
+    });
+
+    // Eliminar categoría
+    $('#btnDelCat').addEventListener('click', async () => {
+      const cat = $('#formCategoria').value;
+      if (!cat) return;
+
+      const count = state.products.filter(p => p.categoria === cat).length;
+      const msg = count > 0
+        ? `⚠ Esta categoría tiene ${count} producto(s) vinculado(s).\n\nSi la eliminás, esos productos quedarán sin categoría en la Sheet.\n\n¿Seguro que querés eliminar "${cat}"?`
+        : `¿Eliminar la categoría "${cat}"?`;
+
+      if (confirm(msg)) {
+        await deleteCategoryFromConfig(cat);
+      }
+    });
+
+    // Agregar subcategoría (botón +)
+    $('#btnAddSub').addEventListener('click', async () => {
+      const cat = $('#formCategoria').value;
+      if (!cat) return;
+      const name = prompt('Nombre de la nueva subcategoría:');
+      if (name && name.trim()) {
+        await addSubcategoryToConfig(cat, name.trim());
+      }
+    });
+
+    // Eliminar subcategoría
+    $('#btnDelSub').addEventListener('click', async () => {
+      const cat = $('#formCategoria').value;
+      const sub = $('#formSubcategoria').value;
+      if (!cat || !sub) return;
+
+      if (confirm(`¿Eliminar la subcategoría "${sub}" de "${cat}"?`)) {
+        await deleteSubcategoryFromConfig(cat, sub);
+      }
+    });
+  }
+
+  async function addCategoryToConfig(name) {
+    try {
+      const res = await fetch('/api/manage-categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: state.password, action: 'add', categoria: name }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+
+      state.configCategories[name] = [];
+      updateCategoryDropdown();
+      $('#formCategoria').value = name;
+      updateSubcategoryDropdown();
+      updateCatActions();
+      showToast('Categoría agregada', `"${name}" está disponible`);
+    } catch (err) {
+      showToast('Error agregando categoría', err.message, true);
+    }
+  }
+
+  async function addSubcategoryToConfig(cat, name) {
+    try {
+      const res = await fetch('/api/manage-categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: state.password, action: 'add', categoria: cat, subcategoria: name }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+
+      if (!state.configCategories[cat]) state.configCategories[cat] = [];
+      if (!state.configCategories[cat].includes(name)) {
+        state.configCategories[cat].push(name);
+      }
+      updateSubcategoryDropdown();
+      $('#formSubcategoria').value = name;
+      updateSubActions();
+      showToast('Subcategoría agregada', `"${name}" en ${cat}`);
+    } catch (err) {
+      showToast('Error agregando subcategoría', err.message, true);
+    }
+  }
+
+  async function deleteCategoryFromConfig(cat) {
+    try {
+      const res = await fetch('/api/manage-categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: state.password, action: 'delete', categoria: cat }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+
+      delete state.configCategories[cat];
+      $('#formCategoria').value = '';
+      updateCategoryDropdown();
+      showToast('Categoría eliminada', `"${cat}" fue eliminada`);
+    } catch (err) {
+      showToast('Error eliminando categoría', err.message, true);
+    }
+  }
+
+  async function deleteSubcategoryFromConfig(cat, sub) {
+    try {
+      const res = await fetch('/api/manage-categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: state.password, action: 'delete', categoria: cat, subcategoria: sub }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+
+      state.configCategories[cat] = state.configCategories[cat].filter(s => s !== sub);
+      updateSubcategoryDropdown();
+      showToast('Subcategoría eliminada', `"${sub}" fue eliminada`);
+    } catch (err) {
+      showToast('Error eliminando subcategoría', err.message, true);
+    }
   }
 
   // ═══ LOAD PRODUCTS ════════════════════════════════════════════════
@@ -819,7 +1097,9 @@
 
     // Llenar campos con datos del producto
     $('#formCategoria').value = product.categoria;
+    updateSubcategoryDropdown();
     $('#formSubcategoria').value = product.subcategoria || '';
+    updateSubActions();
     $('#formNombre').value = product.nombre;
     $('#formMarca').value = product.marca || '';
     $('#formDescripcion').value = product.descripcion || '';
@@ -1080,5 +1360,5 @@
   }
   </script>
 
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a1ee0d87392aaf4c',t:'MTc4NDY3NzI0OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
