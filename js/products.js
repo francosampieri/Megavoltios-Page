@@ -374,6 +374,10 @@ function buildCatalog(categorias) {
  * Construye la grilla de cards visuales (productos con imagen)
  */
 function buildProductCards(products) {
+  // Wrapper para el indicador de scroll en mobile
+  const wrapper = document.createElement('div');
+  wrapper.className = 'product-cards-wrapper';
+
   const grid = document.createElement('div');
   grid.className = 'product-cards-grid';
 
@@ -453,7 +457,36 @@ function buildProductCards(products) {
     grid.appendChild(card);
   });
 
-  return grid;
+  wrapper.appendChild(grid);
+
+  // Hint de scroll horizontal (solo visible en mobile)
+  const hint = document.createElement('div');
+  hint.className = 'product-cards-hint';
+  hint.innerHTML = `
+    Deslizá para ver más
+    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  `;
+  wrapper.appendChild(hint);
+
+  // Detectar scroll para ocultar hint y fade
+  grid.addEventListener('scroll', () => {
+    // Ocultar hint al primer scroll
+    hint.classList.add('hidden');
+
+    // Detectar si llegó al final para ocultar el fade
+    const atEnd = grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 5;
+    wrapper.classList.toggle('scrolled-end', atEnd);
+  }, { passive: true });
+
+  // Verificar si hay overflow (si no, ocultar hint y fade)
+  requestAnimationFrame(() => {
+    if (grid.scrollWidth <= grid.clientWidth) {
+      hint.classList.add('hidden');
+      wrapper.classList.add('scrolled-end');
+    }
+  });
+
+  return wrapper;
 }
 
 

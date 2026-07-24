@@ -1717,6 +1717,11 @@ a.footer__nav-link:hover {
   fill: currentColor;
 }
 
+/* Hint de scroll — oculto en desktop */
+.product-cards-hint {
+  display: none;
+}
+
 /* Categorías mixtas (cards + texto en la misma categoría) */
 .catalog-category--mixed .mixed-section {
   margin-bottom: 2rem;
@@ -1752,7 +1757,74 @@ a.footer__nav-link:hover {
 
 /* Product cards responsive */
 @media (max-width: 768px) {
-  /* Scroll horizontal en mobile en vez de grid de múltiples filas */
+  /* Wrapper para el indicador de scroll */
+  .product-cards-wrapper {
+    position: relative;
+  }
+
+  /* Fade en el borde derecho que indica más contenido */
+  .product-cards-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 40px;
+    background: linear-gradient(to right, transparent, var(--brand-navy-surface) 85%);
+    pointer-events: none;
+    z-index: 2;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    transition: opacity 0.4s ease;
+  }
+
+  /* Ocultar fade cuando llegó al final del scroll */
+  .product-cards-wrapper.scrolled-end::after {
+    opacity: 0;
+  }
+
+  /* Indicador "Deslizá" animado */
+  .product-cards-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    padding: 0.5rem 0 0;
+    animation: hint-pulse 2s ease-in-out 0.5s 3;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+
+  .product-cards-hint svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    animation: hint-slide 1.5s ease-in-out 0.8s 3;
+  }
+
+  .product-cards-hint.hidden {
+    display: none;
+  }
+
+  @keyframes hint-pulse {
+    0%   { opacity: 0; }
+    15%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { opacity: 0.5; }
+  }
+
+  @keyframes hint-slide {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(6px); }
+  }
+
+  /* Scroll horizontal en mobile */
   .product-cards-grid {
     display: flex;
     overflow-x: auto;
