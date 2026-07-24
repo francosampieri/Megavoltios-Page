@@ -29,17 +29,25 @@ const WHATSAPP_NUMBER = '5492616813712';
 async function loadProducts() {
   let categorias = null;
 
-  // Intentar cargar desde Google Sheets
-  if (SHEET_CSV_URL) {
+  // Intentar cargar desde la API directa (tiempo real, sin caché de Sheets)
+  try {
+    categorias = await loadFromAPI();
+    console.log(`✓ Catálogo cargado desde API (${countProducts(categorias)} productos)`);
+  } catch (err) {
+    console.warn('⚠ No se pudo leer desde API:', err.message);
+  }
+
+  // Fallback 1: CSV público de Google Sheets
+  if (!categorias && SHEET_CSV_URL) {
     try {
       categorias = await loadFromSheet(SHEET_CSV_URL);
-      console.log(`✓ Catálogo cargado desde Google Sheets (${countProducts(categorias)} productos)`);
+      console.log(`✓ Catálogo cargado desde CSV (${countProducts(categorias)} productos)`);
     } catch (err) {
-      console.warn('⚠ No se pudo leer Google Sheets, usando JSON local:', err.message);
+      console.warn('⚠ No se pudo leer CSV:', err.message);
     }
   }
 
-  // Fallback: cargar desde JSON local
+  // Fallback 2: JSON local
   if (!categorias) {
     try {
       categorias = await loadFromJSON('./data/products.json');
@@ -54,6 +62,60 @@ async function loadProducts() {
 
   buildCategoryNav(categorias);
   buildCatalog(categorias);
+}
+
+
+// ═══ LECTURA DESDE API DIRECTA (tiempo real) ════════════════════════════════
+
+async function loadFromAPI() {
+  const response = await fetch('/api/get-products');
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+  const data = await response.json();
+  if (!data.products || data.products.length === 0) throw new Error('Sin productos');
+
+  // Agrupar por categoría → subcategoría
+  const catMap = new Map();
+
+  data.products.forEach(prod => {
+    const catId = slugify(prod.categoria);
+
+    if (!catMap.has(catId)) {
+      catMap.set(catId, {
+        id: catId,
+        nombre: prod.categoria,
+        visualProducts: [],
+        textProducts: {},
+        hasSubcategories: false,
+      });
+    }
+
+    const cat = catMap.get(catId);
+
+    // Resolver URL de imagen
+    let imageUrl = '';
+    if (prod.imagen) {
+      imageUrl = prod.imagen.startsWith('http')
+        ? prod.imagen
+        : LOCAL_IMAGES_BASE + prod.imagen;
+    }
+
+    if (imageUrl) {
+      cat.visualProducts.push({
+        nombre: prod.nombre,
+        marca: prod.marca,
+        descripcion: prod.descripcion,
+        imagen: imageUrl,
+      });
+    } else {
+      const sub = prod.subcategoria || '__direct__';
+      if (sub !== '__direct__') cat.hasSubcategories = true;
+      if (!cat.textProducts[sub]) cat.textProducts[sub] = [];
+      cat.textProducts[sub].push(prod.nombre);
+    }
+  });
+
+  return Array.from(catMap.values());
 }
 
 
