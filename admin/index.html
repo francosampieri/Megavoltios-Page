@@ -401,7 +401,7 @@
               <button type="button" class="cat-action-btn cat-action-btn--add" id="btnAddSub" title="Agregar subcategoría" style="display:none;">+</button>
               <button type="button" class="cat-action-btn cat-action-btn--del" id="btnDelSub" title="Eliminar subcategoría" style="display:none;">×</button>
             </div>
-            <span class="form-hint">Opcional — para organizar dentro de la categoría</span>
+            <span class="form-hint" id="subHint"></span>
           </div>
           <div class="form-group">
             <label class="form-label">Nombre del producto <span class="required">*</span></label>
@@ -693,13 +693,22 @@
     const sub = $('#formSubcategoria').value;
     const btnAdd = $('#btnAddSub');
     const btnDel = $('#btnDelSub');
+    const hint = $('#subHint');
 
     if (cat && cat !== '__add__') {
       btnAdd.style.display = '';
-      btnDel.style.display = (sub && sub !== '__add__') ? '' : 'none';
+      if (sub && sub !== '__add__') {
+        btnDel.style.display = '';
+        const count = state.products.filter(p => p.categoria === cat && p.subcategoria === sub).length;
+        hint.textContent = count > 0 ? `${count} producto(s) en esta subcategoría` : '';
+      } else {
+        btnDel.style.display = 'none';
+        hint.textContent = '';
+      }
     } else {
       btnAdd.style.display = 'none';
       btnDel.style.display = 'none';
+      hint.textContent = '';
     }
   }
 
@@ -1384,5 +1393,5 @@
   }
   </script>
 
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a20067810e8bb4f5',t:'MTc4NDg2OTY3OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
