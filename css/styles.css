@@ -1703,7 +1703,10 @@ a.footer__nav-link:hover {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0.4rem 0;
+  border: none;
   border-bottom: 1px solid rgba(245, 166, 35, 0.3);
+  background: none;
+  cursor: pointer;
   transition: all var(--transition);
   align-self: center;
 }
@@ -1923,6 +1926,7 @@ a.footer__nav-link:hover {
   overflow-y: auto;
   transform: scale(0.95) translateY(10px);
   transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
 }
 
 .product-modal-overlay.active .product-modal {
@@ -2021,6 +2025,47 @@ a.footer__nav-link:hover {
 
 .product-modal__close:hover {
   background: rgba(0,0,0,0.7);
+}
+
+/* Modal en desktop: layout horizontal */
+@media (min-width: 769px) {
+  .product-modal {
+    max-width: 700px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-height: 80vh;
+    overflow: hidden;
+  }
+
+  .product-modal__img {
+    border-radius: 12px 0 0 12px;
+    height: 100%;
+    aspect-ratio: auto;
+    min-height: 400px;
+    object-fit: cover;
+  }
+
+  .product-modal__body {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+  }
+
+  .product-modal__name {
+    font-size: 1.4rem;
+  }
+
+  .product-modal__desc {
+    font-size: 0.95rem;
+  }
+
+  /* Botón cerrar sobre la imagen en desktop */
+  .product-modal__close {
+    left: 1rem;
+    right: auto;
+  }
 }
 
 /* Hint de click para expandir */
