@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Megavoltios — Panel de Administración</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --navy: #1A1F3A;
+      --navy-dark: #12162D;
+      --navy-deep: #0D1124;
+      --navy-surface: #222847;
+      --amber: #F5A623;
+      --amber-light: #FFB830;
+      --border: rgba(255,255,255,0.08);
+      --radius: 10px;
+      --radius-sm: 6px;
+      --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+      --text-muted: rgba(255,255,255,0.5);
+      --text-dim: rgba(255,255,255,0.35);
+      --red: #ef4444;
+      --red-bg: rgba(239,68,68,0.1);
+      --green: #22c55e;
+      --green-bg: rgba(34,197,94,0.1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--navy-deep);
+      color: #fff;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    img { max-width: 100%; display: block; }
+    button { font-family: inherit; cursor: pointer; border: none; }
+    input, select, textarea { font-family: inherit; }
+
+    /* ═══ LOGIN ═══ */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: radial-gradient(ellipse at 20% 50%, rgba(245,166,35,0.06) 0%, transparent 60%), var(--navy-deep);
+    }
+    .login-screen.hidden { display: none; }
+    .login-card {
+      background: var(--navy);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 3rem;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .login-logo { font-size: 1.8rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
+    .login-logo .accent { color: var(--amber); }
+    .login-subtitle { font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; margin-bottom: 2.5rem; }
+    .login-field {
+      width: 100%; padding: 0.85rem 1.1rem; background: var(--navy-dark); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: #fff; font-size: 0.95rem; outline: none; transition: border-color var(--transition); margin-bottom: 1rem;
+    }
+    .login-field::placeholder { color: var(--text-dim); }
+    .login-field:focus { border-color: var(--amber); }
+    .login-btn { width: 100%; padding: 0.85rem; background: var(--amber); color: #000; font-size: 0.95rem; font-weight: 700; border-radius: var(--radius-sm); transition: all var(--transition); margin-top: 0.5rem; }
+    .login-btn:hover { background: var(--amber-light); transform: translateY(-1px); }
+    .login-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .login-error { color: var(--red); font-size: 0.82rem; margin-top: 0.75rem; display: none; }
+    .login-error.show { display: block; }
+
+    /* ═══ ADMIN LAYOUT ═══ */
+    .admin-layout { display: none; min-height: 100vh; }
+    .admin-layout.active { display: block; }
+
+    /* Top bar */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border); background: var(--navy-dark); position: sticky; top: 0; z-index: 40;
+    }
+    .topbar__left { display: flex; align-items: center; gap: 1rem; }
+    .topbar__logo { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.02em; }
+    .topbar__logo .accent { color: var(--amber); }
+    .topbar__tag {
+      font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em;
+      font-weight: 600; background: rgba(255,255,255,0.05); padding: 0.2rem 0.6rem; border-radius: 4px;
+    }
+    .topbar__title { font-size: 1.05rem; font-weight: 700; }
+    .topbar__actions { display: flex; gap: 0.75rem; align-items: center; }
+    .topbar__btn {
+      display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1.1rem;
+      border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 700; transition: all var(--transition);
+    }
+    .topbar__btn--primary { background: var(--amber); color: #000; }
+    .topbar__btn--primary:hover { background: var(--amber-light); transform: translateY(-1px); }
+    .topbar__btn--outline { background: transparent; border: 1px solid var(--border); color: rgba(255,255,255,0.7); }
+    .topbar__btn--outline:hover { border-color: var(--amber); color: var(--amber); }
+    .topbar__btn--ghost { background: none; color: var(--text-muted); padding: 0.55rem 0.75rem; }
+    .topbar__btn--ghost:hover { color: var(--red); }
+    .topbar__btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* Page content */
+    .page { padding: 2rem; max-width: 1100px; margin: 0 auto; }
+    .page--form-view { display: none; }
+    .page--form-view.active { display: block; }
+    .page--list-view.active { display: block; }
+    .page--list-view { display: none; }
+
+    /* Stats */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: var(--navy); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+    .stat-card__label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .stat-card__value { font-size: 1.8rem; font-weight: 800; color: #fff; }
+    .stat-card__value .unit { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
+    .stat-card--highlight { border-color: rgba(245,166,35,0.25); }
+    .stat-card--highlight .stat-card__value { color: var(--amber); }
+
+    /* Search + filters */
+    .list-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .product-search {
+      display: flex; align-items: center; gap: 0.5rem; background: var(--navy); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 0.5rem 0.85rem; flex: 1; max-width: 360px;
+    }
+    .product-search svg { width: 15px; height: 15px; stroke: var(--text-dim); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .product-search input { background: none; border: none; color: #fff; font-size: 0.85rem; outline: none; width: 100%; }
+    .product-search input::placeholder { color: var(--text-dim); }
+
+    /* Filter tabs */
+    .filter-tabs { display: flex; gap: 0.25rem; overflow-x: auto; padding-bottom: 0.5rem; scrollbar-width: none; -webkit-overflow-scrolling: touch; max-width: 100%; }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+    .filter-tab {
+      padding: 0.4rem 0.9rem; font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
+      border-radius: 20px; white-space: nowrap; background: none; transition: all var(--transition); border: none;
+    }
+    .filter-tab:hover { color: #fff; background: rgba(255,255,255,0.05); }
+    .filter-tab.active { background: var(--amber); color: #000; }
+    .filter-tab .count { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; font-size: 0.65rem; font-weight: 700; margin-left: 0.35rem; background: rgba(255,255,255,0.1); }
+    .filter-tab.active .count { background: rgba(0,0,0,0.15); }
+
+    /* Product list */
+    .product-table-wrapper { background: var(--navy); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .product-row {
+      display: grid; grid-template-columns: 52px 1fr 110px 90px 70px; align-items: center; gap: 0.75rem;
+      padding: 0.75rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.03); transition: background var(--transition);
+    }
+    .product-row:hover { background: rgba(255,255,255,0.02); }
+    .product-row:last-child { border-bottom: none; }
+    .product-row__img { width: 44px; height: 44px; border-radius: var(--radius-sm); object-fit: cover; border: 1px solid var(--border); background: var(--navy-dark); }
+    .product-row__img--empty { display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 0.6rem; }
+    .product-row__info { min-width: 0; }
+    .product-row__name { font-size: 0.88rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .product-row__subcat { font-size: 0.72rem; color: var(--text-muted); }
+    .product-row__category { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
+    .product-row__status { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 20px; }
+    .product-row__status--visual { background: var(--green-bg); color: var(--green); }
+    .product-row__status--text { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+    .product-row__status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .product-row__actions { display: flex; gap: 0.25rem; justify-content: flex-end; }
+    .product-row__action-btn { width: 30px; height: 30px; border-radius: var(--radius-sm); background: none; color: var(--text-dim); display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
+    .product-row__action-btn:hover { background: rgba(255,255,255,0.06); color: var(--amber); }
+    .product-row__action-btn--edit:hover { color: #60a5fa; background: rgba(96,165,250,0.1); }
+    .product-row__action-btn--delete:hover { color: var(--red); background: var(--red-bg); }
+    .product-row__action-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .empty-state { padding: 3rem; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+    .loading-state { padding: 3rem; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+    .loading-state::after { content: ''; display: inline-block; width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--amber); border-radius: 50%; animation: spin 0.8s linear infinite; margin-left: 0.5rem; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ═══ FORM ═══ */
+    .form-card { background: var(--navy); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; max-width: 800px; margin: 0 auto; }
+    .form-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .form-card__subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group--full { grid-column: 1 / -1; }
+    .form-label { font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-label .required { color: var(--amber); }
+    .form-input, .form-select, .form-textarea {
+      padding: 0.75rem 1rem; background: var(--navy-dark); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: #fff; font-size: 0.9rem; outline: none; transition: border-color var(--transition);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--amber); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-dim); }
+    .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.85rem center; padding-right: 2.5rem; }
+    .form-select option { background: var(--navy-dark); color: #fff; }
+    .form-textarea { min-height: 80px; resize: vertical; }
+    .form-hint { font-size: 0.72rem; color: var(--text-dim); margin-top: 0.1rem; }
+    .form-actions { display: flex; gap: 0.75rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+    .form-btn { padding: 0.75rem 1.75rem; border-radius: var(--radius-sm); font-size: 0.88rem; font-weight: 700; transition: all var(--transition); }
+    .form-btn--primary { background: var(--amber); color: #000; }
+    .form-btn--primary:hover { background: var(--amber-light); transform: translateY(-1px); }
+    .form-btn--primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .form-btn--ghost { background: none; color: var(--text-muted); border: 1px solid var(--border); }
+    .form-btn--ghost:hover { border-color: rgba(255,255,255,0.25); color: #fff; }
+
+    /* Upload zone */
+    .upload-zone {
+      border: 2px dashed var(--border); border-radius: var(--radius); padding: 2rem; text-align: center;
+      transition: all var(--transition); cursor: pointer; position: relative;
+    }
+    .upload-zone:hover, .upload-zone.dragover { border-color: var(--amber); background: rgba(245,166,35,0.04); }
+    .upload-zone.uploading { pointer-events: none; opacity: 0.6; }
+    .upload-zone__icon { width: 44px; height: 44px; margin: 0 auto 0.75rem; stroke: var(--text-dim); transition: stroke var(--transition); }
+    .upload-zone:hover .upload-zone__icon { stroke: var(--amber); }
+    .upload-zone__icon svg { width: 100%; height: 100%; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .upload-zone__text { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 0.25rem; }
+    .upload-zone__hint { font-size: 0.78rem; color: var(--text-dim); }
+    .upload-zone__hint strong { color: var(--amber); }
+    .upload-zone input[type="file"] { display: none; }
+
+    .upload-preview { display: none; align-items: center; gap: 1rem; padding: 1rem; background: var(--navy-dark); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+    .upload-preview.active { display: flex; }
+    .upload-preview__img { width: 60px; height: 60px; border-radius: var(--radius-sm); object-fit: cover; border: 1px solid var(--border); }
+    .upload-preview__info { flex: 1; }
+    .upload-preview__name { font-size: 0.82rem; font-weight: 600; color: #fff; }
+    .upload-preview__size { font-size: 0.72rem; color: var(--text-muted); }
+    .upload-preview__status { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; font-weight: 700; color: var(--green); margin-top: 0.2rem; }
+    .upload-preview__remove { width: 30px; height: 30px; border-radius: 50%; background: var(--red-bg); color: var(--red); display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
+    .upload-preview__remove:hover { background: var(--red); color: #fff; }
+    .upload-preview__remove svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* Progress bar */
+    .upload-progress { display: none; margin-top: 0.75rem; }
+    .upload-progress.active { display: block; }
+    .upload-progress__bar { height: 4px; background: var(--navy-dark); border-radius: 2px; overflow: hidden; }
+    .upload-progress__fill { height: 100%; background: var(--amber); border-radius: 2px; transition: width 0.3s ease; width: 0%; }
+    .upload-progress__text { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.35rem; text-align: center; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem; background: var(--navy-surface); border: 1px solid var(--green);
+      border-radius: var(--radius); padding: 1rem 1.5rem; display: flex; align-items: center; gap: 0.75rem;
+      z-index: 200; box-shadow: 0 16px 48px rgba(0,0,0,0.4); transform: translateY(120%); opacity: 0;
+      transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    .toast.toast--error { border-color: var(--red); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast__icon { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--green-bg); color: var(--green); }
+    .toast--error .toast__icon { background: var(--red-bg); color: var(--red); }
+    .toast__icon svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .toast__text { font-size: 0.88rem; font-weight: 600; color: #fff; }
+    .toast__sub { font-size: 0.75rem; color: var(--text-muted); font-weight: 400; }
+
+    /* Confirm dialog */
+    .dialog-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300;
+      display: flex; align-items: center; justify-content: center; padding: 2rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+    }
+    .dialog-overlay.show { opacity: 1; pointer-events: all; }
+    .dialog {
+      background: var(--navy); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 2rem; max-width: 400px; width: 100%; text-align: center;
+      transform: scale(0.95); transition: transform 0.25s ease;
+    }
+    .dialog-overlay.show .dialog { transform: scale(1); }
+    .dialog h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .dialog p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+    .dialog__actions { display: flex; gap: 0.75rem; justify-content: center; }
+
+    /* Category management buttons */
+    .cat-action-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--navy-dark);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .cat-action-btn:hover { border-color: var(--amber); color: var(--amber); }
+    .cat-action-btn--del:hover { border-color: var(--red); color: var(--red); background: var(--red-bg); }
+    .cat-action-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* Form grid overflow fix */
+    .form-grid > .form-group > div[style*="display:flex"] {
+      min-width: 0;
+    }
+    .form-grid > .form-group > div[style*="display:flex"] > .form-select {
+      min-width: 0;
+    }
+
+    /* Mobile: wrap category buttons below select */
+    @media (max-width: 768px) {
+      .form-grid > .form-group > div[style*="display:flex"] {
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .form-grid > .form-group > div[style*="display:flex"] > .form-select {
+        width: 100%;
+        flex: none;
+      }
+      .form-grid > .form-group > div[style*="display:flex"] > .cat-action-btn {
+        width: 40px;
+        height: 40px;
+      }
+      .form-card {
+        padding: 1.25rem;
+      }
+    }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 768px) {
+      .topbar { padding: 0.75rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
+      .topbar__tag { display: none; }
+      .page { padding: 1.25rem; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .product-row { grid-template-columns: 44px 1fr 70px; }
+      .product-row__category, .product-row__status { display: none; }
+      .form-grid { grid-template-columns: 1fr; }
+      .list-toolbar { flex-direction: column; align-items: stretch; }
+      .product-search { max-width: none; }
+      .filter-tabs { width: 100%; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ LOGIN ═══ -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo">MEGA<span class="accent">VOLTIOS</span></div>
+      <div class="login-subtitle">Panel de administración</div>
+      <input type="password" class="login-field" id="loginPass" placeholder="Contraseña" autofocus />
+      <button class="login-btn" id="loginBtn">Ingresar</button>
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+
+  <!-- ═══ ADMIN ═══ -->
+  <div class="admin-layout" id="adminLayout">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <div class="topbar__left">
+        <div class="topbar__logo">MEGA<span class="accent">VOLTIOS</span></div>
+        <span class="topbar__tag">Admin</span>
+        <span class="topbar__title" id="pageTitle">Productos</span>
+      </div>
+      <div class="topbar__actions" id="topbarActions">
+        <button class="topbar__btn topbar__btn--primary" id="btnAddProduct">
+          <svg viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
+          Agregar producto
+        </button>
+        <button class="topbar__btn topbar__btn--ghost" id="btnLogout" title="Cerrar sesión">
+          <svg viewBox="0 0 24 24"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- LIST VIEW -->
+    <div class="page page--list-view active" id="pageList">
+      <div class="stats-row" id="statsRow">
+        <div class="stat-card stat-card--highlight">
+          <div class="stat-card__label">Total productos</div>
+          <div class="stat-card__value" id="statTotal">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__label">Con imagen</div>
+          <div class="stat-card__value"><span id="statVisual">—</span> <span class="unit">cards</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__label">Solo texto</div>
+          <div class="stat-card__value"><span id="statText">—</span> <span class="unit">items</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__label">Categorías</div>
+          <div class="stat-card__value" id="statCats">—</div>
+        </div>
+      </div>
+
+      <div class="list-toolbar">
+        <div class="product-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="searchInput" placeholder="Buscar producto..." />
+        </div>
+        <div class="filter-tabs" id="filterTabs"></div>
+      </div>
+
+      <div class="product-table-wrapper" id="productTable">
+        <div class="loading-state">Cargando productos</div>
+      </div>
+    </div>
+
+    <!-- FORM VIEW -->
+    <div class="page page--form-view" id="pageForm">
+      <div class="form-card">
+        <h3 id="formTitle">Nuevo producto</h3>
+        <p class="form-card__subtitle">Completá los datos. Si subís una imagen, el producto aparecerá como card visual en la web.</p>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Categoría <span class="required">*</span></label>
+            <div style="display:flex;gap:0.5rem;align-items:center;min-width:0;">
+              <select class="form-select" id="formCategoria" style="flex:1;min-width:0;">
+                <option value="">Seleccionar...</option>
+              </select>
+              <button type="button" class="cat-action-btn cat-action-btn--add" id="btnAddCat" title="Agregar categoría">+</button>
+              <button type="button" class="cat-action-btn cat-action-btn--del" id="btnDelCat" title="Eliminar categoría" style="display:none;">×</button>
+            </div>
+            <span class="form-hint" id="catHint"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subcategoría</label>
+            <div style="display:flex;gap:0.5rem;align-items:center;min-width:0;">
+              <select class="form-select" id="formSubcategoria" style="flex:1;min-width:0;">
+                <option value="">Sin subcategoría</option>
+              </select>
+              <button type="button" class="cat-action-btn cat-action-btn--add" id="btnAddSub" title="Agregar subcategoría" style="display:none;">+</button>
+              <button type="button" class="cat-action-btn cat-action-btn--del" id="btnDelSub" title="Eliminar subcategoría" style="display:none;">×</button>
+            </div>
+            <span class="form-hint" id="subHint"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nombre del producto <span class="required">*</span></label>
+            <input type="text" class="form-input" id="formNombre" placeholder="Ej: Taladro Percutor 550W" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Marca</label>
+            <input type="text" class="form-input" id="formMarca" placeholder="Ej: Einhell" />
+          </div>
+          <div class="form-group form-group--full">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-textarea" id="formDescripcion" placeholder="Breve descripción del producto..."></textarea>
+            <span class="form-hint">Opcional — solo se muestra en cards visuales</span>
+          </div>
+          <div class="form-group form-group--full">
+            <label class="form-label">Imagen del producto</label>
+            <div class="upload-zone" id="uploadZone">
+              <div class="upload-zone__icon">
+                <svg viewBox="0 0 24 24"><path d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"/></svg>
+              </div>
+              <div class="upload-zone__text">Arrastrá la imagen acá o hacé click para seleccionar</div>
+              <div class="upload-zone__hint">JPG, PNG o WebP · Máximo <strong>5MB</strong> · Se sube a Cloudinary</div>
+              <input type="file" id="fileInput" accept="image/*" />
+            </div>
+            <div class="upload-progress" id="uploadProgress">
+              <div class="upload-progress__bar"><div class="upload-progress__fill" id="uploadFill"></div></div>
+              <div class="upload-progress__text" id="uploadText">Subiendo imagen...</div>
+            </div>
+            <div class="upload-preview" id="uploadPreview">
+              <img src="" alt="" class="upload-preview__img" id="previewImg" />
+              <div class="upload-preview__info">
+                <div class="upload-preview__name" id="previewName"></div>
+                <div class="upload-preview__size" id="previewSize"></div>
+                <div class="upload-preview__status">
+                  <svg viewBox="0 0 24 24" width="12" height="12"><path d="M4.5 12.75l6 6 9-13.5"/></svg>
+                  Subida a Cloudinary
+                </div>
+              </div>
+              <button class="upload-preview__remove" id="removeImage" title="Quitar imagen">
+                <svg viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="form-btn form-btn--primary" id="btnSave">Guardar producto</button>
+          <button class="form-btn form-btn--ghost" id="btnCancel">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <div class="toast__icon"><svg viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5"/></svg></div>
+    <div>
+      <div class="toast__text" id="toastText">Producto guardado</div>
+      <div class="toast__sub" id="toastSub">Aparecerá en el catálogo en unos segundos</div>
+    </div>
+  </div>
+
+  <!-- Confirm dialog -->
+  <div class="dialog-overlay" id="dialogOverlay">
+    <div class="dialog">
+      <h4 id="dialogTitle">¿Eliminar producto?</h4>
+      <p id="dialogText">Esta acción no se puede deshacer.</p>
+      <div class="dialog__actions">
+        <button class="form-btn form-btn--ghost" id="dialogCancel">Cancelar</button>
+        <button class="form-btn form-btn--primary" id="dialogConfirm" style="background: var(--red); color: #fff;">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  /**
+   * admin.js — Panel de administración Megavoltios
+   * Funcional: lee de Google Sheets CSV + escribe via Vercel API
+   */
+
+  // ═══ CONFIGURACIÓN ════════════════════════════════════════════════
+  // MODIFICAR estos valores con los datos reales:
+
+  const CONFIG = {
+    // URL del CSV público de Google Sheets
+    // Sheets → Archivo → Compartir → Publicar en la web → CSV → Copiar link
+    sheetCsvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThiL5HG6YFCnpudCNlqd8NRYNRGUtO2fptZ1yV_3JAi0NnC_XZaMfjPLotNjfRiuBwJpmJeO12eEy3/pub?gid=0&single=true&output=csv',
+
+    // Cloudinary (para subir imágenes)
+    cloudinaryCloudName: 'dgkh64tcm',
+    cloudinaryUploadPreset: 'Megavoltios-catalogo',
+
+    // Categorías disponibles (para el dropdown del formulario)
+    categorias: [
+      'Ferretería',
+      'Industrial',
+      'Iluminación',
+      'Cables y Aislaciones',
+      'Gabinetes y Tableros',
+      'Cañería PVC y Metálica',
+      'Señalización y Automatización',
+      'Puesta a Tierra',
+      'Herramientas',
+      'Medición',
+      'Residencial',
+    ],
+  };
+
+  // ═══ STATE ════════════════════════════════════════════════════════
+  let state = {
+    password: '',
+    products: [],
+    filteredProducts: [],
+    currentFilter: 'Todos',
+    searchQuery: '',
+    uploadedImageUrl: '',
+    editingRowIndex: null,
+    configCategories: {},  // { "Categoría": ["Sub1", "Sub2"], ... } cargado desde Config
+  };
+
+  // ═══ DOM REFS ═════════════════════════════════════════════════════
+  const $ = (sel) => document.querySelector(sel);
+  const loginScreen = $('#loginScreen');
+  const adminLayout = $('#adminLayout');
+  const pageList = $('#pageList');
+  const pageForm = $('#pageForm');
+  const productTable = $('#productTable');
+  const filterTabs = $('#filterTabs');
+  const searchInput = $('#searchInput');
+  const uploadZone = $('#uploadZone');
+  const fileInput = $('#fileInput');
+  const uploadPreview = $('#uploadPreview');
+  const uploadProgress = $('#uploadProgress');
+
+  // ═══ LOGIN ════════════════════════════════════════════════════════
+  $('#loginBtn').addEventListener('click', handleLogin);
+  $('#loginPass').addEventListener('keydown', (e) => { if (e.key === 'Enter') handleLogin(); });
+
+  async function handleLogin() {
+    const pass = $('#loginPass').value.trim();
+    if (!pass) return;
+
+    const btn = $('#loginBtn');
+    btn.disabled = true;
+    btn.textContent = 'Verificando...';
+
+    // Verificar contraseña haciendo un request al API
+    try {
+      const res = await fetch('/api/add-product', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pass, categoria: '', nombre: '' }),
+      });
+
+      if (res.status === 401) {
+        $('#loginError').textContent = 'Contraseña incorrecta';
+        $('#loginError').classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Ingresar';
+        return;
+      }
+
+      // Contraseña correcta (el 400 es porque mandamos campos vacíos a propósito)
+      state.password = pass;
+      loginScreen.classList.add('hidden');
+      adminLayout.classList.add('active');
+      initAdmin();
+
+    } catch (err) {
+      // Si no hay API configurada, aceptar cualquier contraseña (modo demo)
+      state.password = pass;
+      loginScreen.classList.add('hidden');
+      adminLayout.classList.add('active');
+      initAdmin();
+    }
+  }
+
+  $('#btnLogout').addEventListener('click', () => {
+    state.password = '';
+    adminLayout.classList.remove('active');
+    loginScreen.classList.remove('hidden');
+    $('#loginPass').value = '';
+    $('#loginError').classList.remove('show');
+    $('#loginBtn').disabled = false;
+    $('#loginBtn').textContent = 'Ingresar';
+  });
+
+  // ═══ INIT ADMIN ═══════════════════════════════════════════════════
+  async function initAdmin() {
+    await loadCategories();
+    await loadProducts();
+    initCategoryManagement();
+  }
+
+  // ═══ CATEGORÍAS DINÁMICAS (desde pestaña Config) ══════════════════
+  async function loadCategories() {
+    try {
+      const res = await fetch('/api/manage-categories');
+      if (res.ok) {
+        const data = await res.json();
+        state.configCategories = data.categorias || {};
+      }
+    } catch (err) {
+      console.warn('No se pudieron cargar categorías de Config, usando CONFIG local:', err.message);
+      // Fallback: construir desde el array estático
+      state.configCategories = {};
+      CONFIG.categorias.forEach(cat => { state.configCategories[cat] = []; });
+    }
+    updateCategoryDropdown();
+  }
+
+  function updateCategoryDropdown() {
+    const select = $('#formCategoria');
+    const currentVal = select.value;
+    select.innerHTML = '<option value="">Seleccionar...</option>';
+
+    Object.keys(state.configCategories).sort().forEach(cat => {
+      const opt = document.createElement('option');
+      opt.value = cat;
+      opt.textContent = cat;
+      select.appendChild(opt);
+    });
+
+    // Opción para agregar nueva
+    const addOpt = document.createElement('option');
+    addOpt.value = '__add__';
+    addOpt.textContent = '➕ Agregar nueva categoría...';
+    select.appendChild(addOpt);
+
+    // Restaurar selección si existe
+    if (currentVal && currentVal !== '__add__') {
+      select.value = currentVal;
+    }
+
+    updateSubcategoryDropdown();
+    updateCatActions();
+  }
+
+  function updateSubcategoryDropdown() {
+    const select = $('#formSubcategoria');
+    const cat = $('#formCategoria').value;
+    const currentVal = select.value;
+    select.innerHTML = '<option value="">Sin subcategoría</option>';
+
+    if (cat && state.configCategories[cat]) {
+      state.configCategories[cat].sort().forEach(sub => {
+        const opt = document.createElement('option');
+        opt.value = sub;
+        opt.textContent = sub;
+        select.appendChild(opt);
+      });
+    }
+
+    // Opción para agregar nueva subcategoría (solo si hay categoría seleccionada)
+    if (cat && cat !== '__add__') {
+      const addOpt = document.createElement('option');
+      addOpt.value = '__add__';
+      addOpt.textContent = '➕ Agregar nueva subcategoría...';
+      select.appendChild(addOpt);
+    }
+
+    // Restaurar selección
+    if (currentVal && currentVal !== '__add__') {
+      select.value = currentVal;
+    }
+
+    updateSubActions();
+  }
+
+  function updateCatActions() {
+    const cat = $('#formCategoria').value;
+    const btnDel = $('#btnDelCat');
+    const hint = $('#catHint');
+
+    if (cat && cat !== '__add__') {
+      btnDel.style.display = '';
+      // Contar productos de esta categoría
+      const count = state.products.filter(p => p.categoria === cat).length;
+      hint.textContent = count > 0 ? `${count} producto(s) en esta categoría` : '';
+    } else {
+      btnDel.style.display = 'none';
+      hint.textContent = '';
+    }
+  }
+
+  function updateSubActions() {
+    const cat = $('#formCategoria').value;
+    const sub = $('#formSubcategoria').value;
+    const btnAdd = $('#btnAddSub');
+    const btnDel = $('#btnDelSub');
+    const hint = $('#subHint');
+
+    if (cat && cat !== '__add__') {
+      btnAdd.style.display = '';
+      if (sub && sub !== '__add__') {
+        btnDel.style.display = '';
+        const count = state.products.filter(p => p.categoria === cat && p.subcategoria === sub).length;
+        hint.textContent = count > 0 ? `${count} producto(s) en esta subcategoría` : '';
+      } else {
+        btnDel.style.display = 'none';
+        hint.textContent = '';
+      }
+    } else {
+      btnAdd.style.display = 'none';
+      btnDel.style.display = 'none';
+      hint.textContent = '';
+    }
+  }
+
+  function initCategoryManagement() {
+    // Cambio de categoría
+    $('#formCategoria').addEventListener('change', async (e) => {
+      if (e.target.value === '__add__') {
+        e.target.value = '';
+        const name = prompt('Nombre de la nueva categoría:');
+        if (name && name.trim()) {
+          await addCategoryToConfig(name.trim());
+        } else {
+          updateCategoryDropdown();
+        }
+      } else {
+        updateSubcategoryDropdown();
+        updateCatActions();
+      }
+    });
+
+    // Cambio de subcategoría
+    $('#formSubcategoria').addEventListener('change', async (e) => {
+      if (e.target.value === '__add__') {
+        e.target.value = '';
+        const name = prompt('Nombre de la nueva subcategoría:');
+        if (name && name.trim()) {
+          await addSubcategoryToConfig($('#formCategoria').value, name.trim());
+        } else {
+          updateSubcategoryDropdown();
+        }
+      } else {
+        updateSubActions();
+      }
+    });
+
+    // Agregar categoría (botón +)
+    $('#btnAddCat').addEventListener('click', async () => {
+      const name = prompt('Nombre de la nueva categoría:');
+      if (name && name.trim()) {
+        await addCategoryToConfig(name.trim());
+      }
+    });
+
+    // Eliminar categoría
+    $('#btnDelCat').addEventListener('click', async () => {
+      const cat = $('#formCategoria').value;
+      if (!cat) return;
+
+      const count = state.products.filter(p => p.categoria === cat).length;
+      const msg = count > 0
+        ? `⚠ Esta categoría tiene ${count} producto(s) vinculado(s).\n\nSi la eliminás, esos productos quedarán sin categoría en la Sheet.\n\n¿Seguro que querés eliminar "${cat}"?`
+        : `¿Eliminar la categoría "${cat}"?`;
+
+      if (confirm(msg)) {
+        await deleteCategoryFromConfig(cat);
+      }
+    });
+
+    // Agregar subcategoría (botón +)
+    $('#btnAddSub').addEventListener('click', async () => {
+      const cat = $('#formCategoria').value;
+      if (!cat) return;
+      const name = prompt('Nombre de la nueva subcategoría:');
+      if (name && name.trim()) {
+        await addSubcategoryToConfig(cat, name.trim());
+      }
+    });
+
+    // Eliminar subcategoría
+    $('#btnDelSub').addEventListener('click', async () => {
+      const cat = $('#formCategoria').value;
+      const sub = $('#formSubcategoria').value;
+      if (!cat || !sub) return;
+
+      if (confirm(`¿Eliminar la subcategoría "${sub}" de "${cat}"?`)) {
+        await deleteSubcategoryFromConfig(cat, sub);
+      }
+    });
+  }
+
+  async function addCategoryToConfig(name) {
+    try {
+      const res = await fetch('/api/manage-categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: state.password, action: 'add', categoria: name }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+
+      state.configCategories[name] = [];
+      updateCategoryDropdown();
+      $('#formCategoria').value = name;
+      updateSubcategoryDropdown();
+      updateCatActions();
+      showToast('Categoría agregada', `"${name}" está disponible`);
+    } catch (err) {
+      showToast('Error agregando categoría', err.message, true);
+    }
+  }
+
+  async function addSubcategoryToConfig(cat, name) {
+    try {
+      const res = await fetch('/api/manage-categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: state.password, action: 'add', categoria: cat, subcategoria: name }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+
+      if (!state.configCategories[cat]) state.configCategories[cat] = [];
+      if (!state.configCategories[cat].includes(name)) {
+        state.configCategories[cat].push(name);
+      }
+      updateSubcategoryDropdown();
+      $('#formSubcategoria').value = name;
+      updateSubActions();
+      showToast('Subcategoría agregada', `"${name}" en ${cat}`);
+    } catch (err) {
+      showToast('Error agregando subcategoría', err.message, true);
+    }
+  }
+
+  async function deleteCategoryFromConfig(cat) {
+    try {
+      const res = await fetch('/api/manage-categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: state.password, action: 'delete', categoria: cat }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+
+      delete state.configCategories[cat];
+      $('#formCategoria').value = '';
+      updateCategoryDropdown();
+      showToast('Categoría eliminada', `"${cat}" fue eliminada`);
+    } catch (err) {
+      showToast('Error eliminando categoría', err.message, true);
+    }
+  }
+
+  async function deleteSubcategoryFromConfig(cat, sub) {
+    // Contar productos con esta subcategoría
+    const count = state.products.filter(p => p.categoria === cat && p.subcategoria === sub).length;
+    
+    const msg = count > 0
+      ? `⚠ Esta subcategoría tiene ${count} producto(s) vinculado(s).\n\nSi la eliminás, esos productos quedarán sin subcategoría.\n\n¿Seguro que querés eliminar "${sub}" de "${cat}"?`
+      : `¿Eliminar la subcategoría "${sub}" de "${cat}"?`;
+
+    if (!confirm(msg)) return;
+
+    try {
+      const res = await fetch('/api/manage-categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: state.password, action: 'delete', categoria: cat, subcategoria: sub }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error);
+
+      state.configCategories[cat] = state.configCategories[cat].filter(s => s !== sub);
+      updateSubcategoryDropdown();
+      showToast('Subcategoría eliminada', `"${sub}" fue eliminada`);
+    } catch (err) {
+      showToast('Error eliminando subcategoría', err.message, true);
+    }
+  }
+
+  // ═══ LOAD PRODUCTS ════════════════════════════════════════════════
+  async function loadProducts() {
+    productTable.innerHTML = '<div class="loading-state">Cargando productos</div>';
+
+    if (!CONFIG.sheetCsvUrl) {
+      productTable.innerHTML = '<div class="empty-state">⚠ Configurá la URL del CSV de Google Sheets en CONFIG.sheetCsvUrl</div>';
+      return;
+    }
+
+    try {
+      const res = await fetch(CONFIG.sheetCsvUrl);
+      const csv = await res.text();
+      state.products = parseCSV(csv);
+      updateStats();
+      buildFilters();
+      renderProducts();
+    } catch (err) {
+      productTable.innerHTML = `<div class="empty-state">Error cargando productos: ${err.message}</div>`;
+    }
+  }
+
+  function parseCSV(text) {
+    const rows = [];
+    let current = [];
+    let field = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+      if (inQuotes) {
+        if (ch === '"' && next === '"') { field += '"'; i++; }
+        else if (ch === '"') { inQuotes = false; }
+        else { field += ch; }
+      } else {
+        if (ch === '"') { inQuotes = true; }
+        else if (ch === ',') { current.push(field); field = ''; }
+        else if (ch === '\n' || (ch === '\r' && next === '\n')) {
+          current.push(field); rows.push(current); current = []; field = '';
+          if (ch === '\r') i++;
+        } else { field += ch; }
+      }
+    }
+    if (field || current.length > 0) { current.push(field); rows.push(current); }
+
+    // Skip header row
+    const data = rows.slice(1).filter(r => r.length > 0 && r[0]?.trim());
+
+    return data.map((row, idx) => ({
+      rowIndex: idx + 1, // 1-based, incluyendo header
+      categoria: (row[0] || '').trim(),
+      subcategoria: (row[1] || '').trim(),
+      nombre: (row[2] || '').trim(),
+      marca: (row[3] || '').trim(),
+      descripcion: (row[4] || '').trim(),
+      imagen: (row[5] || '').trim(),
+    })).filter(p => p.nombre);
+  }
+
+  // ═══ STATS ════════════════════════════════════════════════════════
+  function updateStats() {
+    const total = state.products.length;
+    const visual = state.products.filter(p => p.imagen).length;
+    const text = total - visual;
+    const cats = new Set(state.products.map(p => p.categoria)).size;
+
+    $('#statTotal').textContent = total;
+    $('#statVisual').textContent = visual;
+    $('#statText').textContent = text;
+    $('#statCats').textContent = cats;
+  }
+
+  // ═══ FILTERS ══════════════════════════════════════════════════════
+  function buildFilters() {
+    const catCounts = {};
+    state.products.forEach(p => {
+      catCounts[p.categoria] = (catCounts[p.categoria] || 0) + 1;
+    });
+
+    filterTabs.innerHTML = '';
+
+    // "Todos" tab
+    const allTab = createFilterTab('Todos', state.products.length);
+    allTab.classList.add('active');
+    filterTabs.appendChild(allTab);
+
+    // Category tabs
+    Object.entries(catCounts)
+      .sort((a, b) => b[1] - a[1])
+      .forEach(([cat, count]) => {
+        filterTabs.appendChild(createFilterTab(cat, count));
+      });
+  }
+
+  function createFilterTab(label, count) {
+    const btn = document.createElement('button');
+    btn.className = 'filter-tab';
+    btn.innerHTML = `${label} <span class="count">${count}</span>`;
+    btn.addEventListener('click', () => {
+      filterTabs.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      state.currentFilter = label;
+      renderProducts();
+    });
+    return btn;
+  }
+
+  // ═══ SEARCH ═══════════════════════════════════════════════════════
+  searchInput.addEventListener('input', (e) => {
+    state.searchQuery = e.target.value.toLowerCase();
+    renderProducts();
+  });
+
+  // ═══ RENDER PRODUCTS ══════════════════════════════════════════════
+  function renderProducts() {
+    let products = state.products;
+
+    // Filter by category
+    if (state.currentFilter !== 'Todos') {
+      products = products.filter(p => p.categoria === state.currentFilter);
+    }
+
+    // Filter by search
+    if (state.searchQuery) {
+      products = products.filter(p =>
+        p.nombre.toLowerCase().includes(state.searchQuery) ||
+        p.marca.toLowerCase().includes(state.searchQuery) ||
+        p.subcategoria.toLowerCase().includes(state.searchQuery)
+      );
+    }
+
+    if (products.length === 0) {
+      productTable.innerHTML = '<div class="empty-state">No se encontraron productos</div>';
+      return;
+    }
+
+    productTable.innerHTML = '';
+
+    products.forEach(prod => {
+      const row = document.createElement('div');
+      row.className = 'product-row';
+
+      const hasImage = !!prod.imagen;
+      const imgUrl = hasImage
+        ? (prod.imagen.startsWith('http') ? prod.imagen : `./assets/products/${prod.imagen}`)
+        : '';
+
+      row.innerHTML = `
+        ${hasImage
+          ? `<img src="${imgUrl}" alt="" class="product-row__img" loading="lazy" onerror="this.style.display='none'" />`
+          : `<div class="product-row__img product-row__img--empty">📝</div>`
+        }
+        <div class="product-row__info">
+          <div class="product-row__name">${escHtml(prod.nombre)}</div>
+          <div class="product-row__subcat">${prod.subcategoria ? escHtml(prod.subcategoria) : 'Sin subcategoría'}${prod.marca ? ' · ' + escHtml(prod.marca) : ''}</div>
+        </div>
+        <div class="product-row__category">${escHtml(prod.categoria)}</div>
+        <div class="product-row__status ${hasImage ? 'product-row__status--visual' : 'product-row__status--text'}">
+          ${hasImage ? 'Card visual' : 'Solo texto'}
+        </div>
+        <div class="product-row__actions">
+          <button class="product-row__action-btn product-row__action-btn--edit" title="Editar" data-row="${prod.rowIndex}">
+            <svg viewBox="0 0 24 24"><path d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+          </button>
+          <button class="product-row__action-btn product-row__action-btn--delete" title="Eliminar" data-cat="${escAttr(prod.categoria)}" data-name="${escAttr(prod.nombre)}" data-row="${prod.rowIndex}">
+            <svg viewBox="0 0 24 24"><path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+          </button>
+        </div>
+      `;
+
+      productTable.appendChild(row);
+    });
+
+    // Attach delete handlers
+    productTable.querySelectorAll('.product-row__action-btn--delete').forEach(btn => {
+      btn.addEventListener('click', () => {
+        showDeleteDialog(btn.dataset.cat, btn.dataset.name, parseInt(btn.dataset.row));
+      });
+    });
+
+    // Attach edit handlers
+    productTable.querySelectorAll('.product-row__action-btn--edit').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const rowIndex = parseInt(btn.dataset.row);
+        const product = state.products.find(p => p.rowIndex === rowIndex);
+        if (product) openEditForm(product);
+      });
+    });
+  }
+
+  // ═══ ADD PRODUCT FORM ═════════════════════════════════════════════
+  $('#btnAddProduct').addEventListener('click', () => {
+    pageList.classList.remove('active');
+    pageForm.classList.add('active');
+    $('#pageTitle').textContent = 'Agregar producto';
+    $('#topbarActions').innerHTML = `
+      <button class="topbar__btn topbar__btn--outline" id="btnBackToList">← Volver al listado</button>
+    `;
+    $('#btnBackToList').addEventListener('click', goBackToList);
+    resetForm();
+  });
+
+  $('#btnCancel').addEventListener('click', goBackToList);
+
+  function goBackToList() {
+    pageForm.classList.remove('active');
+    pageList.classList.add('active');
+    $('#pageTitle').textContent = 'Productos';
+    $('#topbarActions').innerHTML = `
+      <button class="topbar__btn topbar__btn--primary" id="btnAddProduct">
+        <svg viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
+        Agregar producto
+      </button>
+      <button class="topbar__btn topbar__btn--ghost" id="btnLogout" title="Cerrar sesión">
+        <svg viewBox="0 0 24 24"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg>
+      </button>
+    `;
+    $('#btnAddProduct').addEventListener('click', () => {
+      pageList.classList.remove('active');
+      pageForm.classList.add('active');
+      $('#pageTitle').textContent = 'Agregar producto';
+      $('#topbarActions').innerHTML = `<button class="topbar__btn topbar__btn--outline" id="btnBackToList">← Volver al listado</button>`;
+      $('#btnBackToList').addEventListener('click', goBackToList);
+      resetForm();
+    });
+    $('#btnLogout').addEventListener('click', () => {
+      state.password = '';
+      adminLayout.classList.remove('active');
+      loginScreen.classList.remove('hidden');
+    });
+  }
+
+  function resetForm() {
+    $('#formCategoria').value = '';
+    $('#formSubcategoria').value = '';
+    $('#formNombre').value = '';
+    $('#formMarca').value = '';
+    $('#formDescripcion').value = '';
+    state.uploadedImageUrl = '';
+    state.editingRowIndex = null;
+    uploadZone.style.display = '';
+    uploadPreview.classList.remove('active');
+    uploadProgress.classList.remove('active');
+    $('#btnSave').disabled = false;
+    $('#btnSave').textContent = 'Guardar producto';
+    $('#formTitle').textContent = 'Nuevo producto';
+    $('.form-card__subtitle').textContent = 'Completá los datos. Si subís una imagen, el producto aparecerá como card visual en la web.';
+  }
+
+  // ═══ EDIT PRODUCT — Abrir formulario pre-rellenado ═══════════════
+  function openEditForm(product) {
+    state.editingRowIndex = product.rowIndex;
+
+    // Llenar campos con datos del producto
+    $('#formCategoria').value = product.categoria;
+    updateSubcategoryDropdown();
+    $('#formSubcategoria').value = product.subcategoria || '';
+    updateSubActions();
+    $('#formNombre').value = product.nombre;
+    $('#formMarca').value = product.marca || '';
+    $('#formDescripcion').value = product.descripcion || '';
+
+    // Si tiene imagen, mostrarla en el preview
+    if (product.imagen) {
+      state.uploadedImageUrl = product.imagen;
+      uploadZone.style.display = 'none';
+      uploadPreview.classList.add('active');
+      $('#previewImg').src = product.imagen.startsWith('http') ? product.imagen : `./assets/products/${product.imagen}`;
+      $('#previewName').textContent = 'Imagen actual';
+      $('#previewSize').textContent = 'Click ✕ para quitar y subir otra';
+    } else {
+      state.uploadedImageUrl = '';
+      uploadZone.style.display = '';
+      uploadPreview.classList.remove('active');
+    }
+
+    uploadProgress.classList.remove('active');
+    $('#btnSave').disabled = false;
+    $('#btnSave').textContent = 'Actualizar producto';
+    $('#formTitle').textContent = 'Editar producto';
+    $('.form-card__subtitle').textContent = `Editando: ${product.nombre}`;
+
+    // Mostrar formulario
+    pageList.classList.remove('active');
+    pageForm.classList.add('active');
+    $('#pageTitle').textContent = 'Editar producto';
+    $('#topbarActions').innerHTML = `
+      <button class="topbar__btn topbar__btn--outline" id="btnBackToList">← Volver al listado</button>
+    `;
+    $('#btnBackToList').addEventListener('click', goBackToList);
+  }
+
+  // ═══ IMAGE UPLOAD (Cloudinary) ════════════════════════════════════
+  uploadZone.addEventListener('click', () => fileInput.click());
+  uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+  uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length > 0) handleFile(fileInput.files[0]);
+  });
+
+  $('#removeImage').addEventListener('click', () => {
+    state.uploadedImageUrl = '';
+    uploadPreview.classList.remove('active');
+    uploadZone.style.display = '';
+    fileInput.value = '';
+  });
+
+  async function handleFile(file) {
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('La imagen supera los 5MB', '', true);
+      return;
+    }
+
+    if (!CONFIG.cloudinaryCloudName || !CONFIG.cloudinaryUploadPreset) {
+      showToast('Configurá Cloudinary en CONFIG', 'Faltan cloudName y uploadPreset', true);
+      return;
+    }
+
+    // Show progress
+    uploadZone.classList.add('uploading');
+    uploadProgress.classList.add('active');
+    $('#uploadFill').style.width = '0%';
+    $('#uploadText').textContent = 'Subiendo imagen...';
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CONFIG.cloudinaryUploadPreset);
+
+      // Upload with progress using XMLHttpRequest
+      const url = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${CONFIG.cloudinaryCloudName}/image/upload`);
+
+        xhr.upload.addEventListener('progress', (e) => {
+          if (e.lengthComputable) {
+            const pct = Math.round((e.loaded / e.total) * 100);
+            $('#uploadFill').style.width = pct + '%';
+            $('#uploadText').textContent = `Subiendo... ${pct}%`;
+          }
+        });
+
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            resolve(data.secure_url);
+          } else {
+            reject(new Error(`Error ${xhr.status}`));
+          }
+        };
+        xhr.onerror = () => reject(new Error('Error de red'));
+        xhr.send(formData);
+      });
+
+      state.uploadedImageUrl = url;
+
+      // Show preview
+      uploadZone.style.display = 'none';
+      uploadProgress.classList.remove('active');
+      uploadZone.classList.remove('uploading');
+      uploadPreview.classList.add('active');
+      $('#previewImg').src = url;
+      $('#previewName').textContent = file.name;
+      $('#previewSize').textContent = `${(file.size / 1024).toFixed(0)} KB`;
+
+    } catch (err) {
+      uploadZone.classList.remove('uploading');
+      uploadProgress.classList.remove('active');
+      showToast('Error subiendo imagen', err.message, true);
+    }
+  }
+
+  // ═══ SAVE PRODUCT (add or edit) ═══════════════════════════════════
+  $('#btnSave').addEventListener('click', async () => {
+    const categoria = $('#formCategoria').value;
+    const nombre = $('#formNombre').value.trim();
+
+    if (!categoria || !nombre) {
+      showToast('Completá los campos obligatorios', 'Categoría y Nombre son requeridos', true);
+      return;
+    }
+
+    const btn = $('#btnSave');
+    const isEditing = state.editingRowIndex !== null;
+    btn.disabled = true;
+    btn.textContent = isEditing ? 'Actualizando...' : 'Guardando...';
+
+    const payload = {
+      password: state.password,
+      categoria,
+      subcategoria: $('#formSubcategoria').value.trim(),
+      nombre,
+      marca: $('#formMarca').value.trim(),
+      descripcion: $('#formDescripcion').value.trim(),
+      imagen: state.uploadedImageUrl,
+    };
+
+    try {
+      const endpoint = isEditing ? '/api/edit-product' : '/api/add-product';
+      if (isEditing) payload.rowIndex = state.editingRowIndex;
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.status === 401) {
+        showToast('Sesión expirada', 'Volvé a iniciar sesión', true);
+        goBackToList();
+        return;
+      }
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Error desconocido');
+      }
+
+      showToast(
+        isEditing ? 'Producto actualizado' : 'Producto guardado',
+        'Los cambios se reflejarán en unos segundos'
+      );
+
+      setTimeout(async () => {
+        await loadProducts();
+      }, 2000);
+
+      goBackToList();
+
+    } catch (err) {
+      showToast('Error guardando producto', err.message, true);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = isEditing ? 'Actualizar producto' : 'Guardar producto';
+    }
+  });
+
+  // ═══ DELETE PRODUCT ═══════════════════════════════════════════════
+  let deleteTarget = null;
+
+  function showDeleteDialog(categoria, nombre, rowIndex) {
+    deleteTarget = { categoria, nombre, rowIndex };
+    $('#dialogText').textContent = `¿Estás seguro de eliminar "${nombre}"?`;
+    $('#dialogOverlay').classList.add('show');
+  }
+
+  $('#dialogCancel').addEventListener('click', () => {
+    $('#dialogOverlay').classList.remove('show');
+    deleteTarget = null;
+  });
+
+  $('#dialogConfirm').addEventListener('click', async () => {
+    if (!deleteTarget) return;
+
+    const btn = $('#dialogConfirm');
+    btn.disabled = true;
+    btn.textContent = 'Eliminando...';
+
+    try {
+      const res = await fetch('/api/delete-product', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password: state.password,
+          categoria: deleteTarget.categoria,
+          nombre: deleteTarget.nombre,
+          rowIndex: deleteTarget.rowIndex,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Error desconocido');
+      }
+
+      $('#dialogOverlay').classList.remove('show');
+      showToast('Producto eliminado', `${deleteTarget.nombre} fue eliminado del catálogo`);
+      deleteTarget = null;
+
+      setTimeout(async () => {
+        await loadProducts();
+      }, 1500);
+
+    } catch (err) {
+      showToast('Error eliminando producto', err.message, true);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Eliminar';
+    }
+  });
+
+  // ═══ TOAST ════════════════════════════════════════════════════════
+  function showToast(text, sub, isError = false) {
+    const toast = $('#toast');
+    $('#toastText').textContent = text;
+    $('#toastSub').textContent = sub || '';
+    toast.classList.toggle('toast--error', isError);
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  // ═══ UTILS ════════════════════════════════════════════════════════
+  function escHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function escAttr(str) {
+    return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  </script>
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2008b4f1ef1e99f',t:'MTc4NDg3MTE0NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

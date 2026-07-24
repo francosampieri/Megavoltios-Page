@@ -1,0 +1,12 @@
+{
+  "name": "megavoltios-catalog",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "googleapis": "^130.0.0"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  }
+}
