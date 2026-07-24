@@ -46,9 +46,11 @@ module.exports = async function handler(req, res) {
 
     const sheetId = sheet.properties.sheetId;
 
-    // Si nos pasan el rowIndex (0-based, sin contar header), lo usamos directo
-    // El rowIndex de la API incluye la fila de headers, así que sumamos 1
-    const targetRow = typeof rowIndex === 'number' ? rowIndex + 1 : null;
+    // rowIndex viene del frontend como 1-based (1 = primer producto, después del header)
+    // deleteDimension usa índices 0-based donde:
+    //   0 = fila 1 (headers)
+    //   1 = fila 2 (primer producto) ← rowIndex = 1 mapea directo
+    const targetRow = typeof rowIndex === 'number' ? rowIndex : null;
 
     if (targetRow === null) {
       // Buscar la fila por categoría + nombre
