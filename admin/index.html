@@ -382,6 +382,9 @@
       .filter-tabs { width: 100%; overflow-x: auto; }
     }
   </style>
+  
+  <!-- Vercel Web Analytics -->
+  <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 </head>
 <body>
 
@@ -581,7 +584,7 @@
 
   const CONFIG = {
     // URL del CSV público de Google Sheets
-    // Sheets → Archivo → Compartir → Publicar en la web → CSV → Copiar link
+    // Sheets → Archivo → Compartir ��� Publicar en la web → CSV → Copiar link
     sheetCsvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThiL5HG6YFCnpudCNlqd8NRYNRGUtO2fptZ1yV_3JAi0NnC_XZaMfjPLotNjfRiuBwJpmJeO12eEy3/pub?gid=0&single=true&output=csv',
 
     // Cloudinary (para subir imágenes)
@@ -1400,7 +1403,7 @@
     }
   }
 
-  // ═══ SAVE PRODUCT (add or edit) ═══════════════════════════════════
+  // ═══ SAVE PRODUCT (add or edit) ══════════════���════════════════════
   $('#btnSave').addEventListener('click', async () => {
     const categoria = $('#formCategoria').value;
     const nombre = $('#formNombre').value.trim();
