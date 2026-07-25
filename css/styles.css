@@ -29,7 +29,7 @@
   --category-nav-height: 52px;
   --radius: 8px;
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --max-width: 1400px;
+  --max-width: 1300px;
 }
 
 *, *::before, *::after {
@@ -73,6 +73,12 @@ ul {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 3rem;
+  }
 }
 
 section {
@@ -167,7 +173,7 @@ section {
   border-radius: var(--radius);
   font-weight: 700;
   font-size: 0.85rem;
-  margin-left: 1rem;
+  margin-left: 2rem;
   box-shadow: 0 4px 12px rgba(245, 166, 35, 0.25);
 }
 
@@ -2043,7 +2049,8 @@ a.footer__nav-link:hover {
     height: 100%;
     aspect-ratio: auto;
     min-height: 400px;
-    object-fit: cover;
+    object-fit: contain;
+    background: var(--brand-navy-dark);
   }
 
   .product-modal__body {
