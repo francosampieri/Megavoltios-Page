@@ -821,6 +821,24 @@ function initCatalogSearch() {
       `;
       grid.appendChild(msg);
     }
+
+    // Si el usuario estaba scrolled más abajo del catálogo, llevarlo al inicio
+    // para que siempre vea los resultados (o el mensaje de "no encontrado")
+    if (query) {
+      const gridRect = grid.getBoundingClientRect();
+      const headerHeight = document.getElementById('main-header')?.offsetHeight || 0;
+      const navWrapperHeight = document.querySelector('.category-nav-wrapper')?.offsetHeight || 0;
+      const stickyOffset = headerHeight + navWrapperHeight + 16;
+
+      // Si el grid está fuera de vista por arriba (el usuario scrolleó más abajo)
+      if (gridRect.top < stickyOffset) {
+        const productsSection = document.getElementById('products');
+        if (productsSection) {
+          const targetY = productsSection.offsetTop + (document.querySelector('.products__header')?.offsetHeight || 0);
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+        }
+      }
+    }
   }
 }
 
