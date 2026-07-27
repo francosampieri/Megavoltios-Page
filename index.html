@@ -10,9 +10,6 @@
   <!-- ════════════════════════════════════════════════════════════════════════ -->
 
   <link rel="stylesheet" href="./css/styles.css" />
-  
-  <!-- Vercel Web Analytics -->
-  <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 </head>
 
 <body>
@@ -255,7 +252,7 @@
          PRODUCTOS — Sección principal
          El contenido es generado automáticamente desde data/products.json
          No modificar el HTML de esta sección — editar el JSON.
-    ════════════════════════════���══════════════════════════════════════════ -->
+    ═══════════════════════════════════════════════════════════════════════ -->
     <section id="products" aria-labelledby="products-title">
 
       <div class="products__header">
@@ -265,22 +262,31 @@
         </div>
       </div>
 
-      <!-- Barra sticky de categorías — se genera desde JS -->
+      <!-- Barra sticky de búsqueda + categorías -->
       <div class="category-nav-wrapper" role="navigation" aria-label="Categorías del catálogo">
-        <button type="button" class="category-nav__arrow category-nav__arrow--left" aria-label="Ver categorías anteriores">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
         <div class="container">
-          <div id="category-nav"></div>
-        </div>
-        <button type="button" class="category-nav__arrow category-nav__arrow--right" aria-label="Ver más categorías">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-        <!-- Indicador de scroll horizontal — solo visible en mobile -->
-        <div class="category-nav-hint" aria-hidden="true">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18l6-6-6-6"/>
-          </svg>
+          <!-- Barra de búsqueda -->
+          <div class="catalog-search">
+            <svg class="catalog-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="catalog-search-input" class="catalog-search__input" placeholder="Buscar producto..." autocomplete="off" />
+            <button type="button" id="catalog-search-clear" class="catalog-search__clear" aria-label="Limpiar búsqueda">✕</button>
+          </div>
+          <!-- Fila de categorías con flechas -->
+          <div class="category-nav-row">
+            <button type="button" class="category-nav__arrow category-nav__arrow--left" aria-label="Ver categorías anteriores">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <div id="category-nav"></div>
+            <button type="button" class="category-nav__arrow category-nav__arrow--right" aria-label="Ver más categorías">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <!-- Indicador de scroll horizontal — solo visible en mobile -->
+            <div class="category-nav-hint" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -524,7 +530,7 @@
   </main>
 
 
-  <!-- ════════════════════════════════════��═════════════════════════════════
+  <!-- ══════════════════════════════════════════════════════════════════════
        FOOTER
        MODIFICAR: nombre, descripción, redes sociales, año
   ═══════════════════════════════════════════════════════════════════════ -->
@@ -603,5 +609,5 @@
     document.getElementById('footer-year').textContent = new Date().getFullYear();
   </script>
 
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a20cda9ddbdbe99e',t:'MTc4NTAwMDIyMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a21e2896ef73b678',t:'MTc4NTE4MTY3NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
