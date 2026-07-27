@@ -35,6 +35,7 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
+      overflow-x: hidden;
     }
     img { max-width: 100%; display: block; }
     button { font-family: inherit; cursor: pointer; border: none; }
@@ -147,7 +148,7 @@
     .stat-card--highlight .stat-card__value { color: var(--amber); }
 
     /* Search + filters */
-    .list-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .list-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; max-width: 100%; overflow: hidden; }
     .product-search {
       display: flex; align-items: center; gap: 0.5rem; background: var(--navy); border: 1px solid var(--border);
       border-radius: var(--radius-sm); padding: 0.5rem 0.85rem; flex: 1; max-width: 360px;
@@ -164,6 +165,7 @@
       overflow: hidden;
       flex: 1;
       min-width: 0;
+      max-width: 100%;
     }
     .filter-tabs-arrow {
       width: 28px;
@@ -382,9 +384,6 @@
       .filter-tabs { width: 100%; overflow-x: auto; }
     }
   </style>
-  
-  <!-- Vercel Web Analytics -->
-  <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 </head>
 <body>
 
@@ -584,7 +583,7 @@
 
   const CONFIG = {
     // URL del CSV público de Google Sheets
-    // Sheets → Archivo → Compartir ��� Publicar en la web → CSV → Copiar link
+    // Sheets → Archivo → Compartir → Publicar en la web → CSV → Copiar link
     sheetCsvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThiL5HG6YFCnpudCNlqd8NRYNRGUtO2fptZ1yV_3JAi0NnC_XZaMfjPLotNjfRiuBwJpmJeO12eEy3/pub?gid=0&single=true&output=csv',
 
     // Cloudinary (para subir imágenes)
@@ -1403,7 +1402,7 @@
     }
   }
 
-  // ═══ SAVE PRODUCT (add or edit) ══════════════���════════════════════
+  // ═══ SAVE PRODUCT (add or edit) ═══════════════════════════════════
   $('#btnSave').addEventListener('click', async () => {
     const categoria = $('#formCategoria').value;
     const nombre = $('#formNombre').value.trim();
@@ -1544,5 +1543,5 @@
   }
   </script>
 
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2050ed75cf5ddba',t:'MTc4NDkxODQ3NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a21e5b80cf9be798',t:'MTc4NTE4Mzc1OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
