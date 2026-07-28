@@ -136,12 +136,6 @@ section {
   letter-spacing: 0.05em;
 }
 
-.header__meta {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 500;
-}
-
 /* ─── MAIN NAV ────────────────────────────────────────────────────────────── */
 
 .main-nav__link {
@@ -536,16 +530,6 @@ section {
   filter: brightness(0) invert(1);
 }
 
-.brands__name {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #fff;
-}
-
-.brands__item:hover .brands__name {
-  color: var(--brand-amber);
-}
-
 /* ─── PRODUCTS & CATALOG ───────────────────────────────────────────────────── */
 
 .products__header {
@@ -682,11 +666,6 @@ section {
 /* Categoría oculta por búsqueda */
 .catalog-category.search-hidden {
   display: none;
-}
-
-.category-nav-wrapper > .container {
-  flex: 1;
-  min-width: 0;
 }
 
 .category-nav__arrow {
@@ -1483,7 +1462,6 @@ a.footer__nav-link:hover {
 }
 
 @media (max-width: 768px) {
-  .header__meta { display: none; }
   .header__cta { display: none; }
 
   /* Category showcase: destacadas apiladas, resto en grid 2 columnas */
@@ -1630,21 +1608,6 @@ a.footer__nav-link:hover {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-32px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(32px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
 @keyframes amberBarGrow {
   from { transform: scaleY(0); }
   to   { transform: scaleY(1); }
@@ -1745,22 +1708,6 @@ a.footer__nav-link:hover {
   transform: scale(1.04);
 }
 
-/* Badge de marca (esquina inferior derecha de la imagen) */
-.product-card__badge {
-  position: absolute;
-  bottom: 0.6rem;
-  right: 0.6rem;
-  background: var(--brand-amber);
-  color: #000;
-  font-size: 0.6rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.2rem 0.5rem;
-  border-radius: 3px;
-  z-index: 2;
-}
-
 /* Separador ámbar que se expande al hover */
 .product-card__divider {
   width: 30px;
@@ -1799,18 +1746,6 @@ a.footer__nav-link:hover {
   color: #fff;
   line-height: 1.3;
   margin-bottom: 0.3rem;
-}
-
-.product-card__desc {
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.4);
-  line-height: 1.45;
-  margin-bottom: 0.65rem;
-  flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 /* Botón estilo B: texto ámbar con subrayado e ícono WhatsApp */
@@ -1989,11 +1924,6 @@ a.footer__nav-link:hover {
     font-size: 0.72rem;
   }
 
-  .product-card__desc {
-    font-size: 0.62rem;
-    -webkit-line-clamp: 2;
-  }
-
   .product-card__divider {
     margin-top: 0.6rem;
   }
@@ -2005,13 +1935,6 @@ a.footer__nav-link:hover {
   .product-card__cta svg {
     width: 11px;
     height: 11px;
-  }
-
-  .product-card__badge {
-    font-size: 0.52rem;
-    padding: 0.15rem 0.35rem;
-    bottom: 0.4rem;
-    right: 0.4rem;
   }
 }
 
@@ -2190,19 +2113,6 @@ a.footer__nav-link:hover {
     left: 1rem;
     right: auto;
   }
-}
-
-/* Hint de click para expandir */
-.product-card__expand-hint {
-  font-size: 0.6rem;
-  color: rgba(255,255,255,0.2);
-  text-align: center;
-  margin-top: 0.35rem;
-  transition: color var(--transition);
-}
-
-.product-card:hover .product-card__expand-hint {
-  color: rgba(255,255,255,0.4);
 }
 
 /* ─── RESPETA PREFERENCIA DE MOVIMIENTO REDUCIDO ────────────────────────── */
