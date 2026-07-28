@@ -74,69 +74,21 @@ async function loadFromAPI() {
   const data = await response.json();
   if (!data.products || data.products.length === 0) throw new Error('Sin productos');
 
-  // Agrupar por categoría → subcategoría
-  const catMap = new Map();
-
-  data.products.forEach(prod => {
-    const catId = slugify(prod.categoria);
-
-    if (!catMap.has(catId)) {
-      catMap.set(catId, {
-        id: catId,
-        nombre: prod.categoria,
-        visualProducts: [],
-        textProducts: {},
-        hasSubcategories: false,
-      });
-    }
-
-    const cat = catMap.get(catId);
-
-    // Resolver URL de imagen
-    let imageUrl = '';
-    if (prod.imagen) {
-      imageUrl = prod.imagen.startsWith('http')
-        ? prod.imagen
-        : LOCAL_IMAGES_BASE + prod.imagen;
-    }
-
-    if (imageUrl) {
-      cat.visualProducts.push({
-        nombre: prod.nombre,
-        marca: prod.marca,
-        descripcion: prod.descripcion,
-        imagen: imageUrl,
-      });
-    } else {
-      const sub = prod.subcategoria || '__direct__';
-      if (sub !== '__direct__') cat.hasSubcategories = true;
-      if (!cat.textProducts[sub]) cat.textProducts[sub] = [];
-      cat.textProducts[sub].push(prod.nombre);
-    }
-  });
-
-  return Array.from(catMap.values());
+  return groupProducts(data.products);
 }
 
 
 // ═══ LECTURA DESDE GOOGLE SHEETS (CSV) ══════════════════════════════════════
 
 async function loadFromSheet(url) {
-  // Cache-busting: agregar timestamp para evitar caché del navegador
-  const cacheBuster = `&_t=${Date.now()}`;
-  const response = await fetch(url + cacheBuster);
+  const response = await fetch(url + `&_t=${Date.now()}`);
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  
-  const csvText = await response.text();
-  const rows = parseCSV(csvText);
-  
+
+  const rows = parseCSV(await response.text());
   if (rows.length < 2) throw new Error('Sheet vacía');
 
-  // Primera fila = headers, resto = datos
+  // Mapear headers a índices
   const headers = rows[0].map(h => h.trim().toLowerCase());
-  const dataRows = rows.slice(1).filter(row => row.length > 0 && row[0]?.trim());
-
-  // Mapear índices de columnas
   const col = {
     categoria:    headers.indexOf('categoría') !== -1 ? headers.indexOf('categoría') : headers.indexOf('categoria'),
     subcategoria: headers.indexOf('subcategoría') !== -1 ? headers.indexOf('subcategoría') : headers.indexOf('subcategoria'),
@@ -146,56 +98,20 @@ async function loadFromSheet(url) {
     imagen:       headers.indexOf('imagen'),
   };
 
-  // Agrupar por categoría → subcategoría
-  const catMap = new Map();
+  // Parsear filas a formato plano
+  const products = rows.slice(1)
+    .filter(row => row.length > 0 && (row[col.categoria] || '').trim())
+    .map(row => ({
+      categoria:    (row[col.categoria] || '').trim(),
+      subcategoria: col.subcategoria >= 0 ? (row[col.subcategoria] || '').trim() : '',
+      nombre:       col.nombre >= 0 ? (row[col.nombre] || '').trim() : '',
+      marca:        col.marca >= 0 ? (row[col.marca] || '').trim() : '',
+      descripcion:  col.descripcion >= 0 ? (row[col.descripcion] || '').trim() : '',
+      imagen:       col.imagen >= 0 ? (row[col.imagen] || '').trim() : '',
+    }))
+    .filter(p => p.nombre);
 
-  dataRows.forEach(row => {
-    const catName  = (row[col.categoria] || '').trim();
-    const subName  = col.subcategoria >= 0 ? (row[col.subcategoria] || '').trim() : '';
-    const nombre   = col.nombre >= 0 ? (row[col.nombre] || '').trim() : '';
-    const marca    = col.marca >= 0 ? (row[col.marca] || '').trim() : '';
-    const desc     = col.descripcion >= 0 ? (row[col.descripcion] || '').trim() : '';
-    const imagen   = col.imagen >= 0 ? (row[col.imagen] || '').trim() : '';
-
-    if (!catName || !nombre) return; // Skip filas vacías
-
-    const catId = slugify(catName);
-
-    if (!catMap.has(catId)) {
-      catMap.set(catId, {
-        id: catId,
-        nombre: catName,
-        visualProducts: [],  // Productos con imagen → cards
-        textProducts: {},    // Productos sin imagen → agrupados por subcategoría
-        hasSubcategories: false,
-      });
-    }
-
-    const cat = catMap.get(catId);
-
-    // Resolver URL de imagen
-    let imageUrl = '';
-    if (imagen) {
-      if (imagen.startsWith('http')) {
-        imageUrl = imagen;
-      } else {
-        imageUrl = LOCAL_IMAGES_BASE + imagen;
-      }
-    }
-
-    if (imageUrl) {
-      // Producto con imagen → formato card
-      cat.visualProducts.push({ nombre, marca, descripcion: desc, imagen: imageUrl });
-    } else {
-      // Producto sin imagen → formato texto
-      const sub = subName || '__direct__';
-      if (sub !== '__direct__') cat.hasSubcategories = true;
-      if (!cat.textProducts[sub]) cat.textProducts[sub] = [];
-      cat.textProducts[sub].push(nombre);
-    }
-  });
-
-  return Array.from(catMap.values());
+  return groupProducts(products);
 }
 
 
@@ -506,6 +422,53 @@ function buildProductList(productos) {
   });
 
   return list;
+}
+
+
+// ═══ AGRUPACIÓN DE PRODUCTOS ════════════════════════════════════════════════
+
+function resolveImageUrl(imagen) {
+  if (!imagen) return '';
+  return imagen.startsWith('http') ? imagen : LOCAL_IMAGES_BASE + imagen;
+}
+
+function groupProducts(products) {
+  const catMap = new Map();
+
+  products.forEach(prod => {
+    if (!prod.categoria || !prod.nombre) return;
+
+    const catId = slugify(prod.categoria);
+
+    if (!catMap.has(catId)) {
+      catMap.set(catId, {
+        id: catId,
+        nombre: prod.categoria,
+        visualProducts: [],
+        textProducts: {},
+        hasSubcategories: false,
+      });
+    }
+
+    const cat = catMap.get(catId);
+    const imageUrl = resolveImageUrl(prod.imagen);
+
+    if (imageUrl) {
+      cat.visualProducts.push({
+        nombre: prod.nombre,
+        marca: prod.marca,
+        descripcion: prod.descripcion,
+        imagen: imageUrl,
+      });
+    } else {
+      const sub = prod.subcategoria || '__direct__';
+      if (sub !== '__direct__') cat.hasSubcategories = true;
+      if (!cat.textProducts[sub]) cat.textProducts[sub] = [];
+      cat.textProducts[sub].push(prod.nombre);
+    }
+  });
+
+  return Array.from(catMap.values());
 }
 
 
