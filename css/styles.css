@@ -541,12 +541,6 @@ section {
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-#featured-products .section-title::before {
-  content: '⭐';
-  font-size: 0.85em;
 }
 
 /* ─── PRODUCTS & CATALOG ───────────────────────────────────────────────────── */
