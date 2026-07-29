@@ -1,6 +1,10 @@
 /**
  * /api/edit-product.js — Vercel Serverless Function
- * Actualiza un producto existente en Google Sheets.
+ * Actualiza un producto existente o toggle su estado de destacado.
+ * 
+ * Actions:
+ *   (default)     → Actualiza todos los campos del producto
+ *   toggle-featured → Solo marca/desmarca como destacado (columna G)
  * 
  * ENV VARS necesarias:
  *   GOOGLE_SHEETS_CREDENTIALS — JSON del Service Account (stringified)
@@ -11,16 +15,10 @@
 const { google } = require('googleapis');
 
 module.exports = async function handler(req, res) {
-  // CORS preflight
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Método no permitido' });
-  }
-
-  const { password, rowIndex, categoria, subcategoria, nombre, marca, descripcion, imagen } = req.body;
+  const { password, action, rowIndex } = req.body;
 
   if (!password || password !== process.env.ADMIN_PASSWORD) {
     return res.status(401).json({ error: 'Contraseña incorrecta' });
@@ -30,9 +28,7 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'rowIndex inválido' });
   }
 
-  if (!categoria || !nombre) {
-    return res.status(400).json({ error: 'Categoría y Nombre son obligatorios' });
-  }
+  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
   try {
     const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS);
@@ -42,12 +38,38 @@ module.exports = async function handler(req, res) {
     });
 
     const sheets = google.sheets({ version: 'v4', auth });
-    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+    const sheetRow = rowIndex + 1; // rowIndex es 1-based, sheet es 1-based con header
 
-    // rowIndex viene como 1-based desde el frontend (1 = primera fila de datos, después del header)
-    // En la Sheet, el header es fila 1, así que los datos empiezan en fila 2
-    // Por lo tanto, la fila real en Sheets = rowIndex + 1
-    const sheetRow = rowIndex + 1;
+    // ── TOGGLE FEATURED ──────────────────────────────────────────────
+    if (action === 'toggle-featured') {
+      // Leer el valor actual de la columna G
+      const current = await sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: `Productos!G${sheetRow}`,
+      });
+
+      const currentValue = ((current.data.values || [])[0] || [''])[0].trim().toLowerCase();
+      const isFeatured = currentValue === 'sí' || currentValue === 'si';
+      const newValue = isFeatured ? '' : 'Sí';
+
+      // Actualizar solo la columna G
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `Productos!G${sheetRow}`,
+        valueInputOption: 'USER_ENTERED',
+        requestBody: { values: [[newValue]] },
+      });
+
+      console.log(`✓ Producto ${isFeatured ? 'desmarcado' : 'marcado'} como destacado (fila ${sheetRow})`);
+      return res.status(200).json({ success: true, destacado: !isFeatured });
+    }
+
+    // ── ACTUALIZAR PRODUCTO COMPLETO ─────────────────────────────────
+    const { categoria, subcategoria, nombre, marca, descripcion, imagen, destacado } = req.body;
+
+    if (!categoria || !nombre) {
+      return res.status(400).json({ error: 'Categoría y Nombre son obligatorios' });
+    }
 
     const row = [
       categoria,
@@ -56,16 +78,14 @@ module.exports = async function handler(req, res) {
       marca || '',
       descripcion || '',
       imagen || '',
+      destacado ? 'Sí' : '',
     ];
 
-    // Actualizar la fila directamente
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `Productos!A${sheetRow}:F${sheetRow}`,
+      range: `Productos!A${sheetRow}:G${sheetRow}`,
       valueInputOption: 'USER_ENTERED',
-      requestBody: {
-        values: [row],
-      },
+      requestBody: { values: [row] },
     });
 
     console.log(`✓ Producto actualizado: ${nombre} (fila ${sheetRow})`);
@@ -73,9 +93,6 @@ module.exports = async function handler(req, res) {
 
   } catch (error) {
     console.error('Error actualizando producto:', error);
-    return res.status(500).json({ 
-      error: 'Error al actualizar producto', 
-      details: error.message 
-    });
+    return res.status(500).json({ error: error.message });
   }
 };

@@ -216,6 +216,9 @@
     .product-row__actions { display: flex; gap: 0.25rem; justify-content: flex-end; }
     .product-row__action-btn { width: 30px; height: 30px; border-radius: var(--radius-sm); background: none; color: var(--text-dim); display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
     .product-row__action-btn:hover { background: rgba(255,255,255,0.06); color: var(--amber); }
+    .product-row__action-btn--star { font-size: 1rem; line-height: 1; }
+    .product-row__action-btn--star.is-featured { color: var(--amber); }
+    .product-row__action-btn--star:not(.is-featured) { color: var(--text-dim); }
     .product-row__action-btn--edit:hover { color: #60a5fa; background: rgba(96,165,250,0.1); }
     .product-row__action-btn--delete:hover { color: var(--red); background: var(--red-bg); }
     .product-row__action-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -1182,6 +1185,7 @@
           ${hasImage ? 'Card visual' : 'Solo texto'}
         </div>
         <div class="product-row__actions">
+          ${hasImage ? `<button class="product-row__action-btn product-row__action-btn--star ${prod.destacado ? 'is-featured' : ''}" title="${prod.destacado ? 'Quitar de destacados' : 'Marcar como destacado'}" data-row="${prod.rowIndex}">${prod.destacado ? '★' : '☆'}</button>` : ''}
           <button class="product-row__action-btn product-row__action-btn--edit" title="Editar" data-row="${prod.rowIndex}">
             <svg viewBox="0 0 24 24"><path d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
           </button>
@@ -1207,6 +1211,45 @@
         const rowIndex = parseInt(btn.dataset.row);
         const product = state.products.find(p => p.rowIndex === rowIndex);
         if (product) openEditForm(product);
+      });
+    });
+
+    // Attach star/featured toggle handlers
+    productTable.querySelectorAll('.product-row__action-btn--star').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const rowIndex = parseInt(btn.dataset.row);
+        btn.disabled = true;
+        try {
+          const res = await fetch('/api/edit-product', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              password: state.password,
+              action: 'toggle-featured',
+              rowIndex: rowIndex,
+            }),
+          });
+          if (!res.ok) throw new Error((await res.json()).error);
+          const data = await res.json();
+
+          // Update UI
+          btn.classList.toggle('is-featured', data.destacado);
+          btn.textContent = data.destacado ? '★' : '☆';
+          btn.title = data.destacado ? 'Quitar de destacados' : 'Marcar como destacado';
+
+          // Update local state
+          const product = state.products.find(p => p.rowIndex === rowIndex);
+          if (product) product.destacado = data.destacado;
+
+          showToast(
+            data.destacado ? 'Producto destacado ⭐' : 'Producto quitado de destacados',
+            data.destacado ? 'Aparecerá en la sección de destacados' : 'Ya no aparecerá en destacados'
+          );
+        } catch (err) {
+          showToast('Error', err.message, true);
+        } finally {
+          btn.disabled = false;
+        }
       });
     });
   }
@@ -1543,5 +1586,5 @@
   }
   </script>
 
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a21e5b80cf9be798',t:'MTc4NTE4Mzc1OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a22e48d809f9b4e6',t:'MTc4NTM1MDc2Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

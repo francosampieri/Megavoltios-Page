@@ -27,7 +27,7 @@ module.exports = async function handler(req, res) {
 
     const data = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'Productos!A:F',
+      range: 'Productos!A:G',
     });
 
     const rows = data.data.values || [];
@@ -47,6 +47,7 @@ module.exports = async function handler(req, res) {
         marca: (item.row[3] || '').trim(),
         descripcion: (item.row[4] || '').trim(),
         imagen: (item.row[5] || '').trim(),
+        destacado: (item.row[6] || '').trim().toLowerCase() === 'sí' || (item.row[6] || '').trim().toLowerCase() === 'si',
       }))
       .filter(p => p.nombre);
 

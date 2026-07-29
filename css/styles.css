@@ -530,6 +530,25 @@ section {
   filter: brightness(0) invert(1);
 }
 
+/* ─── FEATURED PRODUCTS ─────────────────────────────────────────────────── */
+
+#featured-products {
+  padding: 3rem 0 1rem;
+}
+
+#featured-products .section-title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#featured-products .section-title::before {
+  content: '⭐';
+  font-size: 0.85em;
+}
+
 /* ─── PRODUCTS & CATALOG ───────────────────────────────────────────────────── */
 
 .products__header {

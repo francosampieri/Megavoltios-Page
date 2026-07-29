@@ -62,6 +62,7 @@ async function loadProducts() {
 
   buildCategoryNav(categorias);
   buildCatalog(categorias);
+  renderFeaturedProducts(categorias);
 }
 
 
@@ -181,6 +182,36 @@ function parseCSV(text) {
   }
 
   return rows;
+}
+
+
+// ═══ PRODUCTOS DESTACADOS ════════════════════════════════════════════════════
+
+function renderFeaturedProducts(categorias) {
+  const section = document.getElementById('featured-products');
+  const grid = document.getElementById('featured-grid');
+  if (!section || !grid) return;
+
+  // Extraer todos los productos destacados (solo los que tienen imagen/visual)
+  const featured = [];
+  categorias.forEach(cat => {
+    cat.visualProducts.forEach(prod => {
+      if (prod.destacado) {
+        featured.push(prod);
+      }
+    });
+  });
+
+  // Si no hay destacados, mantener la sección oculta
+  if (featured.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  // Mostrar sección y renderizar cards
+  section.style.display = '';
+  grid.innerHTML = '';
+  grid.appendChild(buildProductCards(featured));
 }
 
 
@@ -459,6 +490,7 @@ function groupProducts(products) {
         marca: prod.marca,
         descripcion: prod.descripcion,
         imagen: imageUrl,
+        destacado: prod.destacado || false,
       });
     } else {
       const sub = prod.subcategoria || '__direct__';
